@@ -26,7 +26,7 @@ dependencies:
   intl: ^0.20.2
   json_annotation: ^4.9.0
   lottie: ^3.1.2
-  retrofit: ^4.4.1
+  retrofit: ^4.6.0
   riverpod_annotation: ^2.6.1
   shared_preferences: ^2.3.2
   shimmer: ^3.0.0
