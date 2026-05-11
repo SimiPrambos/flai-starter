@@ -214,7 +214,14 @@ Or without the `very_good` CLI:
 flutter test --coverage --test-randomize-ordering-seed random
 ```
 
-VGV requires **100 % coverage**. To inspect locally:
+VGV requires **100 % coverage**. To inspect locally, install `lcov` first
+(one-time):
+
+```sh
+brew install lcov
+```
+
+Then generate and open the report:
 
 ```sh
 genhtml coverage/lcov.info -o coverage/ && open coverage/index.html
