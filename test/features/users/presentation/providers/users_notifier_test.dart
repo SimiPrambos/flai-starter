@@ -35,8 +35,9 @@ void main() {
 
   group('UsersNotifier', () {
     test('build() returns users on success', () async {
-      when(() => mockRepo.getUsers(page: 1))
-          .thenAnswer((_) async => right([testUser]));
+      when(
+        () => mockRepo.getUsers(page: 1),
+      ).thenAnswer((_) async => right([testUser]));
 
       final container = makeContainer();
       final result = await container.read(usersNotifierProvider.future);
@@ -46,8 +47,9 @@ void main() {
 
     test('build() throws Failure on repository error', () async {
       const failure = Failure.network(message: 'No connection');
-      when(() => mockRepo.getUsers(page: 1))
-          .thenAnswer((_) async => left(failure));
+      when(
+        () => mockRepo.getUsers(page: 1),
+      ).thenAnswer((_) async => left(failure));
 
       final container = makeContainer();
 
@@ -58,8 +60,9 @@ void main() {
     });
 
     test('refresh() re-fetches users', () async {
-      when(() => mockRepo.getUsers(page: 1))
-          .thenAnswer((_) async => right([testUser]));
+      when(
+        () => mockRepo.getUsers(page: 1),
+      ).thenAnswer((_) async => right([testUser]));
 
       final container = makeContainer();
       await container.read(usersNotifierProvider.future);

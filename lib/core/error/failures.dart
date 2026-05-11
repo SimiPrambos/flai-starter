@@ -14,8 +14,8 @@ sealed class Failure with _$Failure {
 
 extension FailureMessage on Failure {
   String get readableMessage => when(
-        network: (msg) => msg,
-        server: (msg, _) => msg,
-        unknown: (msg) => msg,
-      );
+    network: (msg) => msg,
+    server: (msg, _) => msg,
+    unknown: (msg) => msg,
+  );
 }

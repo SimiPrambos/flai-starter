@@ -27,21 +27,27 @@ class AppButton extends StatelessWidget {
             child: CircularProgressIndicator(strokeWidth: 2),
           )
         : icon != null
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [icon!, const SizedBox(width: 8), Text(label)],
-              )
-            : Text(label);
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [icon!, const SizedBox(width: 8), Text(label)],
+          )
+        : Text(label);
 
     final effectiveOnPressed = isLoading ? null : onPressed;
 
     return switch (variant) {
-      AppButtonVariant.filled =>
-        FilledButton(onPressed: effectiveOnPressed, child: child),
-      AppButtonVariant.outlined =>
-        OutlinedButton(onPressed: effectiveOnPressed, child: child),
-      AppButtonVariant.ghost =>
-        TextButton(onPressed: effectiveOnPressed, child: child),
+      AppButtonVariant.filled => FilledButton(
+        onPressed: effectiveOnPressed,
+        child: child,
+      ),
+      AppButtonVariant.outlined => OutlinedButton(
+        onPressed: effectiveOnPressed,
+        child: child,
+      ),
+      AppButtonVariant.ghost => TextButton(
+        onPressed: effectiveOnPressed,
+        child: child,
+      ),
     };
   }
 }

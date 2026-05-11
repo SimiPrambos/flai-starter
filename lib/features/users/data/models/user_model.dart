@@ -22,10 +22,10 @@ class UserModel with _$UserModel {
 
 extension UserModelMapper on UserModel {
   UserEntity toEntity() => UserEntity(
-        id: id,
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        avatar: avatar,
-      );
+    id: id,
+    email: email,
+    firstName: firstName,
+    lastName: lastName,
+    avatar: avatar,
+  );
 }

@@ -70,12 +70,13 @@ class _ErrorInterceptor extends Interceptor {
       DioExceptionType.connectionTimeout ||
       DioExceptionType.receiveTimeout ||
       DioExceptionType.sendTimeout ||
-      DioExceptionType.connectionError =>
-        NetworkException(message: err.message ?? 'Connection error'),
+      DioExceptionType.connectionError => NetworkException(
+        message: err.message ?? 'Connection error',
+      ),
       DioExceptionType.badResponse => ServerException(
-          message: err.message ?? 'Server error',
-          statusCode: err.response?.statusCode ?? 0,
-        ),
+        message: err.message ?? 'Server error',
+        statusCode: err.response?.statusCode ?? 0,
+      ),
       _ => UnknownException(message: err.message ?? 'Unknown error'),
     };
 

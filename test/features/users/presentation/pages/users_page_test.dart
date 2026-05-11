@@ -27,8 +27,8 @@ void main() {
   });
 
   List<Override> overrides() => [
-        userRepositoryProvider.overrideWithValue(mockRepo),
-      ];
+    userRepositoryProvider.overrideWithValue(mockRepo),
+  ];
 
   group('UsersPage', () {
     testWidgets('shows shimmer while loading', (tester) async {
@@ -49,8 +49,9 @@ void main() {
     });
 
     testWidgets('shows user cards on success', (tester) async {
-      when(() => mockRepo.getUsers(page: 1))
-          .thenAnswer((_) async => right([testUser]));
+      when(
+        () => mockRepo.getUsers(page: 1),
+      ).thenAnswer((_) async => right([testUser]));
 
       await tester.pumpApp(const UsersPage(), overrides: overrides());
       await tester.pumpAndSettle();
@@ -59,8 +60,9 @@ void main() {
       expect(find.text('Michael Lawson'), findsOneWidget);
     });
 
-    testWidgets('shows error message and retry button on failure',
-        (tester) async {
+    testWidgets('shows error message and retry button on failure', (
+      tester,
+    ) async {
       when(() => mockRepo.getUsers(page: 1)).thenAnswer(
         (_) async => left(const Failure.network(message: 'No internet')),
       );

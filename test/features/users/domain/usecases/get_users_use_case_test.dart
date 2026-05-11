@@ -26,8 +26,9 @@ void main() {
   group('GetUsersUseCase', () {
     test('returns list of users on success', () async {
       final users = [testUser];
-      when(() => mockRepo.getUsers(page: 1))
-          .thenAnswer((_) async => right(users));
+      when(
+        () => mockRepo.getUsers(page: 1),
+      ).thenAnswer((_) async => right(users));
 
       final result = await useCase(page: 1);
 
@@ -37,8 +38,9 @@ void main() {
 
     test('returns failure when repository fails', () async {
       const failure = Failure.network(message: 'No internet');
-      when(() => mockRepo.getUsers(page: 1))
-          .thenAnswer((_) async => left(failure));
+      when(
+        () => mockRepo.getUsers(page: 1),
+      ).thenAnswer((_) async => left(failure));
 
       final result = await useCase(page: 1);
 
@@ -46,8 +48,7 @@ void main() {
     });
 
     test('delegates page param to repository', () async {
-      when(() => mockRepo.getUsers(page: 2))
-          .thenAnswer((_) async => right([]));
+      when(() => mockRepo.getUsers(page: 2)).thenAnswer((_) async => right([]));
 
       await useCase(page: 2);
 

@@ -39,13 +39,7 @@ cp .env.example .env
 
 ```
 BASE_URL=https://reqres.in/api
-API_KEY=free_user_3DZF3qZYzM22ep6mUq6s8UTdhFz
-```
-
-### Code Generation
-
-```sh
-dart run build_runner build --delete-conflicting-outputs
+API_KEY=https://app.reqres.in/playground?path=/api/users&method=GET
 ```
 
 ### Flavors
@@ -71,6 +65,77 @@ _\*Template VGV App works on iOS, Android, Web, and Windows._
 
 ---
 
+## Code Generation ⚙️
+
+This project uses [build_runner](https://pub.dev/packages/build_runner) to generate code for Riverpod providers, Retrofit API clients, and Freezed models.
+
+Run this after cloning or whenever you add/modify annotated files:
+
+```sh
+dart run build_runner build --delete-conflicting-outputs
+```
+
+To watch for changes during development:
+
+```sh
+dart run build_runner watch --delete-conflicting-outputs
+```
+
+### Generated Files
+
+Generated files (`*.g.dart`, `*.freezed.dart`) are **gitignored** — do not commit them. Every developer runs `build_runner` locally.
+
+### Hiding Generated Files in VS Code
+
+The `.vscode/settings.json` already hides generated files from the Explorer:
+
+```json
+{
+  "files.exclude": {
+    "**/*.g.dart": true,
+    "**/*.freezed.dart": true
+  }
+}
+```
+
+If they still appear, fully quit and reopen VS Code (`Cmd+Q`), and make sure you open the `template_vgv__app/` folder directly — not a parent folder.
+
+---
+
+## API
+
+This project uses [reqres.in](https://reqres.in) as the example API.
+
+| | |
+|---|---|
+| Base URL | `https://reqres.in/api` |
+| Auth | `x-api-key` header |
+| Endpoint | `GET /users?page={page}` |
+
+Response shape:
+
+```json
+{
+  "page": 1,
+  "per_page": 6,
+  "total": 12,
+  "total_pages": 2,
+  "data": [
+    {
+      "id": 7,
+      "email": "michael.lawson@reqres.in",
+      "first_name": "Michael",
+      "last_name": "Lawson",
+      "avatar": "https://reqres.in/img/faces/7-image.jpg"
+    }
+  ]
+}
+```
+
+The API key is loaded from `.env` via `envied` and injected into every request as an `x-api-key` header by `ApiKeyInterceptor`.
+
+---
+
 ## Architecture 🏗️
 
 Clean Architecture with dependency rule: `presentation → domain ← data`.  
@@ -93,6 +158,109 @@ lib/
         ├── data/         # Retrofit datasource, freezed models, repository impl
         ├── domain/       # UserEntity, UserRepository interface, GetUsersUseCase
         └── presentation/ # UsersNotifier, UsersPage, UserCard, UserCardShimmer
+```
+
+---
+
+## Before You Push 🚦
+
+Run these checks locally **in order** before pushing — they mirror exactly what CI/CD
+runs on GitHub so you catch failures before they hit the pipeline.
+
+### 1. Code Generation
+
+Regenerate files whenever you add or modify annotated classes:
+
+```sh
+dart run build_runner build --delete-conflicting-outputs
+```
+
+> Skip if you have not touched any `@riverpod`, `@freezed`, `@JsonSerializable`,
+> or `@RestApi` annotated code.
+
+### 2. Format (line length 80)
+
+VGV enforces 80-character line width. CI uses `--set-exit-if-changed` and will
+fail if any file is not formatted correctly.
+
+Auto-fix first, then verify:
+
+```sh
+# Fix
+dart format --line-length 80 .
+
+# Verify (mirrors CI — exits non-zero if anything changed)
+dart format --line-length 80 --set-exit-if-changed .
+```
+
+### 3. Static Analysis
+
+```sh
+flutter analyze --fatal-infos
+```
+
+Expected output: `No issues found!` — CI treats any info-level diagnostic as a
+failure.
+
+### 4. Tests + Coverage
+
+```sh
+very_good test --coverage --test-randomize-ordering-seed random
+```
+
+Or without the `very_good` CLI:
+
+```sh
+flutter test --coverage --test-randomize-ordering-seed random
+```
+
+VGV requires **100 % coverage**. To inspect locally:
+
+```sh
+genhtml coverage/lcov.info -o coverage/ && open coverage/index.html
+```
+
+Any uncovered line will fail the CI coverage gate — write the test before
+pushing.
+
+### 5. Spell Check (markdown files)
+
+CI runs `cspell` on every `*.md` file. If you add a new technical term, add it
+to `.github/cspell.json` under `"words"`:
+
+```json
+"words": ["yourNewTerm"]
+```
+
+### 6. Semantic PR Title
+
+The `semantic-pull-request` job rejects PR titles that do not follow
+[Conventional Commits](https://www.conventionalcommits.org/):
+
+| Prefix | When |
+|---|---|
+| `feat:` | New feature |
+| `fix:` | Bug fix |
+| `chore:` | Maintenance — deps, config, tooling |
+| `docs:` | Documentation only |
+| `refactor:` | Code change, no feature or fix |
+| `test:` | Adding or fixing tests |
+| `ci:` | CI/CD pipeline changes |
+
+Example: `feat: add user profile page`
+
+> Push titles follow the same convention (commits on `main` are squash-merged
+> from PRs).
+
+### Quick One-Liner
+
+Run all checks in sequence — stops on the first failure:
+
+```sh
+dart run build_runner build --delete-conflicting-outputs && \
+  dart format --line-length 80 --set-exit-if-changed . && \
+  flutter analyze --fatal-infos && \
+  flutter test --coverage --test-randomize-ordering-seed random
 ```
 
 ---

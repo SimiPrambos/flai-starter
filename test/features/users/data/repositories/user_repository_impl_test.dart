@@ -34,8 +34,9 @@ void main() {
         totalPages: 2,
         data: [testModel],
       );
-      when(() => mockDatasource.getUsers(1))
-          .thenAnswer((_) async => testResponse);
+      when(
+        () => mockDatasource.getUsers(1),
+      ).thenAnswer((_) async => testResponse);
 
       final result = await repo.getUsers(page: 1);
 
@@ -47,8 +48,7 @@ void main() {
     });
 
     test('returns UnknownFailure when unexpected exception occurs', () async {
-      when(() => mockDatasource.getUsers(1))
-          .thenThrow(Exception('Unexpected'));
+      when(() => mockDatasource.getUsers(1)).thenThrow(Exception('Unexpected'));
 
       final result = await repo.getUsers(page: 1);
 
@@ -59,51 +59,55 @@ void main() {
       );
     });
 
-    test('returns NetworkFailure when NetworkException in DioException',
-        () async {
-      when(() => mockDatasource.getUsers(1)).thenThrow(
-        DioException(
-          requestOptions: RequestOptions(),
-          error: const NetworkException(message: 'No internet connection'),
-          type: DioExceptionType.connectionError,
-        ),
-      );
+    test(
+      'returns NetworkFailure when NetworkException in DioException',
+      () async {
+        when(() => mockDatasource.getUsers(1)).thenThrow(
+          DioException(
+            requestOptions: RequestOptions(),
+            error: const NetworkException(message: 'No internet connection'),
+            type: DioExceptionType.connectionError,
+          ),
+        );
 
-      final result = await repo.getUsers(page: 1);
+        final result = await repo.getUsers(page: 1);
 
-      expect(result.isLeft(), true);
-      result.fold(
-        (f) {
-          expect(f, isA<NetworkFailure>());
-          expect(
-            (f as NetworkFailure).message,
-            'No internet connection',
-          );
-        },
-        (_) => fail('Expected Left'),
-      );
-    });
+        expect(result.isLeft(), true);
+        result.fold(
+          (f) {
+            expect(f, isA<NetworkFailure>());
+            expect(
+              (f as NetworkFailure).message,
+              'No internet connection',
+            );
+          },
+          (_) => fail('Expected Left'),
+        );
+      },
+    );
 
-    test('returns ServerFailure when ServerException in DioException',
-        () async {
-      when(() => mockDatasource.getUsers(1)).thenThrow(
-        DioException(
-          requestOptions: RequestOptions(),
-          error: const ServerException(message: 'Not found', statusCode: 404),
-          type: DioExceptionType.badResponse,
-        ),
-      );
+    test(
+      'returns ServerFailure when ServerException in DioException',
+      () async {
+        when(() => mockDatasource.getUsers(1)).thenThrow(
+          DioException(
+            requestOptions: RequestOptions(),
+            error: const ServerException(message: 'Not found', statusCode: 404),
+            type: DioExceptionType.badResponse,
+          ),
+        );
 
-      final result = await repo.getUsers(page: 1);
+        final result = await repo.getUsers(page: 1);
 
-      expect(result.isLeft(), true);
-      result.fold(
-        (f) {
-          expect(f, isA<ServerFailure>());
-          expect((f as ServerFailure).statusCode, 404);
-        },
-        (_) => fail('Expected Left'),
-      );
-    });
+        expect(result.isLeft(), true);
+        result.fold(
+          (f) {
+            expect(f, isA<ServerFailure>());
+            expect((f as ServerFailure).statusCode, 404);
+          },
+          (_) => fail('Expected Left'),
+        );
+      },
+    );
   });
 }
