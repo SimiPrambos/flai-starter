@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
@@ -11,6 +12,8 @@ import 'package:template_vgv_app/features/users/users_providers.dart';
 import '../../../../helpers/fakes.dart';
 import '../../../../helpers/pump_app.dart';
 
+T _identity<T>(T value) => value;
+
 void main() {
   late MockUserRepository mockRepo;
 
@@ -22,6 +25,17 @@ void main() {
     avatar: 'https://reqres.in/img/faces/7-image.jpg',
   );
 
+  final manyUsers = List.generate(
+    20,
+    (index) => UserEntity(
+      id: index,
+      email: 'user$index@reqres.in',
+      firstName: 'User',
+      lastName: '$index',
+      avatar: 'https://reqres.in/img/faces/$index-image.jpg',
+    ),
+  );
+
   setUp(() {
     mockRepo = MockUserRepository();
   });
@@ -31,6 +45,12 @@ void main() {
   ];
 
   group('UsersPage', () {
+    test('can be constructed', () {
+      final createPage = _identity(UsersPage.new);
+
+      expect(createPage(), isA<UsersPage>());
+    });
+
     testWidgets('shows shimmer while loading', (tester) async {
       when(() => mockRepo.getUsers(page: 1)).thenAnswer(
         (_) async {
@@ -72,6 +92,51 @@ void main() {
 
       expect(find.text('No internet'), findsOneWidget);
       expect(find.text('Retry'), findsOneWidget);
+    });
+
+    testWidgets('shows non-failure error message', (tester) async {
+      when(() => mockRepo.getUsers(page: 1)).thenThrow(Exception('Boom'));
+
+      await tester.pumpApp(const UsersPage(), overrides: overrides());
+      await tester.pumpAndSettle();
+
+      expect(find.text('Exception: Boom'), findsOneWidget);
+    });
+
+    testWidgets('retries from error state', (tester) async {
+      var calls = 0;
+      when(() => mockRepo.getUsers(page: 1)).thenAnswer((_) async {
+        calls++;
+        if (calls == 1) {
+          return left(const Failure.network(message: 'No internet'));
+        }
+        return right([testUser]);
+      });
+
+      await tester.pumpApp(const UsersPage(), overrides: overrides());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Retry'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Michael Lawson'), findsOneWidget);
+      verify(() => mockRepo.getUsers(page: 1)).called(2);
+    });
+
+    testWidgets('pull to refresh re-fetches users', (tester) async {
+      when(
+        () => mockRepo.getUsers(page: 1),
+      ).thenAnswer((_) async => right(manyUsers));
+
+      await tester.pumpApp(const UsersPage(), overrides: overrides());
+      await tester.pumpAndSettle();
+
+      await tester.drag(find.byType(ListView), const Offset(0, 500));
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle();
+
+      verify(() => mockRepo.getUsers(page: 1)).called(2);
     });
   });
 }

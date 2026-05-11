@@ -109,5 +109,28 @@ void main() {
         );
       },
     );
+
+    test(
+      'returns UnknownFailure when DioException has no app exception',
+      () async {
+        when(() => mockDatasource.getUsers(1)).thenThrow(
+          DioException(
+            requestOptions: RequestOptions(),
+            message: 'Something went wrong',
+          ),
+        );
+
+        final result = await repo.getUsers(page: 1);
+
+        expect(result.isLeft(), true);
+        result.fold(
+          (f) {
+            expect(f, isA<UnknownFailure>());
+            expect((f as UnknownFailure).message, 'Something went wrong');
+          },
+          (_) => fail('Expected Left'),
+        );
+      },
+    );
   });
 }

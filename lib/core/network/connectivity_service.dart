@@ -8,7 +8,10 @@ ConnectivityService connectivityService(ConnectivityServiceRef ref) =>
     ConnectivityService();
 
 class ConnectivityService {
-  final _connectivity = Connectivity();
+  ConnectivityService({Connectivity? connectivity})
+      : _connectivity = connectivity ?? Connectivity();
+
+  final Connectivity _connectivity;
 
   Future<bool> isConnected() async {
     final results = await _connectivity.checkConnectivity();
