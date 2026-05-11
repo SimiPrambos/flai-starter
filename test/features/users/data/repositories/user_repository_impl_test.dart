@@ -1,6 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:template_vgv_app/core/error/exceptions.dart';
 import 'package:template_vgv_app/core/error/failures.dart';
 import 'package:template_vgv_app/features/users/data/models/user_model.dart';
 import 'package:template_vgv_app/features/users/data/models/users_response.dart';
@@ -26,7 +27,7 @@ void main() {
 
   group('UserRepositoryImpl.getUsers', () {
     test('returns mapped entities on success', () async {
-      final testResponse = UsersResponse(
+      const testResponse = UsersResponse(
         page: 1,
         perPage: 6,
         total: 12,
@@ -54,6 +55,53 @@ void main() {
       expect(result.isLeft(), true);
       result.fold(
         (f) => expect(f, isA<UnknownFailure>()),
+        (_) => fail('Expected Left'),
+      );
+    });
+
+    test('returns NetworkFailure when NetworkException in DioException',
+        () async {
+      when(() => mockDatasource.getUsers(1)).thenThrow(
+        DioException(
+          requestOptions: RequestOptions(),
+          error: const NetworkException(message: 'No internet connection'),
+          type: DioExceptionType.connectionError,
+        ),
+      );
+
+      final result = await repo.getUsers(page: 1);
+
+      expect(result.isLeft(), true);
+      result.fold(
+        (f) {
+          expect(f, isA<NetworkFailure>());
+          expect(
+            (f as NetworkFailure).message,
+            'No internet connection',
+          );
+        },
+        (_) => fail('Expected Left'),
+      );
+    });
+
+    test('returns ServerFailure when ServerException in DioException',
+        () async {
+      when(() => mockDatasource.getUsers(1)).thenThrow(
+        DioException(
+          requestOptions: RequestOptions(),
+          error: const ServerException(message: 'Not found', statusCode: 404),
+          type: DioExceptionType.badResponse,
+        ),
+      );
+
+      final result = await repo.getUsers(page: 1);
+
+      expect(result.isLeft(), true);
+      result.fold(
+        (f) {
+          expect(f, isA<ServerFailure>());
+          expect((f as ServerFailure).statusCode, 404);
+        },
         (_) => fail('Expected Left'),
       );
     });

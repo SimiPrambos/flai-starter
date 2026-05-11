@@ -24,7 +24,7 @@ class UserRepositoryImpl implements UserRepository {
   }) async {
     try {
       final response = await _datasource.getUsers(page);
-      final entities = response.data.map((m) => m.toEntity()).toList() as List<UserEntity>;
+      final entities = response.data.map((m) => m.toEntity()).toList();
       return right(entities);
     } on DioException catch (e) {
       final appException = e.error;
