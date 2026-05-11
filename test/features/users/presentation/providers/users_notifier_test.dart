@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:template_vgv_app/core/error/failures.dart';
-import 'package:template_vgv_app/features/users/data/repositories/user_repository_impl.dart';
 import 'package:template_vgv_app/features/users/domain/entities/user_entity.dart';
 import 'package:template_vgv_app/features/users/presentation/providers/users_notifier.dart';
+import 'package:template_vgv_app/features/users/users_providers.dart';
 import '../../../../helpers/fakes.dart';
 
 void main() {

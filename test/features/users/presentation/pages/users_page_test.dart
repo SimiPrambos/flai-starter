@@ -3,11 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:template_vgv_app/core/error/failures.dart';
-import 'package:template_vgv_app/features/users/data/repositories/user_repository_impl.dart';
 import 'package:template_vgv_app/features/users/domain/entities/user_entity.dart';
 import 'package:template_vgv_app/features/users/presentation/pages/users_page.dart';
 import 'package:template_vgv_app/features/users/presentation/widgets/user_card.dart';
 import 'package:template_vgv_app/features/users/presentation/widgets/user_card_shimmer.dart';
+import 'package:template_vgv_app/features/users/users_providers.dart';
 import '../../../../helpers/fakes.dart';
 import '../../../../helpers/pump_app.dart';
 
