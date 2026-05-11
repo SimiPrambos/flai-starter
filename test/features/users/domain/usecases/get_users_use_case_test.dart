@@ -42,7 +42,7 @@ void main() {
 
       final result = await useCase(page: 1);
 
-      expect(result, left(failure));
+      expect(result, left<Failure, List<UserEntity>>(failure));
     });
 
     test('delegates page param to repository', () async {

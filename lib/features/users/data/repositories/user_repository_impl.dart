@@ -40,7 +40,7 @@ class UserRepositoryImpl implements UserRepository {
         );
       }
       return left(Failure.unknown(message: e.message ?? 'Unknown error'));
-    } catch (e) {
+    } on Object catch (e) {
       return left(Failure.unknown(message: e.toString()));
     }
   }
