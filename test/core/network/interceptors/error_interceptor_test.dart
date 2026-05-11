@@ -24,13 +24,12 @@ void main() {
     required DioExceptionType type,
     String? message,
     Response<dynamic>? response,
-  }) =>
-      DioException(
-        requestOptions: RequestOptions(path: '/test'),
-        type: type,
-        message: message,
-        response: response,
-      );
+  }) => DioException(
+    requestOptions: RequestOptions(path: '/test'),
+    type: type,
+    message: message,
+    response: response,
+  );
 
   DioException capturedRejection(DioExceptionType type, {String? message}) {
     interceptor.onError(

@@ -17,15 +17,17 @@ void main() {
 
   group('ConnectivityService.isConnected', () {
     test('returns true when at least one result is not none', () async {
-      when(() => mockConnectivity.checkConnectivity())
-          .thenAnswer((_) async => [ConnectivityResult.wifi]);
+      when(
+        () => mockConnectivity.checkConnectivity(),
+      ).thenAnswer((_) async => [ConnectivityResult.wifi]);
 
       expect(await service.isConnected(), isTrue);
     });
 
     test('returns false when all results are none', () async {
-      when(() => mockConnectivity.checkConnectivity())
-          .thenAnswer((_) async => [ConnectivityResult.none]);
+      when(
+        () => mockConnectivity.checkConnectivity(),
+      ).thenAnswer((_) async => [ConnectivityResult.none]);
 
       expect(await service.isConnected(), isFalse);
     });
@@ -33,15 +35,17 @@ void main() {
 
   group('ConnectivityService.onConnectivityChanged', () {
     test('emits true when connected', () async {
-      when(() => mockConnectivity.onConnectivityChanged)
-          .thenAnswer((_) => Stream.value([ConnectivityResult.mobile]));
+      when(
+        () => mockConnectivity.onConnectivityChanged,
+      ).thenAnswer((_) => Stream.value([ConnectivityResult.mobile]));
 
       expect(await service.onConnectivityChanged.first, isTrue);
     });
 
     test('emits false when disconnected', () async {
-      when(() => mockConnectivity.onConnectivityChanged)
-          .thenAnswer((_) => Stream.value([ConnectivityResult.none]));
+      when(
+        () => mockConnectivity.onConnectivityChanged,
+      ).thenAnswer((_) => Stream.value([ConnectivityResult.none]));
 
       expect(await service.onConnectivityChanged.first, isFalse);
     });
