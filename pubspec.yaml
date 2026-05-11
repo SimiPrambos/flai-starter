@@ -1,29 +1,78 @@
 name: template_vgv_app
-description: My Template Flutter app using vgv
+description: Flutter enterprise template — Clean Architecture, Riverpod, GoRouter
 version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ^3.11.0
-  flutter: ^3.41.0
+  sdk: ^3.8.0
+  flutter: ^3.29.0
 
 dependencies:
-  bloc: ^9.2.0
   flutter:
     sdk: flutter
-  flutter_bloc: ^9.1.1
   flutter_localizations:
     sdk: flutter
-  intl: ^0.20.2
+
+  # State Management & DI
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Navigation
+  go_router: ^14.6.1
+
+  # Networking
+  dio: ^5.7.0
+  retrofit: ^4.4.1
+
+  # Serialization & Models
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+
+  # Error Handling
+  fpdart: ^1.1.0
+
+  # Storage
+  shared_preferences: ^2.3.2
+  flutter_secure_storage: ^9.2.2
+
+  # Environment Config
+  envied: ^1.1.0
+
+  # Logging
+  talker: ^4.4.1
+  talker_dio_logger: ^4.4.1
+  talker_flutter: ^4.4.1
+
+  # Connectivity
+  connectivity_plus: ^6.1.0
+
+  # UI Utilities
+  gap: ^3.0.1
+  cached_network_image: ^3.4.1
+  flutter_svg: ^2.0.10+1
+  shimmer: ^3.0.0
+  lottie: ^3.1.2
+
+  # i18n
+  intl: ^0.20.0
 
 dev_dependencies:
-  bloc_lint: ^0.4.1
-  bloc_test: ^10.0.0
-  bloc_tools: ^0.1.0-dev.24
   flutter_test:
     sdk: flutter
-  mocktail: ^1.0.5
-  very_good_analysis: ^10.2.0
+
+  # Code Generation
+  build_runner: ^2.4.13
+  riverpod_generator: ^2.6.3
+  retrofit_generator: ^9.1.6
+  freezed: ^2.5.7
+  json_serializable: ^6.8.0
+  envied_generator: ^1.1.1
+
+  # Linting
+  very_good_analysis: ^6.0.0
+
+  # Testing
+  mocktail: ^1.0.4
 
 flutter:
   generate: true
