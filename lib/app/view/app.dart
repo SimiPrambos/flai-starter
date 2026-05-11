@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:template_vgv_app/counter/counter.dart';
 import 'package:template_vgv_app/l10n/l10n.dart';
 
 class App extends StatelessWidget {
@@ -7,16 +6,11 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: prefer_const_constructors, localizationsDelegates is a runtime value, so MaterialApp cannot be const
     return MaterialApp(
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        ),
-        useMaterial3: true,
-      ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const CounterPage(),
+      home: const Scaffold(body: Center(child: CircularProgressIndicator())),
     );
   }
 }
