@@ -1,7 +1,19 @@
 {
-    "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
-    }
+  "@@locale": "en",
+  "appTitle": "Flutter Template",
+  "@appTitle": {
+    "description": "App title"
+  },
+  "usersPageTitle": "Users",
+  "@usersPageTitle": {
+    "description": "Title of the users list page"
+  },
+  "errorRetry": "Retry",
+  "@errorRetry": {
+    "description": "Label for retry button"
+  },
+  "loadingLabel": "Loading...",
+  "@loadingLabel": {
+    "description": "Loading state label"
+  }
 }

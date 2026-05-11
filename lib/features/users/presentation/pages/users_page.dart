@@ -7,6 +7,7 @@ import 'package:template_vgv_app/core/theme/app_text_styles.dart';
 import 'package:template_vgv_app/features/users/presentation/providers/users_notifier.dart';
 import 'package:template_vgv_app/features/users/presentation/widgets/user_card.dart';
 import 'package:template_vgv_app/features/users/presentation/widgets/user_card_shimmer.dart';
+import 'package:template_vgv_app/l10n/l10n.dart';
 import 'package:template_vgv_app/shared/widgets/app_button.dart';
 
 class UsersPage extends ConsumerWidget {
@@ -16,8 +17,10 @@ class UsersPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final usersAsync = ref.watch(usersNotifierProvider);
 
+    final l10n = context.l10n;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Users')),
+      appBar: AppBar(title: Text(l10n.usersPageTitle)),
       body: RefreshIndicator(
         onRefresh: () => ref.read(usersNotifierProvider.notifier).refresh(),
         child: usersAsync.when(
@@ -42,7 +45,7 @@ class UsersPage extends ConsumerWidget {
                     ),
                     const Gap(AppSpacing.md),
                     AppButton(
-                      label: 'Retry',
+                      label: l10n.errorRetry,
                       onPressed: () =>
                           ref.read(usersNotifierProvider.notifier).refresh(),
                     ),
