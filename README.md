@@ -42,29 +42,6 @@ BASE_URL=https://reqres.in/api
 API_KEY=https://app.reqres.in/playground?path=/api/users&method=GET
 ```
 
-### Flavors
-
-This project contains 3 flavors:
-
-- development
-- staging
-- production
-
-```sh
-# Development
-$ flutter run --flavor development --target lib/main_development.dart
-
-# Staging
-$ flutter run --flavor staging --target lib/main_staging.dart
-
-# Production
-$ flutter run --flavor production --target lib/main_production.dart
-```
-
-_\*Template VGV App works on iOS, Android, Web, and Windows._
-
----
-
 ## Code Generation ⚙️
 
 This project uses [build_runner](https://pub.dev/packages/build_runner) to generate code for Riverpod providers, Retrofit API clients, and Freezed models.
@@ -99,6 +76,29 @@ The `.vscode/settings.json` already hides generated files from the Explorer:
 ```
 
 If they still appear, fully quit and reopen VS Code (`Cmd+Q`), and make sure you open the `template_vgv__app/` folder directly — not a parent folder.
+
+---
+
+### Flavors
+
+This project contains 3 flavors:
+
+- development
+- staging
+- production
+
+```sh
+# Development
+$ flutter run --flavor development --target lib/main_development.dart
+
+# Staging
+$ flutter run --flavor staging --target lib/main_staging.dart
+
+# Production
+$ flutter run --flavor production --target lib/main_production.dart
+```
+
+_\*Template VGV App works on iOS, Android, Web, and Windows._
 
 ---
 
