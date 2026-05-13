@@ -29,7 +29,7 @@ class AuthInterceptor extends Interceptor {
   ) async {
     if (err.response?.statusCode == 401) {
       await _secureStorage.deleteAll();
-      // TODO(auth): replace '/users' with '/login' once auth routes are added
+      // TODO(auth): replace with LoginRoute().go once auth routes are added
       _router.go('/users');
     }
     handler.next(err);
