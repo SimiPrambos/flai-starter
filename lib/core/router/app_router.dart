@@ -1,7 +1,9 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:template_vgv_app/core/firebase/firebase_providers.dart';
 import 'package:template_vgv_app/core/logging/talker_provider.dart';
 import 'package:template_vgv_app/features/users/presentation/pages/user_detail_page.dart';
 import 'package:template_vgv_app/features/users/presentation/pages/users_page.dart';
@@ -15,16 +17,17 @@ part 'app_router.g.dart';
 class UsersRoute extends GoRouteData {
   const UsersRoute();
 
+  static const name = 'users';
   static const path = '/users';
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const UsersPage();
+  Widget build(BuildContext context, GoRouterState state) => const UsersPage();
 }
 
 class UserDetailRoute extends GoRouteData {
   const UserDetailRoute({required this.id});
 
+  static const name = 'user_detail';
   static const path = ':id';
 
   final int id;
@@ -56,15 +59,32 @@ extension UserDetailRouteX on UserDetailRoute {
 @Riverpod(keepAlive: true)
 GoRouter appRouter(AppRouterRef ref) {
   final talker = ref.watch(talkerProvider);
+  final analytics = ref.watch(firebaseAnalyticsProvider);
+
+  final observers = <NavigatorObserver>[
+    TalkerRouteObserver(talker),
+    if (analytics != null)
+      FirebaseAnalyticsObserver(
+        analytics: analytics,
+        onError: (error) => talker.handle(
+          error,
+          StackTrace.current,
+          'Firebase Analytics route tracking failed',
+        ),
+      ),
+  ];
+
   return GoRouter(
     initialLocation: UsersRoute.path,
-    observers: [TalkerRouteObserver(talker)],
+    observers: observers,
     routes: [
       GoRoute(
+        name: UsersRoute.name,
         path: UsersRoute.path,
         builder: (context, state) => const UsersRoute().build(context, state),
         routes: [
           GoRoute(
+            name: UserDetailRoute.name,
             path: UserDetailRoute.path,
             builder: (context, state) {
               final id = int.parse(state.pathParameters['id']!);

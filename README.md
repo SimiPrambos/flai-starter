@@ -22,6 +22,7 @@ Showcases a **users list** from [reqres.in](https://reqres.in) as an example fea
 | Storage | `shared_preferences`, `flutter_secure_storage` |
 | Env config | `envied` |
 | Logging | `talker`, `talker_dio_logger`, `talker_flutter` |
+| Observability | `firebase_core`, `firebase_crashlytics`, `firebase_analytics` |
 | Connectivity | `connectivity_plus` |
 | UI utilities | `gap`, `cached_network_image`, `skeletonizer` |
 
@@ -136,6 +137,26 @@ The API key is loaded from `.env` via `envied` and injected into every request a
 
 ---
 
+## Firebase
+
+Firebase Crashlytics and Analytics are scaffolded for consuming projects.
+Without Firebase config files, the app logs that Firebase is disabled and keeps
+running normally.
+
+To enable Firebase in a project created from this starter:
+
+```sh
+dart pub global activate flutterfire_cli
+flutterfire configure
+```
+
+This overwrites the placeholder `lib/firebase_options.dart` and generates
+native Firebase files for supported platforms. After configuration, Crashlytics
+receives uncaught Flutter/platform errors and Talker breadcrumbs. GoRouter
+screen transitions are sent to Firebase Analytics via the router observers.
+
+---
+
 ## Architecture 🏗️
 
 Clean Architecture with dependency rule: `presentation → domain ← data`.  
@@ -149,6 +170,7 @@ lib/
 │   ├── router/         # GoRouter config
 │   ├── storage/        # SecureStorage + SharedPreferences wrappers
 │   ├── logging/        # Talker provider
+│   ├── firebase/       # Firebase bootstrap, Crashlytics, Analytics providers
 │   ├── env/            # Envied — BASE_URL, API_KEY
 │   └── theme/          # AppColors, AppTextStyles, AppSpacing, AppAssets
 ├── shared/
