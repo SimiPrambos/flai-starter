@@ -121,6 +121,3 @@ lib/l10n/gen/
 .env
 lib/core/env/env.g.dart
 
-# Generated files
-*.g.dart
-*.freezed.dart
