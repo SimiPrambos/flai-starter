@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:talker_flutter/talker_flutter.dart';
+import 'package:template_vgv_app/core/logging/talker_provider.dart';
 import 'package:template_vgv_app/features/users/presentation/pages/user_detail_page.dart';
 import 'package:template_vgv_app/features/users/presentation/pages/users_page.dart';
 
@@ -53,8 +55,10 @@ extension UserDetailRouteX on UserDetailRoute {
 
 @Riverpod(keepAlive: true)
 GoRouter appRouter(AppRouterRef ref) {
+  final talker = ref.watch(talkerProvider);
   return GoRouter(
     initialLocation: UsersRoute.path,
+    observers: [TalkerRouteObserver(talker)],
     routes: [
       GoRoute(
         path: UsersRoute.path,
