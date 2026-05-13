@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:template_vgv_app/core/theme/app_colors.dart';
 import 'package:template_vgv_app/core/theme/app_spacing.dart';
@@ -29,41 +30,41 @@ class UserDetailPage extends ConsumerWidget {
           }
 
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(AppSpacing.lg),
+            padding: EdgeInsets.all(AppSpacing.lg),
             child: Column(
               children: [
-                const Gap(AppSpacing.lg),
+                Gap(AppSpacing.lg),
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(60),
+                  borderRadius: BorderRadius.circular(60.r),
                   child: CachedNetworkImage(
                     imageUrl: user.avatar,
-                    width: 120,
-                    height: 120,
+                    width: 120.w,
+                    height: 120.w,
                     fit: BoxFit.cover,
                     placeholder: (_, _) => Container(
-                      width: 120,
-                      height: 120,
+                      width: 120.w,
+                      height: 120.w,
                       color: AppColors.shimmerBase,
                     ),
                     errorWidget: (_, _, _) => Container(
-                      width: 120,
-                      height: 120,
+                      width: 120.w,
+                      height: 120.w,
                       color: AppColors.shimmerBase,
-                      child: const Icon(
+                      child: Icon(
                         Icons.person,
-                        size: 60,
+                        size: 60.r,
                         color: AppColors.onSurfaceVariant,
                       ),
                     ),
                   ),
                 ),
-                const Gap(AppSpacing.lg),
+                Gap(AppSpacing.lg),
                 Text(user.fullName, style: AppTextStyles.displayLg),
-                const Gap(AppSpacing.xs),
+                Gap(AppSpacing.xs),
                 Text(user.email, style: AppTextStyles.labelSm),
-                const Gap(AppSpacing.xl),
+                Gap(AppSpacing.xl),
                 const Divider(),
-                const Gap(AppSpacing.md),
+                Gap(AppSpacing.md),
                 _InfoRow(label: 'ID', value: '#${user.id}'),
                 _InfoRow(label: 'First Name', value: user.firstName),
                 _InfoRow(label: 'Last Name', value: user.lastName),
@@ -85,7 +86,7 @@ class _InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

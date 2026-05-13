@@ -34,7 +34,7 @@ class UsersPage extends ConsumerWidget {
                 : error.toString();
             return Center(
               child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.xl),
+                padding: EdgeInsets.all(AppSpacing.xl),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -43,7 +43,7 @@ class UsersPage extends ConsumerWidget {
                       style: AppTextStyles.bodyMd,
                       textAlign: TextAlign.center,
                     ),
-                    const Gap(AppSpacing.md),
+                    Gap(AppSpacing.md),
                     AppButton(
                       label: l10n.errorRetry,
                       onPressed: () =>
@@ -55,7 +55,7 @@ class UsersPage extends ConsumerWidget {
             );
           },
           data: (users) => ListView.builder(
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
             itemCount: users.length,
             itemBuilder: (_, i) => UserCard(user: users[i]),
           ),

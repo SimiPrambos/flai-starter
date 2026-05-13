@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:template_vgv_app/core/theme/app_colors.dart';
@@ -13,32 +14,32 @@ class UserCardShimmer extends StatelessWidget {
       baseColor: AppColors.shimmerBase,
       highlightColor: AppColors.shimmerHighlight,
       child: Card(
-        margin: const EdgeInsets.symmetric(
+        margin: EdgeInsets.symmetric(
           horizontal: AppSpacing.md,
           vertical: AppSpacing.sm / 2,
         ),
         child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.md),
+          padding: EdgeInsets.all(AppSpacing.md),
           child: Row(
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: 48.w,
+                height: 48.w,
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
                 ),
               ),
-              const Gap(AppSpacing.md),
+              Gap(AppSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(height: 14, color: Colors.white),
-                    const Gap(AppSpacing.xs),
+                    Container(height: 14.h, color: Colors.white),
+                    Gap(AppSpacing.xs),
                     Container(
-                      height: 12,
-                      width: 140,
+                      height: 12.h,
+                      width: 140.w,
                       color: Colors.white,
                     ),
                   ],

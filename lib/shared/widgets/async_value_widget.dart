@@ -26,7 +26,7 @@ class AsyncValueWidget<T> extends StatelessWidget {
           error?.call(e, st) ??
           Center(
             child: Padding(
-              padding: const EdgeInsets.all(AppSpacing.md),
+              padding: EdgeInsets.all(AppSpacing.md),
               child: Text(
                 e.toString(),
                 style: AppTextStyles.bodyMd,
