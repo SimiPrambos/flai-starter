@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:template_vgv_app/shared/widgets/async_value_widget.dart';
+import '../../helpers/pump_app.dart';
 
 void main() {
   group('AsyncValueWidget', () {
@@ -12,15 +13,13 @@ void main() {
       Widget? loading,
       Widget Function(Object error, StackTrace? stack)? error,
     }) {
-      return tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: AsyncValueWidget<T>(
-              value: value,
-              loading: loading,
-              error: error,
-              data: data ?? (value) => Text('$value'),
-            ),
+      return tester.pumpApp(
+        Scaffold(
+          body: AsyncValueWidget<T>(
+            value: value,
+            loading: loading,
+            error: error,
+            data: data ?? (value) => Text('$value'),
           ),
         ),
       );

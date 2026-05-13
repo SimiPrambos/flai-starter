@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:template_vgv_app/core/theme/app_colors.dart';
 import 'package:template_vgv_app/core/theme/app_spacing.dart';
 
-class UserCardShimmer extends StatelessWidget {
-  const UserCardShimmer({super.key});
+class UserCardSkeleton extends StatelessWidget {
+  const UserCardSkeleton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: AppColors.shimmerBase,
-      highlightColor: AppColors.shimmerHighlight,
+    return Skeletonizer.zone(
+      effect: const ShimmerEffect(
+        baseColor: AppColors.skeletonBase,
+        highlightColor: AppColors.skeletonHighlight,
+        duration: Duration(milliseconds: 1200),
+      ),
       child: Card(
         margin: EdgeInsets.symmetric(
           horizontal: AppSpacing.md,
@@ -22,26 +25,15 @@ class UserCardShimmer extends StatelessWidget {
           padding: EdgeInsets.all(AppSpacing.md),
           child: Row(
             children: [
-              Container(
-                width: 48.w,
-                height: 48.w,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-              ),
+              Bone.circle(size: 48.w),
               Gap(AppSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(height: 14.h, color: Colors.white),
+                    Bone.text(width: double.infinity, fontSize: 14.sp),
                     Gap(AppSpacing.xs),
-                    Container(
-                      height: 12.h,
-                      width: 140.w,
-                      color: Colors.white,
-                    ),
+                    Bone.text(width: 140.w, fontSize: 12.sp),
                   ],
                 ),
               ),

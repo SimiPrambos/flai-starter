@@ -6,7 +6,7 @@ import 'package:template_vgv_app/core/theme/app_spacing.dart';
 import 'package:template_vgv_app/core/theme/app_text_styles.dart';
 import 'package:template_vgv_app/features/users/presentation/providers/users_notifier.dart';
 import 'package:template_vgv_app/features/users/presentation/widgets/user_card.dart';
-import 'package:template_vgv_app/features/users/presentation/widgets/user_card_shimmer.dart';
+import 'package:template_vgv_app/features/users/presentation/widgets/user_card_skeleton.dart';
 import 'package:template_vgv_app/l10n/l10n.dart';
 import 'package:template_vgv_app/shared/widgets/app_button.dart';
 
@@ -26,7 +26,7 @@ class UsersPage extends ConsumerWidget {
         child: usersAsync.when(
           loading: () => ListView.builder(
             itemCount: 6,
-            itemBuilder: (context, index) => const UserCardShimmer(),
+            itemBuilder: (context, index) => const UserCardSkeleton(),
           ),
           error: (error, _) {
             final message = error is Failure

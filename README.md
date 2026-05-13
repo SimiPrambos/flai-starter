@@ -23,7 +23,7 @@ Showcases a **users list** from [reqres.in](https://reqres.in) as an example fea
 | Env config | `envied` |
 | Logging | `talker`, `talker_dio_logger`, `talker_flutter` |
 | Connectivity | `connectivity_plus` |
-| UI utilities | `gap`, `cached_network_image`, `shimmer` |
+| UI utilities | `gap`, `cached_network_image`, `skeletonizer` |
 
 ---
 
@@ -157,7 +157,7 @@ lib/
     └── users/
         ├── data/         # Retrofit datasource, freezed models, repository impl
         ├── domain/       # UserEntity, UserRepository interface, GetUsersUseCase
-        └── presentation/ # UsersNotifier, UsersPage, UserCard, UserCardShimmer
+        └── presentation/ # UsersNotifier, UsersPage, UserCard, UserCardSkeleton
 ```
 
 ---

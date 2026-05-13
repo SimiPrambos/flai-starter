@@ -7,7 +7,7 @@ import 'package:template_vgv_app/core/error/failures.dart';
 import 'package:template_vgv_app/features/users/domain/entities/user_entity.dart';
 import 'package:template_vgv_app/features/users/presentation/pages/users_page.dart';
 import 'package:template_vgv_app/features/users/presentation/widgets/user_card.dart';
-import 'package:template_vgv_app/features/users/presentation/widgets/user_card_shimmer.dart';
+import 'package:template_vgv_app/features/users/presentation/widgets/user_card_skeleton.dart';
 import 'package:template_vgv_app/features/users/users_providers.dart';
 import '../../../../helpers/fakes.dart';
 import '../../../../helpers/pump_app.dart';
@@ -51,7 +51,7 @@ void main() {
       expect(createPage(), isA<UsersPage>());
     });
 
-    testWidgets('shows shimmer while loading', (tester) async {
+    testWidgets('shows skeleton while loading', (tester) async {
       when(() => mockRepo.getUsers(page: 1)).thenAnswer(
         (_) async {
           await Future<void>.delayed(const Duration(seconds: 1));
@@ -61,7 +61,7 @@ void main() {
 
       await tester.pumpApp(const UsersPage(), overrides: overrides());
 
-      expect(find.byType(UserCardShimmer), findsWidgets);
+      expect(find.byType(UserCardSkeleton), findsWidgets);
 
       // Drain the pending timer to avoid a leftover-timer assertion.
       await tester.pump(const Duration(seconds: 2));

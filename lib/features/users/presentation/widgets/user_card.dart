@@ -37,12 +37,12 @@ class UserCard extends StatelessWidget {
                   placeholder: (_, _) => Container(
                     width: 48.w,
                     height: 48.w,
-                    color: AppColors.shimmerBase,
+                    color: AppColors.skeletonBase,
                   ),
                   errorWidget: (_, _, _) => Container(
                     width: 48.w,
                     height: 48.w,
-                    color: AppColors.shimmerBase,
+                    color: AppColors.skeletonBase,
                     child: Icon(
                       Icons.person,
                       color: AppColors.onSurfaceVariant,

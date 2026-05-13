@@ -34,6 +34,13 @@ Design baseline: **375×812** (iPhone 13 mini). All sizes must scale with Screen
 Never use raw `double` literals for sizes in widgets — always apply the appropriate suffix.
 Never use `const` on `EdgeInsets`, `Gap`, or `SizedBox` that use `AppSpacing` (getters are runtime values).
 
+## Loading Skeletons
+
+Use `skeletonizer` for loading placeholders. Prefer `Skeletonizer` /
+`Skeletonizer.zone` with `Bone` widgets or skeleton annotations.
+Do not add or use the `shimmer` package for new loading states.
+Name placeholder widgets with a `Skeleton` suffix, not `Shimmer`.
+
 ## Generated Files
 
 `*.g.dart` and `*.freezed.dart` are committed to git.

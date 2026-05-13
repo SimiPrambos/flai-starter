@@ -44,12 +44,12 @@ class UserDetailPage extends ConsumerWidget {
                     placeholder: (_, _) => Container(
                       width: 120.w,
                       height: 120.w,
-                      color: AppColors.shimmerBase,
+                      color: AppColors.skeletonBase,
                     ),
                     errorWidget: (_, _, _) => Container(
                       width: 120.w,
                       height: 120.w,
-                      color: AppColors.shimmerBase,
+                      color: AppColors.skeletonBase,
                       child: Icon(
                         Icons.person,
                         size: 60.r,
