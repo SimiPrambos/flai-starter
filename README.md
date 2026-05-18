@@ -1,149 +1,125 @@
-# Template VGV App
+# flai-starter
 
 ![coverage][coverage_badge]
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![License: MIT][license_badge]][license_link]
 
-Flutter enterprise template — [Very Good CLI][very_good_cli_link] + **Riverpod + Clean Architecture**.
+Production-ready Flutter starter with Clean Architecture and AI tooling.
 
-Showcases a **users list** from [reqres.in](https://reqres.in) as an example feature covering all architecture layers: data, domain, and presentation.
+Everything wired up and working — architecture, routing, networking,
+error handling, logging, and AI context guides — so your team hits the ground running.
 
 ---
 
-## Tech Stack
+## What's Inside
 
-| Category | Package |
+| Area | Technology |
 |---|---|
 | State + DI | `flutter_riverpod`, `riverpod_annotation` (codegen) |
-| Navigation | `go_router` |
-| Network | `dio`, `retrofit` |
-| Model | `freezed_annotation`, `json_annotation` |
-| Error handling | `fpdart` (Either) |
-| Storage | `shared_preferences`, `flutter_secure_storage` |
+| Navigation | `go_router` (typed routes, manual extensions) |
+| Network | `dio`, `retrofit`, `connectivity_plus` |
+| Models | `freezed`, `json_serializable` |
+| Error handling | `fpdart` `Either<Failure, T>` |
 | Env config | `envied` |
-| Logging | `talker`, `talker_dio_logger`, `talker_flutter` |
-| Observability | `firebase_core`, `firebase_crashlytics`, `firebase_analytics` |
-| Connectivity | `connectivity_plus` |
-| UI utilities | `gap`, `cached_network_image`, `skeletonizer` |
+| Logging | `talker` + dio / riverpod / flutter adapters |
+| Observability | Firebase Core, Crashlytics, Analytics |
+| UI utilities | `gap`, `cached_network_image`, `skeletonizer`, `flutter_screenutil` |
+| AI context guides | Specialist skills for Claude Code (architecture, routing, Riverpod, testing, and more) |
+| Monorepo tooling | Melos |
 
 ---
 
-## Getting Started 🚀
+## Getting Started
 
-### Environment Setup
+### Prerequisites
 
-Copy `.env.example` to `.env` and fill in the values:
+- Flutter ≥ 3.29
+- Node.js (for GitNexus and RTK)
+- `melos` (`dart pub global activate melos`)
+
+### 1. Clone and bootstrap
+
+```sh
+git clone https://github.com/your-org/flai-starter.git my-app
+cd my-app
+
+dart pub global activate melos
+melos bootstrap
+```
+
+`melos bootstrap` runs `scripts/bootstrap.sh` as a post-hook, which:
+
+- Activates git hooks (conventional commits)
+- Installs GitNexus (first run only) and indexes the codebase
+- Installs RTK
+
+### 2. Configure environment
 
 ```sh
 cp .env.example .env
 ```
 
+Edit `.env` and set:
+
 ```
 BASE_URL=https://reqres.in/api
-API_KEY=https://app.reqres.in/playground?path=/api/users&method=GET
+API_KEY=<your key from reqres.in>
 ```
 
-## Code Generation ⚙️
-
-This project uses [build_runner](https://pub.dev/packages/build_runner) to generate code for Riverpod providers, Retrofit API clients, and Freezed models.
-
-Run this after cloning or whenever you add/modify annotated files:
+### 3. Generate code
 
 ```sh
 dart run build_runner build --delete-conflicting-outputs
 ```
 
-To watch for changes during development:
+Run this after cloning and after modifying any `@riverpod`, `@freezed`, `@JsonSerializable`, or `@RestApi` annotated file.
+
+### 4. Run
 
 ```sh
-dart run build_runner watch --delete-conflicting-outputs
+flutter run
 ```
-
-### Generated Files
-
-Generated files (`*.g.dart`, `*.freezed.dart`) are **gitignored** — do not commit them. Every developer runs `build_runner` locally.
-
-### Hiding Generated Files in VS Code
-
-The `.vscode/settings.json` already hides generated files from the Explorer:
-
-```json
-{
-  "files.exclude": {
-    "**/*.g.dart": true,
-    "**/*.freezed.dart": true
-  }
-}
-```
-
-If they still appear, fully quit and reopen VS Code (`Cmd+Q`), and make sure you open the `template_vgv__app/` folder directly — not a parent folder.
 
 ---
 
-### Flavors
+## Architecture
 
-This project contains 3 flavors:
+Clean Architecture with a strict dependency rule: `presentation → domain ← data`.
+The `domain/` layer is pure Dart — no Flutter, no infrastructure imports.
 
-- development
-- staging
-- production
-
-```sh
-# Development
-$ flutter run --flavor development --target lib/main_development.dart
-
-# Staging
-$ flutter run --flavor staging --target lib/main_staging.dart
-
-# Production
-$ flutter run --flavor production --target lib/main_production.dart
+```
+lib/
+├── app/
+│   └── view/         # App widget
+├── core/
+│   ├── env/          # Envied — BASE_URL, API_KEY
+│   ├── error/        # Failure (sealed) + AppException
+│   ├── network/      # Dio client + interceptors
+│   ├── router/       # GoRouter config
+│   ├── logging/      # Talker provider
+│   ├── firebase/     # Crashlytics + Analytics bootstrap
+│   ├── storage/      # Local persistence
+│   └── theme/        # AppColors, AppTextStyles, AppSpacing
+├── features/
+│   └── <feature>/
+│       ├── data/         # Retrofit datasource, Freezed models, repo impl
+│       ├── domain/       # Entity, repository interface, use case
+│       └── presentation/ # Notifier, page, widgets
+├── l10n/             # Localisation (English + Bahasa Indonesia)
+└── shared/
+    └── widgets/      # AppButton, AppTextField, AsyncValueWidget
 ```
 
-_\*Template VGV App works on iOS, Android, Web, and Windows._
-
----
-
-## API
-
-This project uses [reqres.in](https://reqres.in) as the example API.
-
-| | |
-|---|---|
-| Base URL | `https://reqres.in/api` |
-| Auth | `x-api-key` header |
-| Endpoint | `GET /users?page={page}` |
-
-Response shape:
-
-```json
-{
-  "page": 1,
-  "per_page": 6,
-  "total": 12,
-  "total_pages": 2,
-  "data": [
-    {
-      "id": 7,
-      "email": "michael.lawson@reqres.in",
-      "first_name": "Michael",
-      "last_name": "Lawson",
-      "avatar": "https://reqres.in/img/faces/7-image.jpg"
-    }
-  ]
-}
-```
-
-The API key is loaded from `.env` via `envied` and injected into every request as an `x-api-key` header by `ApiKeyInterceptor`.
+The `users` feature is the reference implementation — read it before building new features.
 
 ---
 
 ## Firebase
 
-Firebase Crashlytics and Analytics are scaffolded for consuming projects.
-Without Firebase config files, the app logs that Firebase is disabled and keeps
-running normally.
+Crashlytics and Analytics are pre-wired. Without platform config files the app
+runs normally — Firebase is disabled gracefully with a log message.
 
-To enable Firebase in a project created from this starter:
+To enable Firebase in a project built from this starter:
 
 ```sh
 dart pub global activate flutterfire_cli
@@ -151,295 +127,51 @@ flutterfire configure
 ```
 
 This overwrites the placeholder `lib/firebase_options.dart` and generates
-native Firebase files for supported platforms. After configuration, Crashlytics
-receives uncaught Flutter/platform errors and Talker breadcrumbs. GoRouter
-screen transitions are sent to Firebase Analytics via the router observers.
+native config files for all supported platforms. After configuration,
+Crashlytics receives uncaught Flutter and platform errors, and GoRouter
+screen transitions are forwarded to Analytics automatically.
 
 ---
 
-## Architecture 🏗️
+## AI-Assisted Development
 
-Clean Architecture with dependency rule: `presentation → domain ← data`.  
-The domain layer must stay pure Dart + `fpdart` — no Flutter or data layer imports allowed.
+flai-starter ships with pre-configured MCP servers and tooling so AI
+assistants work accurately in this codebase from the first message.
 
-```
-lib/
-├── core/
-│   ├── error/          # Failure (freezed sealed) + AppException
-│   ├── network/        # Dio client, interceptors, connectivity service
-│   ├── router/         # GoRouter config
-│   ├── storage/        # SecureStorage + SharedPreferences wrappers
-│   ├── logging/        # Talker provider
-│   ├── firebase/       # Firebase bootstrap, Crashlytics, Analytics providers
-│   ├── env/            # Envied — BASE_URL, API_KEY
-│   └── theme/          # AppColors, AppTextStyles, AppSpacing, AppAssets
-├── shared/
-│   └── widgets/        # AppButton, AppTextField, AsyncValueWidget
-└── features/
-    └── users/
-        ├── data/         # Retrofit datasource, freezed models, repository impl
-        ├── domain/       # UserEntity, UserRepository interface, GetUsersUseCase
-        └── presentation/ # UsersNotifier, UsersPage, UserCard, UserCardSkeleton
-```
+### MCP Servers (`.mcp.json`)
 
----
-
-## Specialist Skills 🤖
-
-Context guides for AI assistants (Claude Code, etc.) working on specific areas.
-Each skill contains patterns, rules, code examples, and common mistakes for that domain.
-
-| Topic | Skill | When to use |
-|---|---|---|
-| Architecture & layers | `.claude/skills/architecture/SKILL.md` | Adding features, checking imports |
-| Navigation / routing | `.claude/skills/navigation/SKILL.md` | Adding routes, screen navigation |
-| Riverpod providers | `.claude/skills/riverpod/SKILL.md` | Creating providers or notifiers |
-| Error handling | `.claude/skills/error-handling/SKILL.md` | Writing repos, handling failures |
-| Network / API | `.claude/skills/network/SKILL.md` | Adding endpoints, Dio config |
-| Responsive UI | `.claude/skills/responsive-ui/SKILL.md` | Writing widget dimensions |
-| Loading skeletons | `.claude/skills/loading-states/SKILL.md` | Adding loading placeholders |
-| Theme & shared UI | `.claude/skills/theme/SKILL.md` | Colors, text styles, spacing |
-| Testing | `.claude/skills/testing/SKILL.md` | Writing any test |
-| Firebase & Talker | `.claude/skills/firebase-talker/SKILL.md` | Logging, analytics, Crashlytics |
-| Generated files | `.claude/skills/generated-files/SKILL.md` | Build runner, env, constraints |
-
-### How to Use Skills
-
-Skills are loaded by referencing the file path with `@` in your prompt to Claude Code.
-Claude reads the skill and applies its rules and patterns automatically for that task.
-
-**Load one skill:**
-
-```
-@.claude/skills/architecture/SKILL.md buatkan feature auth dari scratch
-```
-
-**Load multiple skills sekaligus:**
-
-```
-@.claude/skills/architecture/SKILL.md @.claude/skills/riverpod/SKILL.md
-@.claude/skills/testing/SKILL.md implement feature notifications lengkap dengan tests
-```
-
-**Let Claude decide** (skills auto-loaded via `.claude/CLAUDE.md`):
-
-```
-buatkan route baru untuk halaman profile
-→ Claude membaca CLAUDE.md, tahu harus load navigation skill, lalu implement
-```
-
-### Examples
-
-| Task | Skills to load |
+| Server | Purpose |
 |---|---|
-| Buat feature baru dari nol | `architecture` + `riverpod` + `error-handling` + `testing` |
-| Tambah halaman baru | `navigation` + `responsive-ui` + `theme` |
-| Tambah API endpoint | `network` + `error-handling` + `generated-files` |
-| Buat loading state | `loading-states` + `responsive-ui` |
-| Setup logging/crash reporting | `firebase-talker` |
-| Fix test yang gagal | `testing` |
+| GitNexus | Code intelligence — impact analysis, refactoring, debugging |
+| Context7 | Live library docs — always up-to-date API references |
+| Dart | Live Dart tooling — analyzer, pub.dev search, symbol lookup |
+
+### Specialist Skills
+
+Context guides in `.claude/skills/` encode architecture rules, patterns,
+and common mistakes for each area (routing, Riverpod, error handling,
+testing, etc.).
+
+See [`.claude/CLAUDE.md`](.claude/CLAUDE.md) for the full skills index.
+
+### RTK
+
+Token-optimized CLI wrapper. Prefix any command with `rtk` for 60–90%
+token reduction on build, test, and git operations.
+
+All tooling is installed automatically by `melos bootstrap`.
 
 ---
 
-## Before You Push 🚦
+## Contributing
 
-Run these checks locally **in order** before pushing — they mirror exactly what CI/CD
-runs on GitHub so you catch failures before they hit the pipeline.
-
-### 1. Code Generation
-
-Regenerate files whenever you add or modify annotated classes:
-
-```sh
-dart run build_runner build --delete-conflicting-outputs
-```
-
-> Skip if you have not touched any `@riverpod`, `@freezed`, `@JsonSerializable`,
-> or `@RestApi` annotated code.
-
-### 2. Format (line length 80)
-
-VGV enforces 80-character line width. CI uses `--set-exit-if-changed` and will
-fail if any file is not formatted correctly.
-
-Auto-fix first, then verify:
-
-```sh
-# Fix
-dart format --line-length 80 .
-
-# Verify (mirrors CI — exits non-zero if anything changed)
-dart format --line-length 80 --set-exit-if-changed .
-```
-
-### 3. Static Analysis
-
-```sh
-flutter analyze --fatal-infos
-```
-
-Expected output: `No issues found!` — CI treats any info-level diagnostic as a
-failure.
-
-### 4. Tests + Coverage
-
-```sh
-very_good test --coverage --test-randomize-ordering-seed random
-```
-
-Or without the `very_good` CLI:
-
-```sh
-flutter test --coverage --test-randomize-ordering-seed random
-```
-
-VGV requires **100 % coverage**. To inspect locally, install `lcov` first
-(one-time):
-
-```sh
-brew install lcov
-```
-
-Then generate and open the report:
-
-```sh
-genhtml coverage/lcov.info -o coverage/ && open coverage/index.html
-```
-
-Any uncovered line will fail the CI coverage gate — write the test before
-pushing.
-
-### 5. Spell Check (markdown files)
-
-CI runs `cspell` on every `*.md` file. If you add a new technical term, add it
-to `.github/cspell.json` under `"words"`:
-
-```json
-"words": ["yourNewTerm"]
-```
-
-### 6. Semantic PR Title
-
-The `semantic-pull-request` job rejects PR titles that do not follow
-[Conventional Commits](https://www.conventionalcommits.org/):
-
-| Prefix | When |
-|---|---|
-| `feat:` | New feature |
-| `fix:` | Bug fix |
-| `chore:` | Maintenance — deps, config, tooling |
-| `docs:` | Documentation only |
-| `refactor:` | Code change, no feature or fix |
-| `test:` | Adding or fixing tests |
-| `ci:` | CI/CD pipeline changes |
-
-Example: `feat: add user profile page`
-
-> Push titles follow the same convention (commits on `main` are squash-merged
-> from PRs).
-
-### Quick One-Liner
-
-Run all checks in sequence — stops on the first failure:
-
-```sh
-dart run build_runner build --delete-conflicting-outputs && \
-  dart format --line-length 80 --set-exit-if-changed . && \
-  flutter analyze --fatal-infos && \
-  flutter test --coverage --test-randomize-ordering-seed random
-```
-
----
-
-## Running Tests 🧪
-
-```sh
-$ very_good test --coverage --test-randomize-ordering-seed random
-```
-
-To view the generated coverage report:
-
-```sh
-# Generate Coverage Report
-$ genhtml coverage/lcov.info -o coverage/
-
-# Open Coverage Report
-$ open coverage/index.html
-```
-
-### Testing Strategy
-
-| Layer | Approach |
-|---|---|
-| UseCase | Pure unit test, mock `UserRepository` with mocktail |
-| Repository | Mock `RemoteUserDataSource` |
-| Notifier | `ProviderContainer` with `overrides` |
-| Widget | `pumpApp()` helper — wraps `ProviderScope + MaterialApp` |
-
----
-
-## Working with Translations 🌐
-
-This project supports **English** and **Bahasa Indonesia**.
-
-### Adding Strings
-
-Open `lib/l10n/arb/app_en.arb` and add a new key/value pair:
-
-```arb
-{
-    "@@locale": "en",
-    "usersPageTitle": "Users",
-    "@usersPageTitle": {
-        "description": "Title shown in the AppBar of the Users Page"
-    }
-}
-```
-
-Add the corresponding translation in `app_id.arb`:
-
-```arb
-{
-    "@@locale": "id",
-    "usersPageTitle": "Pengguna"
-}
-```
-
-### File Structure
-
-```
-lib/l10n/arb/
-├── app_en.arb
-└── app_id.arb
-```
-
-### Adding a New Locale
-
-Update the `CFBundleLocalizations` array in `ios/Runner/Info.plist`:
-
-```xml
-<key>CFBundleLocalizations</key>
-<array>
-    <string>en</string>
-    <string>id</string>
-</array>
-```
-
-### Generating Translations
-
-```sh
-flutter gen-l10n --arb-dir="lib/l10n/arb"
-```
-
-Alternatively, run `flutter run` and code generation will take place automatically.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the pre-push checklist, CI/CD
+steps, conventional commit format, and testing strategy.
 
 ---
 
 [coverage_badge]: coverage_badge.svg
-[internationalization_link]: https://docs.flutter.dev/ui/internationalization
-[arb_documentation_link]: https://github.com/google/app-resource-bundle
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [license_link]: https://opensource.org/licenses/MIT
 [very_good_analysis_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg
 [very_good_analysis_link]: https://pub.dev/packages/very_good_analysis
-[very_good_cli_link]: https://github.com/VeryGoodOpenSource/very_good_cli
