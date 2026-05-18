@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:template_vgv_app/core/error/failures.dart';
+import 'package:template_vgv_app/core/theme/app_colors.dart';
 import 'package:template_vgv_app/core/theme/app_spacing.dart';
 import 'package:template_vgv_app/core/theme/app_text_styles.dart';
+import 'package:template_vgv_app/features/users/domain/entities/user_entity.dart';
 import 'package:template_vgv_app/features/users/presentation/providers/users_notifier.dart';
 import 'package:template_vgv_app/features/users/presentation/widgets/user_card.dart';
-import 'package:template_vgv_app/features/users/presentation/widgets/user_card_skeleton.dart';
 import 'package:template_vgv_app/l10n/l10n.dart';
 import 'package:template_vgv_app/shared/widgets/app_button.dart';
+
+const _fakeUser = UserEntity(
+  id: 0,
+  email: 'placeholder@email.com',
+  firstName: 'First Name',
+  lastName: 'Last Name',
+  avatar: '',
+);
 
 class UsersPage extends ConsumerWidget {
   const UsersPage({super.key});
@@ -24,9 +34,16 @@ class UsersPage extends ConsumerWidget {
       body: RefreshIndicator(
         onRefresh: () => ref.read(usersNotifierProvider.notifier).refresh(),
         child: usersAsync.when(
-          loading: () => ListView.builder(
-            itemCount: 6,
-            itemBuilder: (context, index) => const UserCardSkeleton(),
+          loading: () => Skeletonizer(
+            effect: const ShimmerEffect(
+              baseColor: AppColors.skeletonBase,
+              highlightColor: AppColors.skeletonHighlight,
+              duration: Duration(milliseconds: 1200),
+            ),
+            child: ListView.builder(
+              itemCount: 6,
+              itemBuilder: (context, index) => const UserCard(user: _fakeUser),
+            ),
           ),
           error: (error, _) {
             final message = error is Failure
