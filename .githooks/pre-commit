@@ -1,0 +1,4 @@
+#!/bin/sh
+dart fix --apply
+dart format --set-exit-if-changed lib test
+flutter analyze lib test

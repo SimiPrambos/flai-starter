@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:talker/talker.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:template_vgv_app/core/logging/talker_provider.dart';
 import 'package:template_vgv_app/core/router/app_router.dart';
@@ -29,7 +28,7 @@ Widget _appWithRouter(GoRouter router) => ScreenUtilInit(
   designSize: const Size(375, 812),
   minTextAdapt: true,
   splitScreenMode: true,
-  builder: (_, __) => MaterialApp.router(
+  builder: (_, _) => MaterialApp.router(
     routerConfig: router,
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
@@ -72,7 +71,7 @@ void main() {
             userRepositoryProvider.overrideWithValue(mockRepo),
           ],
           child: Consumer(
-            builder: (_, ref, __) =>
+            builder: (_, ref, _) =>
                 _appWithRouter(ref.watch(appRouterProvider)),
           ),
         ),
@@ -94,7 +93,7 @@ void main() {
             userRepositoryProvider.overrideWithValue(mockRepo),
           ],
           child: Consumer(
-            builder: (_, ref, __) =>
+            builder: (_, ref, _) =>
                 _appWithRouter(ref.watch(appRouterProvider)),
           ),
         ),

@@ -82,7 +82,7 @@ void main() {
             designSize: const Size(375, 812),
             minTextAdapt: true,
             splitScreenMode: true,
-            builder: (_, __) => MaterialApp.router(
+            builder: (_, _) => MaterialApp.router(
               routerConfig: router,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
