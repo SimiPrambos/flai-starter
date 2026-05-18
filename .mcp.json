@@ -9,11 +9,8 @@
       ]
     },
     "context7": {
-      "type": "http",
-      "url": "https://mcp.context7.com/mcp",
-      "headers": {
-        "CONTEXT7_API_KEY": "ctx7sk-63ebfb69-46d0-4569-811f-da0c1ab121b5"
-      }
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
     },
     "dart": {
       "type": "stdio",
