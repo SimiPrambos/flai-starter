@@ -32,8 +32,9 @@ void main() {
 
   group('AuthInterceptor.onRequest', () {
     test('adds Authorization header when token exists', () async {
-      when(() => mockStorage.read(key: SecureStorageKeys.accessToken))
-          .thenAnswer((_) async => 'my-token');
+      when(
+        () => mockStorage.read(key: SecureStorageKeys.accessToken),
+      ).thenAnswer((_) async => 'my-token');
       final options = RequestOptions(path: '/test');
       final handler = MockRequestInterceptorHandler();
 
@@ -44,8 +45,9 @@ void main() {
     });
 
     test('does not add Authorization header when token is null', () async {
-      when(() => mockStorage.read(key: SecureStorageKeys.accessToken))
-          .thenAnswer((_) async => null);
+      when(
+        () => mockStorage.read(key: SecureStorageKeys.accessToken),
+      ).thenAnswer((_) async => null);
       final options = RequestOptions(path: '/test');
       final handler = MockRequestInterceptorHandler();
 
@@ -56,8 +58,9 @@ void main() {
     });
 
     test('does not add Authorization header when token is empty', () async {
-      when(() => mockStorage.read(key: SecureStorageKeys.accessToken))
-          .thenAnswer((_) async => '');
+      when(
+        () => mockStorage.read(key: SecureStorageKeys.accessToken),
+      ).thenAnswer((_) async => '');
       final options = RequestOptions(path: '/test');
       final handler = MockRequestInterceptorHandler();
 
