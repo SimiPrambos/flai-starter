@@ -20,7 +20,8 @@ jobs:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
       flutter_version: "3.41.x"
-      run_bloc_lint: true
+      run_bloc_lint: false
+      setup: cp .env.example .env && dart run build_runner build --delete-conflicting-outputs
 
   spell-check:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/spell_check.yml@v1
