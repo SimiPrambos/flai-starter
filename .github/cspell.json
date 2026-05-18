@@ -17,6 +17,31 @@
   "useGitignore": true,
   "words": [
     "reqres",
-    "localizable"
+    "localizable",
+    "flai",
+    "flutterfire",
+    "Riverpod",
+    "riverpod",
+    "freezed",
+    "envied",
+    "fpdart",
+    "Crashlytics",
+    "GoRouter",
+    "Talker",
+    "Melos",
+    "gitnexus",
+    "pytest",
+    "skeletonizer",
+    "screenutil",
+    "Localisation",
+    "Bahasa",
+    "Nilai",
+    "contoh"
+  ],
+  "ignorePaths": [
+    "node_modules",
+    ".git",
+    "build",
+    ".dart_tool"
   ]
 }

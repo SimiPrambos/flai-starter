@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+dart fix --apply
+dart format lib test
+git add -u
+flutter analyze lib test
