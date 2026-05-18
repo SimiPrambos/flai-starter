@@ -5,7 +5,7 @@ Check and install before any task:
 
 ```bash
 # GitNexus
-npx gitnexus --version || npm install -g gitnexus && npx gitnexus analyze
+npx gitnexus --version || npm install -g gitnexus && npx gitnexus analyze --index-only
 
 # RTK
 rtk --version || npm install -g @rtk/cli
@@ -18,7 +18,9 @@ rtk --version || npm install -g @rtk/cli
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-> Index stale? Run `npx gitnexus analyze` first.
+> Index stale? Run `npx gitnexus analyze --index-only` first.
+
+**Always:** when running analyze command must use `--index-only`.
 
 **Always:** Run `gitnexus_impact({target, direction: "upstream"})` before editing any symbol. Run `gitnexus_detect_changes()` before committing. Warn user on HIGH/CRITICAL risk.
 
