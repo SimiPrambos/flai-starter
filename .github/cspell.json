@@ -28,7 +28,15 @@
     "Crashlytics",
     "GoRouter",
     "Talker",
-    "Melos"
+    "Melos",
+    "gitnexus",
+    "pytest",
+    "skeletonizer",
+    "screenutil",
+    "Localisation",
+    "Bahasa",
+    "Nilai",
+    "contoh"
   ],
   "ignorePaths": [
     "node_modules",
