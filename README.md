@@ -184,6 +184,63 @@ lib/
 
 ---
 
+## Specialist Skills 🤖
+
+Context guides for AI assistants (Claude Code, etc.) working on specific areas.
+Each skill contains patterns, rules, code examples, and common mistakes for that domain.
+
+| Topic | Skill | When to use |
+|---|---|---|
+| Architecture & layers | `.claude/skills/architecture/SKILL.md` | Adding features, checking imports |
+| Navigation / routing | `.claude/skills/navigation/SKILL.md` | Adding routes, screen navigation |
+| Riverpod providers | `.claude/skills/riverpod/SKILL.md` | Creating providers or notifiers |
+| Error handling | `.claude/skills/error-handling/SKILL.md` | Writing repos, handling failures |
+| Network / API | `.claude/skills/network/SKILL.md` | Adding endpoints, Dio config |
+| Responsive UI | `.claude/skills/responsive-ui/SKILL.md` | Writing widget dimensions |
+| Loading skeletons | `.claude/skills/loading-states/SKILL.md` | Adding loading placeholders |
+| Theme & shared UI | `.claude/skills/theme/SKILL.md` | Colors, text styles, spacing |
+| Testing | `.claude/skills/testing/SKILL.md` | Writing any test |
+| Firebase & Talker | `.claude/skills/firebase-talker/SKILL.md` | Logging, analytics, Crashlytics |
+| Generated files | `.claude/skills/generated-files/SKILL.md` | Build runner, env, constraints |
+
+### How to Use Skills
+
+Skills are loaded by referencing the file path with `@` in your prompt to Claude Code.
+Claude reads the skill and applies its rules and patterns automatically for that task.
+
+**Load one skill:**
+
+```
+@.claude/skills/architecture/SKILL.md buatkan feature auth dari scratch
+```
+
+**Load multiple skills sekaligus:**
+
+```
+@.claude/skills/architecture/SKILL.md @.claude/skills/riverpod/SKILL.md
+@.claude/skills/testing/SKILL.md implement feature notifications lengkap dengan tests
+```
+
+**Let Claude decide** (skills auto-loaded via `.claude/CLAUDE.md`):
+
+```
+buatkan route baru untuk halaman profile
+→ Claude membaca CLAUDE.md, tahu harus load navigation skill, lalu implement
+```
+
+### Examples
+
+| Task | Skills to load |
+|---|---|
+| Buat feature baru dari nol | `architecture` + `riverpod` + `error-handling` + `testing` |
+| Tambah halaman baru | `navigation` + `responsive-ui` + `theme` |
+| Tambah API endpoint | `network` + `error-handling` + `generated-files` |
+| Buat loading state | `loading-states` + `responsive-ui` |
+| Setup logging/crash reporting | `firebase-talker` |
+| Fix test yang gagal | `testing` |
+
+---
+
 ## Before You Push 🚦
 
 Run these checks locally **in order** before pushing — they mirror exactly what CI/CD
