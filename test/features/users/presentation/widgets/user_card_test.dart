@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:template_vgv_app/features/users/domain/entities/user_entity.dart';
 import 'package:template_vgv_app/features/users/presentation/widgets/user_card.dart';
+import '../../../../helpers/pump_app.dart';
 
 void main() {
   group('UserCard', () {
@@ -15,10 +16,8 @@ void main() {
     );
 
     testWidgets('renders user details', (tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: UserCard(user: user)),
-        ),
+      await tester.pumpApp(
+        const Scaffold(body: UserCard(user: user)),
       );
 
       expect(find.text('Michael Lawson'), findsOneWidget);
@@ -27,10 +26,8 @@ void main() {
     });
 
     testWidgets('builds avatar error widget', (tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: UserCard(user: user)),
-        ),
+      await tester.pumpApp(
+        const Scaffold(body: UserCard(user: user)),
       );
 
       final image = tester.widget<CachedNetworkImage>(
@@ -38,14 +35,12 @@ void main() {
       );
       final context = tester.element(find.byType(CachedNetworkImage));
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: image.errorWidget!(
-              context,
-              user.avatar,
-              Exception('failed'),
-            ),
+      await tester.pumpApp(
+        Scaffold(
+          body: image.errorWidget!(
+            context,
+            user.avatar,
+            Exception('failed'),
           ),
         ),
       );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum AppButtonVariant { filled, outlined, ghost }
 
@@ -21,15 +22,15 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final child = isLoading
-        ? const SizedBox(
-            width: 20,
-            height: 20,
-            child: CircularProgressIndicator(strokeWidth: 2),
+        ? SizedBox(
+            width: 20.r,
+            height: 20.r,
+            child: const CircularProgressIndicator(strokeWidth: 2),
           )
         : icon != null
         ? Row(
             mainAxisSize: MainAxisSize.min,
-            children: [icon!, const SizedBox(width: 8), Text(label)],
+            children: [icon!, SizedBox(width: 8.w), Text(label)],
           )
         : Text(label);
 

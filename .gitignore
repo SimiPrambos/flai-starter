@@ -121,6 +121,9 @@ lib/l10n/gen/
 .env
 lib/core/env/env.g.dart
 
-# Generated files
-*.g.dart
-*.freezed.dart
+# Project-specific Firebase config. Generate these in consuming apps with:
+# `flutterfire configure`
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+macos/Runner/GoogleService-Info.plist
+firebase_app_id_file.json

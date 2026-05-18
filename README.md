@@ -22,8 +22,9 @@ Showcases a **users list** from [reqres.in](https://reqres.in) as an example fea
 | Storage | `shared_preferences`, `flutter_secure_storage` |
 | Env config | `envied` |
 | Logging | `talker`, `talker_dio_logger`, `talker_flutter` |
+| Observability | `firebase_core`, `firebase_crashlytics`, `firebase_analytics` |
 | Connectivity | `connectivity_plus` |
-| UI utilities | `gap`, `cached_network_image`, `shimmer` |
+| UI utilities | `gap`, `cached_network_image`, `skeletonizer` |
 
 ---
 
@@ -136,6 +137,26 @@ The API key is loaded from `.env` via `envied` and injected into every request a
 
 ---
 
+## Firebase
+
+Firebase Crashlytics and Analytics are scaffolded for consuming projects.
+Without Firebase config files, the app logs that Firebase is disabled and keeps
+running normally.
+
+To enable Firebase in a project created from this starter:
+
+```sh
+dart pub global activate flutterfire_cli
+flutterfire configure
+```
+
+This overwrites the placeholder `lib/firebase_options.dart` and generates
+native Firebase files for supported platforms. After configuration, Crashlytics
+receives uncaught Flutter/platform errors and Talker breadcrumbs. GoRouter
+screen transitions are sent to Firebase Analytics via the router observers.
+
+---
+
 ## Architecture 🏗️
 
 Clean Architecture with dependency rule: `presentation → domain ← data`.  
@@ -149,6 +170,7 @@ lib/
 │   ├── router/         # GoRouter config
 │   ├── storage/        # SecureStorage + SharedPreferences wrappers
 │   ├── logging/        # Talker provider
+│   ├── firebase/       # Firebase bootstrap, Crashlytics, Analytics providers
 │   ├── env/            # Envied — BASE_URL, API_KEY
 │   └── theme/          # AppColors, AppTextStyles, AppSpacing, AppAssets
 ├── shared/
@@ -157,8 +179,65 @@ lib/
     └── users/
         ├── data/         # Retrofit datasource, freezed models, repository impl
         ├── domain/       # UserEntity, UserRepository interface, GetUsersUseCase
-        └── presentation/ # UsersNotifier, UsersPage, UserCard, UserCardShimmer
+        └── presentation/ # UsersNotifier, UsersPage, UserCard, UserCardSkeleton
 ```
+
+---
+
+## Specialist Skills 🤖
+
+Context guides for AI assistants (Claude Code, etc.) working on specific areas.
+Each skill contains patterns, rules, code examples, and common mistakes for that domain.
+
+| Topic | Skill | When to use |
+|---|---|---|
+| Architecture & layers | `.claude/skills/architecture/SKILL.md` | Adding features, checking imports |
+| Navigation / routing | `.claude/skills/navigation/SKILL.md` | Adding routes, screen navigation |
+| Riverpod providers | `.claude/skills/riverpod/SKILL.md` | Creating providers or notifiers |
+| Error handling | `.claude/skills/error-handling/SKILL.md` | Writing repos, handling failures |
+| Network / API | `.claude/skills/network/SKILL.md` | Adding endpoints, Dio config |
+| Responsive UI | `.claude/skills/responsive-ui/SKILL.md` | Writing widget dimensions |
+| Loading skeletons | `.claude/skills/loading-states/SKILL.md` | Adding loading placeholders |
+| Theme & shared UI | `.claude/skills/theme/SKILL.md` | Colors, text styles, spacing |
+| Testing | `.claude/skills/testing/SKILL.md` | Writing any test |
+| Firebase & Talker | `.claude/skills/firebase-talker/SKILL.md` | Logging, analytics, Crashlytics |
+| Generated files | `.claude/skills/generated-files/SKILL.md` | Build runner, env, constraints |
+
+### How to Use Skills
+
+Skills are loaded by referencing the file path with `@` in your prompt to Claude Code.
+Claude reads the skill and applies its rules and patterns automatically for that task.
+
+**Load one skill:**
+
+```
+@.claude/skills/architecture/SKILL.md buatkan feature auth dari scratch
+```
+
+**Load multiple skills sekaligus:**
+
+```
+@.claude/skills/architecture/SKILL.md @.claude/skills/riverpod/SKILL.md
+@.claude/skills/testing/SKILL.md implement feature notifications lengkap dengan tests
+```
+
+**Let Claude decide** (skills auto-loaded via `.claude/CLAUDE.md`):
+
+```
+buatkan route baru untuk halaman profile
+→ Claude membaca CLAUDE.md, tahu harus load navigation skill, lalu implement
+```
+
+### Examples
+
+| Task | Skills to load |
+|---|---|
+| Buat feature baru dari nol | `architecture` + `riverpod` + `error-handling` + `testing` |
+| Tambah halaman baru | `navigation` + `responsive-ui` + `theme` |
+| Tambah API endpoint | `network` + `error-handling` + `generated-files` |
+| Buat loading state | `loading-states` + `responsive-ui` |
+| Setup logging/crash reporting | `firebase-talker` |
+| Fix test yang gagal | `testing` |
 
 ---
 

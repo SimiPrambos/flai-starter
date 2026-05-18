@@ -10,6 +10,6 @@ abstract final class AppColors {
   static const onSurface = Color(0xFF111827);
   static const onSurfaceVariant = Color(0xFF6B7280);
   static const divider = Color(0xFFE5E7EB);
-  static const shimmerBase = Color(0xFFE5E7EB);
-  static const shimmerHighlight = Color(0xFFF3F4F6);
+  static const skeletonBase = Color(0xFFE5E7EB);
+  static const skeletonHighlight = Color(0xFFF3F4F6);
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:template_vgv_app/shared/widgets/app_button.dart';
+import '../../helpers/pump_app.dart';
 
 void main() {
   group('AppButton', () {
@@ -8,10 +9,8 @@ void main() {
       WidgetTester tester,
       AppButton button,
     ) {
-      return tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(body: Center(child: button)),
-        ),
+      return tester.pumpApp(
+        Scaffold(body: Center(child: button)),
       );
     }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:template_vgv_app/shared/widgets/app_text_field.dart';
+import '../../helpers/pump_app.dart';
 
 void main() {
   group('AppTextField', () {
@@ -10,23 +11,21 @@ void main() {
       addTearDown(controller.dispose);
       String? changedValue;
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Form(
-              key: formKey,
-              child: AppTextField(
-                label: 'Password',
-                hint: 'Enter password',
-                controller: controller,
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Required' : null,
-                prefixIcon: const Icon(Icons.lock),
-                suffixIcon: const Icon(Icons.visibility),
-                obscureText: true,
-                keyboardType: TextInputType.visiblePassword,
-                onChanged: (value) => changedValue = value,
-              ),
+      await tester.pumpApp(
+        Scaffold(
+          body: Form(
+            key: formKey,
+            child: AppTextField(
+              label: 'Password',
+              hint: 'Enter password',
+              controller: controller,
+              validator: (value) =>
+                  value == null || value.isEmpty ? 'Required' : null,
+              prefixIcon: const Icon(Icons.lock),
+              suffixIcon: const Icon(Icons.visibility),
+              obscureText: true,
+              keyboardType: TextInputType.visiblePassword,
+              onChanged: (value) => changedValue = value,
             ),
           ),
         ),
