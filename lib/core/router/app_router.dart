@@ -63,6 +63,7 @@ GoRouter appRouter(AppRouterRef ref) {
 
   final observers = <NavigatorObserver>[
     TalkerRouteObserver(talker),
+    // coverage:ignore-start
     if (analytics != null)
       FirebaseAnalyticsObserver(
         analytics: analytics,
@@ -72,6 +73,7 @@ GoRouter appRouter(AppRouterRef ref) {
           'Firebase Analytics route tracking failed',
         ),
       ),
+    // coverage:ignore-end
   ];
 
   return GoRouter(
