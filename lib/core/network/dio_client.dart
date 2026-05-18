@@ -5,11 +5,8 @@ import 'package:template_vgv_app/core/env/env.dart';
 import 'package:template_vgv_app/core/logging/talker_provider.dart';
 import 'package:template_vgv_app/core/network/connectivity_service.dart';
 import 'package:template_vgv_app/core/network/interceptors/api_key_interceptor.dart';
-import 'package:template_vgv_app/core/network/interceptors/auth_interceptor.dart';
 import 'package:template_vgv_app/core/network/interceptors/connectivity_interceptor.dart';
 import 'package:template_vgv_app/core/network/interceptors/error_interceptor.dart';
-import 'package:template_vgv_app/core/router/app_router.dart';
-import 'package:template_vgv_app/core/storage/secure_storage.dart';
 
 part 'dio_client.g.dart';
 
@@ -17,8 +14,6 @@ part 'dio_client.g.dart';
 Dio dioClient(DioClientRef ref) {
   final talker = ref.watch(talkerProvider);
   final connectivity = ref.watch(connectivityServiceProvider);
-  final secureStorage = ref.watch(secureStorageProvider);
-  final router = ref.watch(appRouterProvider);
 
   final dio = Dio(
     BaseOptions(
@@ -29,7 +24,6 @@ Dio dioClient(DioClientRef ref) {
   );
 
   dio.interceptors.addAll([
-    AuthInterceptor(secureStorage, router),
     ApiKeyInterceptor(),
     ConnectivityInterceptor(connectivity),
     ErrorInterceptor(),

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:template_vgv_app/core/common/paginated_result.dart';
 import 'package:template_vgv_app/core/error/failures.dart';
 import 'package:template_vgv_app/features/users/domain/entities/user_entity.dart';
 import 'package:template_vgv_app/features/users/domain/usecases/get_users_use_case.dart';
@@ -24,15 +25,19 @@ void main() {
   });
 
   group('GetUsersUseCase', () {
-    test('returns list of users on success', () async {
-      final users = [testUser];
+    test('returns PaginatedResult on success', () async {
+      const paginated = PaginatedResult(
+        items: [testUser],
+        currentPage: 1,
+        totalPages: 2,
+      );
       when(
         () => mockRepo.getUsers(page: 1),
-      ).thenAnswer((_) async => right(users));
+      ).thenAnswer((_) async => right(paginated));
 
       final result = await useCase(page: 1);
 
-      expect(result, right<Failure, List<UserEntity>>(users));
+      expect(result, right<Failure, PaginatedResult<UserEntity>>(paginated));
       verify(() => mockRepo.getUsers(page: 1)).called(1);
     });
 
@@ -44,11 +49,18 @@ void main() {
 
       final result = await useCase(page: 1);
 
-      expect(result, left<Failure, List<UserEntity>>(failure));
+      expect(
+        result,
+        left<Failure, PaginatedResult<UserEntity>>(failure),
+      );
     });
 
     test('delegates page param to repository', () async {
-      when(() => mockRepo.getUsers(page: 2)).thenAnswer((_) async => right([]));
+      when(() => mockRepo.getUsers(page: 2)).thenAnswer(
+        (_) async => right(
+          const PaginatedResult(items: [], currentPage: 2, totalPages: 2),
+        ),
+      );
 
       await useCase(page: 2);
 

@@ -6,6 +6,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:template_vgv_app/core/common/paginated_result.dart';
 import 'package:template_vgv_app/core/logging/talker_provider.dart';
 import 'package:template_vgv_app/core/router/app_router.dart';
 import 'package:template_vgv_app/features/users/domain/entities/user_entity.dart';
@@ -61,7 +62,9 @@ void main() {
 
     testWidgets('navigates to UsersPage at /users', (tester) async {
       when(() => mockRepo.getUsers(page: 1)).thenAnswer(
-        (_) async => right([]),
+        (_) async => right(
+          const PaginatedResult(items: [], currentPage: 1, totalPages: 1),
+        ),
       );
 
       await tester.pumpWidget(
@@ -83,7 +86,16 @@ void main() {
 
     testWidgets('navigates to UserDetailPage on user card tap', (tester) async {
       when(() => mockRepo.getUsers(page: 1)).thenAnswer(
-        (_) async => right([_testUser]),
+        (_) async => right(
+          const PaginatedResult(
+            items: [_testUser],
+            currentPage: 1,
+            totalPages: 1,
+          ),
+        ),
+      );
+      when(() => mockRepo.getUserById(id: 7)).thenAnswer(
+        (_) async => right(_testUser),
       );
 
       await tester.pumpWidget(

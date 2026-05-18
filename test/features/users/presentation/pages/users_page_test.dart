@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:template_vgv_app/core/common/paginated_result.dart';
 import 'package:template_vgv_app/core/error/failures.dart';
 import 'package:template_vgv_app/features/users/domain/entities/user_entity.dart';
 import 'package:template_vgv_app/features/users/presentation/pages/users_page.dart';
@@ -43,6 +44,9 @@ void main() {
     userRepositoryProvider.overrideWithValue(mockRepo),
   ];
 
+  PaginatedResult<UserEntity> singlePage(List<UserEntity> items) =>
+      PaginatedResult(items: items, currentPage: 1, totalPages: 1);
+
   group('UsersPage', () {
     test('can be constructed', () {
       final createPage = _identity(UsersPage.new);
@@ -54,7 +58,7 @@ void main() {
       when(() => mockRepo.getUsers(page: 1)).thenAnswer(
         (_) async {
           await Future<void>.delayed(const Duration(seconds: 1));
-          return right([testUser]);
+          return right(singlePage([testUser]));
         },
       );
 
@@ -63,7 +67,6 @@ void main() {
       expect(find.byType(ListView), findsOneWidget);
       expect(find.text('Michael Lawson'), findsNothing);
 
-      // Drain the pending timer to avoid a leftover-timer assertion.
       await tester.pump(const Duration(seconds: 2));
       await tester.pumpAndSettle();
     });
@@ -71,7 +74,7 @@ void main() {
     testWidgets('shows user cards on success', (tester) async {
       when(
         () => mockRepo.getUsers(page: 1),
-      ).thenAnswer((_) async => right([testUser]));
+      ).thenAnswer((_) async => right(singlePage([testUser])));
 
       await tester.pumpApp(const UsersPage(), overrides: overrides());
       await tester.pumpAndSettle();
@@ -110,7 +113,7 @@ void main() {
         if (calls == 1) {
           return left(const Failure.network(message: 'No internet'));
         }
-        return right([testUser]);
+        return right(singlePage([testUser]));
       });
 
       await tester.pumpApp(const UsersPage(), overrides: overrides());
@@ -126,7 +129,11 @@ void main() {
     testWidgets('pull to refresh re-fetches users', (tester) async {
       when(
         () => mockRepo.getUsers(page: 1),
-      ).thenAnswer((_) async => right(manyUsers));
+      ).thenAnswer(
+        (_) async => right(
+          PaginatedResult(items: manyUsers, currentPage: 1, totalPages: 3),
+        ),
+      );
 
       await tester.pumpApp(const UsersPage(), overrides: overrides());
       await tester.pumpAndSettle();
@@ -137,6 +144,57 @@ void main() {
       await tester.pumpAndSettle();
 
       verify(() => mockRepo.getUsers(page: 1)).called(2);
+    });
+
+    testWidgets('shows load more button when hasMore is true', (tester) async {
+      when(
+        () => mockRepo.getUsers(page: 1),
+      ).thenAnswer(
+        (_) async => right(
+          const PaginatedResult(
+            items: [testUser],
+            currentPage: 1,
+            totalPages: 2,
+          ),
+        ),
+      );
+
+      await tester.pumpApp(const UsersPage(), overrides: overrides());
+      await tester.pumpAndSettle();
+
+      expect(find.text('Load More'), findsOneWidget);
+    });
+
+    testWidgets('tapping load more fetches page 2', (tester) async {
+      final page2User = testUser.copyWith(id: 8, firstName: 'Janet');
+      when(
+        () => mockRepo.getUsers(page: 1),
+      ).thenAnswer(
+        (_) async => right(
+          const PaginatedResult(
+            items: [testUser],
+            currentPage: 1,
+            totalPages: 2,
+          ),
+        ),
+      );
+      when(
+        () => mockRepo.getUsers(page: 2),
+      ).thenAnswer(
+        (_) async => right(
+          PaginatedResult(items: [page2User], currentPage: 2, totalPages: 2),
+        ),
+      );
+
+      await tester.pumpApp(const UsersPage(), overrides: overrides());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Load More'));
+      await tester.pumpAndSettle();
+
+      verify(() => mockRepo.getUsers(page: 2)).called(1);
+      expect(find.byType(UserCard), findsNWidgets(2));
+      expect(find.text('Load More'), findsNothing);
     });
   });
 }
