@@ -1,7 +1,16 @@
 <!-- setup:start -->
 # Setup — Required Tools
 
-Check and install before any task:
+After cloning, run once:
+
+```bash
+dart pub global activate melos
+melos bootstrap
+```
+
+`melos bootstrap` installs dependencies, links local packages, and activates git hooks automatically.
+
+Then check and install CLI tools:
 
 ```bash
 # GitNexus
@@ -11,7 +20,7 @@ npx gitnexus --version || npm install -g gitnexus && npx gitnexus analyze --inde
 rtk --version || npm install -g @rtk/cli
 ```
 
-**NEVER proceed with coding if either tool is missing.**
+**NEVER proceed with coding if any tool is missing.**
 
 <!-- setup:end -->
 

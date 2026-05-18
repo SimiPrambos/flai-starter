@@ -1,0 +1,16 @@
+#!/bin/sh
+pattern="^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(.+\))?(!)?: .{1,100}"
+
+if ! grep -Eq "$pattern" "$1"; then
+  echo ""
+  echo "❌ Invalid commit message."
+  echo ""
+  echo "   Format : type(scope): description"
+  echo "   Example: feat(auth): add login with Apple"
+  echo ""
+  echo "   Types  : feat | fix | docs | style | refactor | test | chore | perf | ci | build | revert"
+  echo "   Scope  : optional, e.g. (auth) (ui) (network)"
+  echo "   !      : optional, marks breaking change"
+  echo ""
+  exit 1
+fi
