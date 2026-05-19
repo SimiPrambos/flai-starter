@@ -17,7 +17,9 @@ part '{{name.snakeCase()}}_repository_impl.g.dart';
   {{name.pascalCase()}}RepositoryRef ref,
 ) => {{name.pascalCase()}}RepositoryImpl(ref.watch(remote{{name.pascalCase()}}DataSourceProvider));
 
-class {{name.pascalCase()}}RepositoryImpl with RepositoryGuard implements {{name.pascalCase()}}Repository {
+class {{name.pascalCase()}}RepositoryImpl
+    with RepositoryGuard
+    implements {{name.pascalCase()}}Repository {
   const {{name.pascalCase()}}RepositoryImpl(this._datasource);
   final Remote{{name.pascalCase()}}DataSource _datasource;
 

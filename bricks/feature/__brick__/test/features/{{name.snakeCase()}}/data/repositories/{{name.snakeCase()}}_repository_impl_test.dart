@@ -25,7 +25,8 @@ void main() {
     };
 
     test('returns right with mapped entities on success', () async {
-      when(() => mockDatasource.get{{name.pascalCase()}}s(1)).thenAnswer((_) async => listJson);
+      when(() => mockDatasource.get{{name.pascalCase()}}s(1))
+          .thenAnswer((_) async => listJson);
 
       final result = await repo.get{{name.pascalCase()}}s(page: 1);
 
@@ -37,7 +38,8 @@ void main() {
     });
 
     test('returns Left(NetworkFailure) on NetworkException', () async {
-      when(() => mockDatasource.get{{name.pascalCase()}}s(1)).thenThrow(
+      when(() => mockDatasource.get{{name.pascalCase()}}s(1))
+          .thenThrow(
         DioException(
           requestOptions: RequestOptions(),
           error: const NetworkException(message: 'No internet'),
@@ -55,7 +57,8 @@ void main() {
     });
 
     test('returns Left(UnknownFailure) on unexpected exception', () async {
-      when(() => mockDatasource.get{{name.pascalCase()}}s(1)).thenThrow(Exception('Oops'));
+      when(() => mockDatasource.get{{name.pascalCase()}}s(1))
+          .thenThrow(Exception('Oops'));
 
       final result = await repo.get{{name.pascalCase()}}s(page: 1);
 
@@ -72,7 +75,8 @@ void main() {
     };
 
     test('returns right with mapped entity on success', () async {
-      when(() => mockDatasource.get{{name.pascalCase()}}(1)).thenAnswer((_) async => singleJson);
+      when(() => mockDatasource.get{{name.pascalCase()}}(1))
+          .thenAnswer((_) async => singleJson);
 
       final result = await repo.get{{name.pascalCase()}}ById(id: 1);
 
@@ -84,7 +88,8 @@ void main() {
     });
 
     test('returns Left(ServerFailure) on 404', () async {
-      when(() => mockDatasource.get{{name.pascalCase()}}(999)).thenThrow(
+      when(() => mockDatasource.get{{name.pascalCase()}}(999))
+          .thenThrow(
         DioException(
           requestOptions: RequestOptions(),
           error: const ServerException(message: 'Not found', statusCode: 404),

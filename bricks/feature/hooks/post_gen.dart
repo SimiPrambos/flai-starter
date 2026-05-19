@@ -38,12 +38,29 @@ Future<void> run(HookContext context) async {
   final detailImport =
       "import 'package:$appPackage/features/$snake/presentation/pages/${snake}_detail_page.dart';";
 
-  // Insert imports after the last import line
-  final lastImportIdx = content.lastIndexOf("import '");
-  final endOfLastImport = content.indexOf('\n', lastImportIdx);
-  content = content.substring(0, endOfLastImport + 1) +
-      '$pageImport\n$detailImport\n' +
-      content.substring(endOfLastImport + 1);
+  // Insert imports after the last features/ import line (keeps feature imports grouped)
+  final featuresPattern = "import 'package:$appPackage/features/";
+  var insertionPoint = -1;
+  var searchIdx = 0;
+  while (true) {
+    final idx = content.indexOf(featuresPattern, searchIdx);
+    if (idx == -1) break;
+    insertionPoint = content.indexOf('\n', idx);
+    searchIdx = insertionPoint + 1;
+  }
+
+  if (insertionPoint != -1) {
+    content = content.substring(0, insertionPoint + 1) +
+        '$pageImport\n$detailImport\n' +
+        content.substring(insertionPoint + 1);
+  } else {
+    // No existing features/ imports — fallback to after last import
+    final lastImportIdx = content.lastIndexOf("import '");
+    final endOfLastImport = content.indexOf('\n', lastImportIdx);
+    content = content.substring(0, endOfLastImport + 1) +
+        '$pageImport\n$detailImport\n' +
+        content.substring(endOfLastImport + 1);
+  }
 
   // Append route classes at end of file
   final routeBlock = '''
