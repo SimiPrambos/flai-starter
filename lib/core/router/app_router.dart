@@ -14,42 +14,35 @@ part 'app_router.g.dart';
 // Route definitions
 // ---------------------------------------------------------------------------
 
-class UsersRoute extends GoRouteData {
+@TypedGoRoute<UsersRoute>(
+  path: '/users',
+  routes: [
+    TypedGoRoute<UserDetailRoute>(path: ':id'),
+  ],
+)
+@immutable
+class UsersRoute extends GoRouteData with _$UsersRoute {
   const UsersRoute();
 
-  static const name = 'users';
   static const path = '/users';
+  static const routeName = 'users';
 
   @override
   Widget build(BuildContext context, GoRouterState state) => const UsersPage();
 }
 
-class UserDetailRoute extends GoRouteData {
+@immutable
+class UserDetailRoute extends GoRouteData with _$UserDetailRoute {
   const UserDetailRoute({required this.id});
 
-  static const name = 'user_detail';
   static const path = ':id';
+  static const routeName = 'user_detail';
 
   final int id;
 
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       UserDetailPage(id: id);
-}
-
-// ---------------------------------------------------------------------------
-// Navigation extensions  (type-safe — never use context.go('/string') directly)
-// ---------------------------------------------------------------------------
-
-extension UsersRouteX on UsersRoute {
-  void go(BuildContext context) => context.go(UsersRoute.path);
-  void push(BuildContext context) => context.push(UsersRoute.path);
-}
-
-extension UserDetailRouteX on UserDetailRoute {
-  String get _location => '${UsersRoute.path}/$id';
-  void go(BuildContext context) => context.go(_location);
-  void push(BuildContext context) => context.push(_location);
 }
 
 // ---------------------------------------------------------------------------
@@ -79,22 +72,6 @@ GoRouter appRouter(AppRouterRef ref) {
   return GoRouter(
     initialLocation: UsersRoute.path,
     observers: observers,
-    routes: [
-      GoRoute(
-        name: UsersRoute.name,
-        path: UsersRoute.path,
-        builder: (context, state) => const UsersRoute().build(context, state),
-        routes: [
-          GoRoute(
-            name: UserDetailRoute.name,
-            path: UserDetailRoute.path,
-            builder: (context, state) {
-              final id = int.parse(state.pathParameters['id']!);
-              return UserDetailRoute(id: id).build(context, state);
-            },
-          ),
-        ],
-      ),
-    ],
+    routes: $appRoutes,
   );
 }

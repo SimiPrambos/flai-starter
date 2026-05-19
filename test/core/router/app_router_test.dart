@@ -165,7 +165,7 @@ void main() {
             builder: (context, state) => Scaffold(
               body: Builder(
                 builder: (ctx) => ElevatedButton(
-                  onPressed: () => const UsersRoute().push(ctx),
+                  onPressed: () => const UsersRoute().push<void>(ctx),
                   child: const Text('push'),
                 ),
               ),
@@ -202,7 +202,7 @@ void main() {
             builder: (context, state) => Scaffold(
               body: Builder(
                 builder: (ctx) => ElevatedButton(
-                  onPressed: () => const UserDetailRoute(id: 7).push(ctx),
+                  onPressed: () => const UserDetailRoute(id: 7).push<void>(ctx),
                   child: const Text('push'),
                 ),
               ),

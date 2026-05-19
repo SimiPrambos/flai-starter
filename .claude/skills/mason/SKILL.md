@@ -101,8 +101,12 @@ See `lib/features/users/presentation/providers/users_notifier.dart` for the refe
 
 ### 4. Register the route in `app_router.dart`
 
+Add a `@TypedGoRoute` annotation and a `GoRouteData` subclass with `with _$ClassName`:
+
 ```dart
-class PaymentsRoute extends GoRouteData {
+@TypedGoRoute<PaymentsRoute>(path: '/payments')
+@immutable
+class PaymentsRoute extends GoRouteData with _$PaymentsRoute {
   const PaymentsRoute();
   static const path = '/payments';
   static const routeName = 'payments';
@@ -111,14 +115,9 @@ class PaymentsRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) =>
       const PaymentsPage();
 }
-
-extension PaymentsRouteExtension on PaymentsRoute {
-  void go(BuildContext context) => context.go(path);
-  void push(BuildContext context) => context.push(path);
-}
 ```
 
-Wire it into the router tree and add `PaymentsRoute` to the `routes` list.
+Run `build_runner` — `$appRoutes` is updated automatically. No manual route tree edit needed.
 
 ### 5. Verify
 

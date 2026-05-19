@@ -3,10 +3,70 @@
 part of 'app_router.dart';
 
 // **************************************************************************
+// GoRouterGenerator
+// **************************************************************************
+
+List<RouteBase> get $appRoutes => [$usersRoute];
+
+RouteBase get $usersRoute => GoRouteData.$route(
+  path: '/users',
+
+  factory: _$UsersRoute._fromState,
+  routes: [
+    GoRouteData.$route(path: ':id', factory: _$UserDetailRoute._fromState),
+  ],
+);
+
+mixin _$UsersRoute on GoRouteData {
+  static UsersRoute _fromState(GoRouterState state) => const UsersRoute();
+
+  @override
+  String get location => GoRouteData.$location('/users');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$UserDetailRoute on GoRouteData {
+  static UserDetailRoute _fromState(GoRouterState state) =>
+      UserDetailRoute(id: int.parse(state.pathParameters['id']!)!);
+
+  UserDetailRoute get _self => this as UserDetailRoute;
+
+  @override
+  String get location => GoRouteData.$location(
+    '/users/${Uri.encodeComponent(_self.id.toString())}',
+  );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+// **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appRouterHash() => r'7af2147296e598d399b33bfa02dcdc22b4d04364';
+String _$appRouterHash() => r'5f8cd05cc2045c98a85b91b408bbaf4dab0fea49';
 
 /// See also [appRouter].
 @ProviderFor(appRouter)
