@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:{{app_package}}/core/network/dio_client.dart';
-import 'package:{{app_package}}/features/{{name.snakeCase()}}/data/models/{{name.snakeCase()}}_model.dart';
 
 part 'remote_{{name.snakeCase()}}_datasource.g.dart';
 
@@ -17,7 +16,12 @@ abstract class Remote{{name.pascalCase()}}DataSource {
       _Remote{{name.pascalCase()}}DataSource;
 
   @GET('/{{name.snakeCase()}}')
-  Future<List<{{name.pascalCase()}}Model>> get{{name.pascalCase()}}(
+  Future<dynamic> get{{name.pascalCase()}}s(
     @Query('page') int page,
+  );
+
+  @GET('/{{name.snakeCase()}}/{id}')
+  Future<dynamic> get{{name.pascalCase()}}(
+    @Path('id') int id,
   );
 }

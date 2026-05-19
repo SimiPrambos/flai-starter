@@ -2,11 +2,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:{{app_package}}/core/common/paginated_mixin.dart';
 import 'package:{{app_package}}/core/common/paginated_result.dart';
 import 'package:{{app_package}}/features/{{name.snakeCase()}}/domain/entities/{{name.snakeCase()}}_entity.dart';
+import 'package:{{app_package}}/features/{{name.snakeCase()}}/{{name.snakeCase()}}_providers.dart';
 
 part '{{name.snakeCase()}}_notifier.g.dart';
 
-// Wire the use case provider in a {{name.snakeCase()}}_providers.dart file
-// similar to lib/features/users/users_providers.dart, then import it here.
 @riverpod
 class {{name.pascalCase()}}Notifier extends _${{name.pascalCase()}}Notifier
     with PaginatedMixin<{{name.pascalCase()}}Entity> {
@@ -15,8 +14,13 @@ class {{name.pascalCase()}}Notifier extends _${{name.pascalCase()}}Notifier
 
   @override
   Future<PaginatedResult<{{name.pascalCase()}}Entity>> fetchPage(int page) async {
-    // Replace with your use case provider, e.g.:
-    // final result = await ref.read(get{{name.pascalCase()}}UseCaseProvider).call(page: page);
-    throw UnimplementedError('Wire the use case and implement fetchPage');
+    final result = await ref
+        .read({{name.camelCase()}}RepositoryProvider)
+        .get{{name.pascalCase()}}s(page: page);
+    return result.fold(
+      // ignore: only_throw_errors // Failure is not an Exception but is intentionally thrown
+      (failure) => throw failure,
+      (paginated) => paginated,
+    );
   }
 }
