@@ -1,0 +1,16 @@
+name: feature
+description: Scaffolds a complete Clean Architecture feature with all layers and tests
+version: 0.1.0+1
+environment:
+  mason: ">=0.1.0-dev.47 <0.1.0"
+
+vars:
+  name:
+    type: string
+    description: Feature name in snake_case (e.g. payments, auth, orders)
+    prompt: "Feature name (snake_case):"
+  app_package:
+    type: string
+    description: App package name from pubspec.yaml
+    default: template_vgv_app
+    prompt: "App package name:"
