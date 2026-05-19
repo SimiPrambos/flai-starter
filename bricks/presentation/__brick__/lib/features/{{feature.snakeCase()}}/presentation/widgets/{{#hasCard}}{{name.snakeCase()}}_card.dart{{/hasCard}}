@@ -1,0 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/domain/entities/{{feature.snakeCase()}}_entity.dart';
+
+class {{name.pascalCase()}}Card extends StatelessWidget {
+  const {{name.pascalCase()}}Card({required this.item, super.key});
+  final {{feature.pascalCase()}}Entity item;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text('ID: ${item.id}'),
+    );
+  }
+}

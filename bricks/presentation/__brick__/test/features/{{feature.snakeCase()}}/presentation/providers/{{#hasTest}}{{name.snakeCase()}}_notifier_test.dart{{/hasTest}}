@@ -1,0 +1,170 @@
+{{#isList}}
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:{{app_package}}/core/common/paginated_result.dart';
+import 'package:{{app_package}}/core/error/failures.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/domain/entities/{{feature.snakeCase()}}_entity.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/domain/repositories/{{feature.snakeCase()}}_repository.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/presentation/providers/{{name.snakeCase()}}_notifier.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/{{feature.snakeCase()}}_providers.dart';
+
+class _MockRepo extends Mock implements {{feature.pascalCase()}}Repository {}
+
+void main() {
+  late _MockRepo mockRepo;
+
+  const testEntity = {{feature.pascalCase()}}Entity(id: 1);
+
+  setUp(() => mockRepo = _MockRepo());
+
+  ProviderContainer makeContainer() {
+    final container = ProviderContainer(
+      overrides: [{{feature.camelCase()}}RepositoryProvider.overrideWithValue(mockRepo)],
+    );
+    addTearDown(container.dispose);
+    return container;
+  }
+
+  PaginatedResult<{{feature.pascalCase()}}Entity> page(
+    List<{{feature.pascalCase()}}Entity> items, {
+    int current = 1,
+    int total = 1,
+  }) =>
+      PaginatedResult(items: items, currentPage: current, totalPages: total);
+
+  group('{{name.pascalCase()}}Notifier', () {
+    test('build() returns entities on success', () async {
+      when(() => mockRepo.get{{feature.pascalCase()}}s(page: 1))
+          .thenAnswer((_) async => right(page([testEntity])));
+
+      final container = makeContainer();
+      final result = await container.read({{name.camelCase()}}NotifierProvider.future);
+
+      expect(result, [testEntity]);
+    });
+
+    test('build() throws Failure on repository error', () async {
+      const failure = Failure.network(message: 'No connection');
+      when(() => mockRepo.get{{feature.pascalCase()}}s(page: 1))
+          .thenAnswer((_) async => left(failure));
+
+      final container = makeContainer();
+
+      await expectLater(
+        container.read({{name.camelCase()}}NotifierProvider.future),
+        throwsA(isA<NetworkFailure>()),
+      );
+    });
+  });
+}
+{{/isList}}
+{{#isDetail}}
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:{{app_package}}/core/error/failures.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/domain/entities/{{feature.snakeCase()}}_entity.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/domain/repositories/{{feature.snakeCase()}}_repository.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/presentation/providers/{{name.snakeCase()}}_notifier.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/{{feature.snakeCase()}}_providers.dart';
+
+class _MockRepo extends Mock implements {{feature.pascalCase()}}Repository {}
+
+void main() {
+  late _MockRepo mockRepo;
+
+  const testEntity = {{feature.pascalCase()}}Entity(id: 1);
+
+  setUp(() => mockRepo = _MockRepo());
+
+  ProviderContainer makeContainer() {
+    final container = ProviderContainer(
+      overrides: [{{feature.camelCase()}}RepositoryProvider.overrideWithValue(mockRepo)],
+    );
+    addTearDown(container.dispose);
+    return container;
+  }
+
+  group('{{name.pascalCase()}}Notifier', () {
+    test('build(id) returns entity on success', () async {
+      when(() => mockRepo.get{{feature.pascalCase()}}ById(id: 1))
+          .thenAnswer((_) async => right(testEntity));
+
+      final container = makeContainer();
+      final result = await container.read({{name.camelCase()}}NotifierProvider(1).future);
+
+      expect(result, testEntity);
+    });
+
+    test('build(id) throws Failure on repository error', () async {
+      const failure = Failure.server(message: 'Not found', statusCode: 404);
+      when(() => mockRepo.get{{feature.pascalCase()}}ById(id: 999))
+          .thenAnswer((_) async => left(failure));
+
+      final container = makeContainer();
+
+      await expectLater(
+        container.read({{name.camelCase()}}NotifierProvider(999).future),
+        throwsA(isA<ServerFailure>()),
+      );
+    });
+  });
+}
+{{/isDetail}}
+{{#isSingle}}
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:{{app_package}}/core/error/failures.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/domain/entities/{{feature.snakeCase()}}_entity.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/domain/repositories/{{feature.snakeCase()}}_repository.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/presentation/providers/{{name.snakeCase()}}_notifier.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/{{feature.snakeCase()}}_providers.dart';
+
+class _MockRepo extends Mock implements {{feature.pascalCase()}}Repository {}
+
+void main() {
+  late _MockRepo mockRepo;
+
+  const testEntity = {{feature.pascalCase()}}Entity(id: 1);
+
+  setUp(() => mockRepo = _MockRepo());
+
+  ProviderContainer makeContainer() {
+    final container = ProviderContainer(
+      overrides: [{{feature.camelCase()}}RepositoryProvider.overrideWithValue(mockRepo)],
+    );
+    addTearDown(container.dispose);
+    return container;
+  }
+
+  group('{{name.pascalCase()}}Notifier', () {
+    test('build() returns entity on success', () async {
+      when(() => mockRepo.get{{feature.pascalCase()}}ById(id: 0))
+          .thenAnswer((_) async => right(testEntity));
+
+      final container = makeContainer();
+      final result = await container.read({{name.camelCase()}}NotifierProvider.future);
+
+      expect(result, testEntity);
+    });
+
+    test('build() throws Failure on repository error', () async {
+      const failure = Failure.network(message: 'No connection');
+      when(() => mockRepo.get{{feature.pascalCase()}}ById(id: 0))
+          .thenAnswer((_) async => left(failure));
+
+      final container = makeContainer();
+
+      await expectLater(
+        container.read({{name.camelCase()}}NotifierProvider.future),
+        throwsA(isA<NetworkFailure>()),
+      );
+    });
+  });
+}
+{{/isSingle}}
