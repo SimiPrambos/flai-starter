@@ -17,12 +17,12 @@ void main() {
     repo = {{name.pascalCase()}}RepositoryImpl(mockDatasource);
   });
 
-  group('{{name.pascalCase()}}RepositoryImpl.get{{name.pascalCase()}}s', () {
+  group('{{name.pascalCase()}}RepositoryImpl.get{{name.pascalCase()}}', () {
     test('returns right on success', () async {
       when(() => mockDatasource.get{{name.pascalCase()}}(1))
           .thenAnswer((_) async => []);
 
-      final result = await repo.get{{name.pascalCase()}}s(page: 1);
+      final result = await repo.get{{name.pascalCase()}}(page: 1);
 
       expect(result.isRight(), true);
     });
@@ -36,7 +36,7 @@ void main() {
         ),
       );
 
-      final result = await repo.get{{name.pascalCase()}}s(page: 1);
+      final result = await repo.get{{name.pascalCase()}}(page: 1);
 
       expect(result.isLeft(), true);
       result.fold(
@@ -49,7 +49,7 @@ void main() {
       when(() => mockDatasource.get{{name.pascalCase()}}(1))
           .thenThrow(Exception('Unexpected'));
 
-      final result = await repo.get{{name.pascalCase()}}s(page: 1);
+      final result = await repo.get{{name.pascalCase()}}(page: 1);
 
       expect(result.isLeft(), true);
       result.fold(
