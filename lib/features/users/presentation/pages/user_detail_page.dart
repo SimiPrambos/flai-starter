@@ -10,7 +10,7 @@ import 'package:template_vgv_app/features/users/domain/entities/user_entity.dart
 import 'package:template_vgv_app/features/users/presentation/providers/user_by_id_notifier.dart';
 import 'package:template_vgv_app/features/users/presentation/widgets/user_detail_skeleton.dart';
 import 'package:template_vgv_app/l10n/l10n.dart';
-import 'package:template_vgv_app/shared/widgets/async_value_widget.dart';
+import 'package:template_vgv_app/shared/widgets/async_detail_scaffold.dart';
 
 class UserDetailPage extends ConsumerWidget {
   const UserDetailPage({required this.id, super.key});
@@ -19,16 +19,11 @@ class UserDetailPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userAsync = ref.watch(userByIdNotifierProvider(id));
-    final l10n = context.l10n;
-
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.userDetailPageTitle)),
-      body: AsyncValueWidget<UserEntity>(
-        value: userAsync,
-        loading: const UserDetailSkeleton(),
-        data: (user) => _UserDetailContent(user: user),
-      ),
+    return AsyncDetailScaffold<UserEntity>(
+      title: context.l10n.userDetailPageTitle,
+      value: ref.watch(userByIdNotifierProvider(id)),
+      skeleton: const UserDetailSkeleton(),
+      builder: (user) => _UserDetailContent(user: user),
     );
   }
 }
