@@ -14,7 +14,7 @@ docs/features/
 
 The `feature-spec` skill is invoked automatically before any work in `lib/features/{name}/`.
 
-- **New feature** → skill runs Create mode: reads PRD + Figma, writes SPEC.md, then runs `melos make-feature`
+- **New feature** → skill runs Create mode: reads PRD + Figma, writes SPEC.md, then picks the right mason bricks based on what the feature needs
 - **Existing feature** → skill runs Follow mode: reads spec, summarizes constraints, proceeds
 - **PRD changed** → skill runs Update mode: diffs, updates SPEC.md, runs GitNexus impact analysis, appends CHANGELOG
 

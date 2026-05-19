@@ -47,5 +47,5 @@ Load the relevant skill before working in each area:
 | Testing | @skills/testing/SKILL.md | Writing any test |
 | Firebase & Talker | @skills/firebase-talker/SKILL.md | Logging, analytics, Crashlytics |
 | Generated files | @skills/generated-files/SKILL.md | Build runner, env, constraints |
-| Feature scaffolding | @skills/mason/SKILL.md | Creating a new feature with mason |
+| Feature scaffolding | @skills/mason/SKILL.md | Scaffolding any layer with make-domain / make-data / make-presentation / make-feature |
 | Shared widgets (AppAvatar, PaginatedListPage, AsyncDetailScaffold, ErrorRetryWidget) | @skills/shared-widgets/SKILL.md | Using or building any shared widget |

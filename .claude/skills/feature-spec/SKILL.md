@@ -45,11 +45,11 @@ Use when: no `docs/features/{name}/SPEC.md` exists yet.
 5. Create empty `docs/features/{name}/CHANGELOG.md`
 6. Set status: `draft`
 7. Announce: "Spec created. Proceeding to scaffold."
-8. Invoke `mason` skill → run `melos make-feature -- --name {name}`
+8. Invoke `mason` skill → it determines which bricks to run based on what the spec needs (data layer, page types, iteration plan). Full command reference is in the mason skill.
 9. Fill in generated files from spec:
    - Entity fields → `{name}_entity.dart` + `{name}_model.dart`
    - API endpoint → `remote_{name}_datasource.dart` Retrofit annotations
-   - Card widget content → `{name}_card.dart`
+   - Card widget content → `{name}_card.dart` (list type only)
 10. Update spec status to `in-progress`
 
 ---
@@ -183,7 +183,7 @@ Filename: `{NNN}-{kebab-description}.md`
 
 | Phase | Skill |
 |---|---|
-| Spec creation complete | invoke `mason` skill for scaffolding |
+| Spec creation complete | invoke `mason` skill — picks atomic bricks based on spec |
 | Filling in entity + model | `architecture` skill — layer rules apply |
 | Filling in datasource | `network` skill — Retrofit annotations, interceptors |
 | Filling in notifier | `riverpod` skill — codegen, keepAlive rules |
@@ -195,9 +195,9 @@ Filename: `{NNN}-{kebab-description}.md`
 ## Status Lifecycle
 
 ```
-PRD received         → draft
-melos make-feature   → in-progress
-All ACs met + tests pass → shipped  (spec locked; changes require new ADR)
+PRD received              → draft
+bricks scaffolded         → in-progress
+All ACs met + tests pass  → shipped  (spec locked; changes require new ADR)
 ```
 
 ---
