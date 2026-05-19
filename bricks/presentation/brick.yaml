@@ -1,0 +1,29 @@
+name: presentation
+description: Adds a page to a feature — type determines list/detail/single/static shape
+version: 0.1.0+1
+environment:
+  mason: ">=0.1.0-dev.47 <0.2.0"
+
+vars:
+  feature:
+    type: string
+    description: Feature folder name this page belongs to (snake_case)
+    prompt: "Feature name (snake_case):"
+  name:
+    type: string
+    description: Page name in snake_case (may differ from feature, e.g. products_detail)
+    prompt: "Page name (snake_case):"
+  type:
+    type: enum
+    description: Page type
+    values:
+      - list
+      - detail
+      - single
+      - static
+    prompt: "Page type:"
+  app_package:
+    type: string
+    description: App package name from pubspec.yaml
+    default: template_vgv_app
+    prompt: "App package name:"
