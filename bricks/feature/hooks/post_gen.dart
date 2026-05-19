@@ -62,6 +62,20 @@ Future<void> run(HookContext context) async {
         content.substring(endOfLastImport + 1);
   }
 
+  // Re-sort features/ import lines to satisfy directives_ordering lint
+  final allLines = content.split('\n');
+  final featuresImportLines = allLines
+      .where((l) => l.startsWith("import 'package:$appPackage/features/"))
+      .toList()
+    ..sort();
+  var featuresImportIdx = 0;
+  content = allLines.map((line) {
+    if (line.startsWith("import 'package:$appPackage/features/")) {
+      return featuresImportLines[featuresImportIdx++];
+    }
+    return line;
+  }).join('\n');
+
   // Append route classes at end of file
   final routeBlock = '''
 
