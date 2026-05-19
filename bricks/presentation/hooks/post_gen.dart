@@ -13,6 +13,20 @@ Future<void> run(HookContext context) async {
   final nameSnake = ReCase(name).snakeCase;
   final featureSnake = ReCase(feature).snakeCase;
   final hasNotifier = type != 'static';
+  final hasCard = type == 'list';
+
+  // Step 0: dart format all generated files to fix trailing whitespace /
+  // leading blank lines produced by mustache section rendering.
+  final filesToFormat = [
+    'lib/features/$featureSnake/presentation/pages/${nameSnake}_page.dart',
+    if (hasNotifier)
+      'lib/features/$featureSnake/presentation/providers/${nameSnake}_notifier.dart',
+    if (hasCard)
+      'lib/features/$featureSnake/presentation/widgets/${nameSnake}_card.dart',
+    if (hasNotifier)
+      'test/features/$featureSnake/presentation/providers/${nameSnake}_notifier_test.dart',
+  ];
+  await Process.run('dart', ['format', ...filesToFormat]);
 
   // Step 1: build_runner for notifier codegen (skip for static — no notifier)
   if (hasNotifier) {
