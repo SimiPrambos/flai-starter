@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:template_vgv_app/core/common/paginated_result.dart';
 import 'package:template_vgv_app/core/error/exceptions.dart';
 import 'package:template_vgv_app/core/error/failures.dart';
 import 'package:template_vgv_app/features/users/data/datasources/remote_user_datasource.dart';
@@ -19,26 +20,35 @@ class UserRepositoryImpl implements UserRepository {
   final RemoteUserDataSource _datasource;
 
   @override
-  Future<Either<Failure, List<UserEntity>>> getUsers({
+  Future<Either<Failure, PaginatedResult<UserEntity>>> getUsers({
     required int page,
   }) async {
     try {
       final response = await _datasource.getUsers(page);
-      final entities = response.data.map((m) => m.toEntity()).toList();
-      return right(entities);
+      return right(
+        PaginatedResult(
+          items: response.data.map((m) => m.toEntity()).toList(),
+          currentPage: response.page,
+          totalPages: response.totalPages,
+        ),
+      );
     } on DioException catch (e) {
       final appException = e.error;
-      if (appException is NetworkException) {
-        return left(Failure.network(message: appException.message));
-      }
-      if (appException is ServerException) {
-        return left(
-          Failure.server(
-            message: appException.message,
-            statusCode: appException.statusCode,
-          ),
-        );
-      }
+      if (appException is AppException) return left(appException.toFailure());
+      return left(Failure.unknown(message: e.message ?? 'Unknown error'));
+    } on Object catch (e) {
+      return left(Failure.unknown(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserEntity>> getUserById({required int id}) async {
+    try {
+      final response = await _datasource.getUser(id);
+      return right(response.data.toEntity());
+    } on DioException catch (e) {
+      final appException = e.error;
+      if (appException is AppException) return left(appException.toFailure());
       return left(Failure.unknown(message: e.message ?? 'Unknown error'));
     } on Object catch (e) {
       return left(Failure.unknown(message: e.toString()));

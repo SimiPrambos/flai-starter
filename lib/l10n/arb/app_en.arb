@@ -8,6 +8,10 @@
   "@usersPageTitle": {
     "description": "Title of the users list page"
   },
+  "userDetailPageTitle": "User Detail",
+  "@userDetailPageTitle": {
+    "description": "Title of the user detail page"
+  },
   "errorRetry": "Retry",
   "@errorRetry": {
     "description": "Label for retry button"
@@ -15,5 +19,21 @@
   "loadingLabel": "Loading...",
   "@loadingLabel": {
     "description": "Loading state label"
+  },
+  "loadMore": "Load More",
+  "@loadMore": {
+    "description": "Label for load more button"
+  },
+  "userFieldId": "ID",
+  "@userFieldId": {
+    "description": "User ID field label"
+  },
+  "userFieldFirstName": "First Name",
+  "@userFieldFirstName": {
+    "description": "User first name field label"
+  },
+  "userFieldLastName": "Last Name",
+  "@userFieldLastName": {
+    "description": "User last name field label"
   }
 }

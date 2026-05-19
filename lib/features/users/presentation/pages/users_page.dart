@@ -26,14 +26,15 @@ class UsersPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final usersAsync = ref.watch(usersNotifierProvider);
-
+    final notifier = ref.read(usersNotifierProvider.notifier);
     final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.usersPageTitle)),
       body: RefreshIndicator(
-        onRefresh: () => ref.read(usersNotifierProvider.notifier).refresh(),
+        onRefresh: notifier.refresh,
         child: usersAsync.when(
+          skipLoadingOnReload: true,
           loading: () => Skeletonizer(
             effect: const ShimmerEffect(
               baseColor: AppColors.skeletonBase,
@@ -42,7 +43,7 @@ class UsersPage extends ConsumerWidget {
             ),
             child: ListView.builder(
               itemCount: 6,
-              itemBuilder: (context, index) => const UserCard(user: _fakeUser),
+              itemBuilder: (_, _) => const UserCard(user: _fakeUser),
             ),
           ),
           error: (error, _) {
@@ -63,19 +64,40 @@ class UsersPage extends ConsumerWidget {
                     Gap(AppSpacing.md),
                     AppButton(
                       label: l10n.errorRetry,
-                      onPressed: () =>
-                          ref.read(usersNotifierProvider.notifier).refresh(),
+                      onPressed: notifier.refresh,
                     ),
                   ],
                 ),
               ),
             );
           },
-          data: (users) => ListView.builder(
-            padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
-            itemCount: users.length,
-            itemBuilder: (_, i) => UserCard(user: users[i]),
-          ),
+          data: (users) {
+            final isLoadingMore =
+                usersAsync.isLoading && usersAsync.valueOrNull != null;
+            return ListView.builder(
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
+              itemCount: users.length + 1,
+              itemBuilder: (_, i) {
+                if (i < users.length) return UserCard(user: users[i]);
+                if (isLoadingMore) {
+                  return const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                if (notifier.hasMore) {
+                  return Padding(
+                    padding: EdgeInsets.all(AppSpacing.md),
+                    child: AppButton(
+                      label: l10n.loadMore,
+                      onPressed: notifier.loadMore,
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            );
+          },
         ),
       ),
     );

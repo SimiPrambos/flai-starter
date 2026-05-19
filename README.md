@@ -82,6 +82,36 @@ flutter run
 
 ---
 
+## Verification
+
+One command runs the full check loop:
+
+```sh
+melos check
+```
+
+Runs: `build_runner → flutter analyze → flutter test`. Use it before pushing and after scaffolding a new feature.
+
+---
+
+## Scaffolding a New Feature
+
+```sh
+melos make-feature -- --name <feature_name> --app-package template_vgv_app
+```
+
+Generates all Clean Architecture layers for `<feature_name>` (snake_case) — entity, repository interface, use case, data model, datasource, repository implementation, Riverpod notifier, page, and test stubs. A post-gen hook runs `build_runner` automatically and prints the four wiring steps needed to complete the feature.
+
+After generation:
+
+1. Add API fields to `<name>_model.dart` and `<name>_entity.dart`
+2. Create `lib/features/<name>/<name>_providers.dart` to wire the use case
+3. Import it in `<name>_notifier.dart` and implement `fetchPage`
+4. Register the route in `lib/core/router/app_router.dart`
+5. Run `melos check`
+
+---
+
 ## Architecture
 
 Clean Architecture with a strict dependency rule: `presentation → domain ← data`.
@@ -92,6 +122,7 @@ lib/
 ├── app/
 │   └── view/         # App widget
 ├── core/
+│   ├── common/       # PaginatedMixin<T>, PaginatedResult<T>
 │   ├── env/          # Envied — BASE_URL, API_KEY
 │   ├── error/        # Failure (sealed) + AppException
 │   ├── network/      # Dio client + interceptors
@@ -109,6 +140,8 @@ lib/
 └── shared/
     └── widgets/      # AppButton, AppTextField, AsyncValueWidget
 ```
+
+`PaginatedMixin<T>` is a reusable mixin on `AutoDisposeAsyncNotifier<List<T>>` that handles page state, `loadMore()`, and `refresh()`. Extend it in any notifier that fetches paginated data — implement only `fetchPage(int page)`.
 
 The `users` feature is the reference implementation — read it before building new features.
 

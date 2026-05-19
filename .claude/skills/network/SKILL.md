@@ -9,9 +9,14 @@ description: Use when adding API endpoints, configuring Dio, writing datasources
 
 Interceptor order is intentional — do not reorder:
 
-1. **API key interceptor** — injects `Env.apiKey` as `x-api-key` header
-2. **Connectivity/error interceptor** — maps offline, timeout, server, unknown failures into `AppException`
-3. **`TalkerDioLogger`** — logs request/response/error details
+1. **`ApiKeyInterceptor`** — injects `Env.apiKey` as `x-api-key` header
+2. **`ConnectivityInterceptor`** — rejects offline requests with `NetworkException` before they hit the network
+3. **`ErrorInterceptor`** — maps Dio error types to `AppException` subtypes
+4. **`TalkerDioLogger`** — logs request/response/error details
+
+> To add auth, create an `AuthInterceptor` that injects a Bearer token in
+> `onRequest` and handles 401 redirects in `onError` via a `VoidCallback`
+> (not a direct `GoRouter` dependency). Insert it before `ApiKeyInterceptor`.
 
 ## Datasources
 

@@ -23,8 +23,3 @@ class PreferencesService {
 
   String? getString({required String key}) => _prefs.getString(key);
 }
-
-abstract final class PrefsKeys {
-  static const isDarkMode = 'is_dark_mode';
-  static const languageCode = 'language_code';
-}

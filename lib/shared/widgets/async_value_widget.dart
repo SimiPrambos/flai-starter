@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:template_vgv_app/core/error/failures.dart';
 import 'package:template_vgv_app/core/theme/app_spacing.dart';
 import 'package:template_vgv_app/core/theme/app_text_styles.dart';
 
@@ -28,7 +29,7 @@ class AsyncValueWidget<T> extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.all(AppSpacing.md),
               child: Text(
-                e.toString(),
+                e is Failure ? e.readableMessage : e.toString(),
                 style: AppTextStyles.bodyMd,
                 textAlign: TextAlign.center,
               ),

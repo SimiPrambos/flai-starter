@@ -23,5 +23,24 @@ final getUsersUseCaseProvider = AutoDisposeProvider<GetUsersUseCase>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetUsersUseCaseRef = AutoDisposeProviderRef<GetUsersUseCase>;
+String _$getUserByIdUseCaseHash() =>
+    r'0fdc28ed45280ee096c409bb95919ee02241c35a';
+
+/// See also [getUserByIdUseCase].
+@ProviderFor(getUserByIdUseCase)
+final getUserByIdUseCaseProvider =
+    AutoDisposeProvider<GetUserByIdUseCase>.internal(
+      getUserByIdUseCase,
+      name: r'getUserByIdUseCaseProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$getUserByIdUseCaseHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetUserByIdUseCaseRef = AutoDisposeProviderRef<GetUserByIdUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

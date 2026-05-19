@@ -2,6 +2,11 @@
   "@@locale": "id",
   "appTitle": "Template Flutter",
   "usersPageTitle": "Pengguna",
+  "userDetailPageTitle": "Detail Pengguna",
   "errorRetry": "Coba Lagi",
-  "loadingLabel": "Memuat..."
+  "loadingLabel": "Memuat...",
+  "loadMore": "Muat Lebih Banyak",
+  "userFieldId": "ID",
+  "userFieldFirstName": "Nama Depan",
+  "userFieldLastName": "Nama Belakang"
 }

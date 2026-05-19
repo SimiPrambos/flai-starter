@@ -26,13 +26,21 @@ Failure.unknown(message: ...)
 
 ## Repository Pattern
 
+Repositories catch `DioException` (the network layer wrapper) and map the
+inner `AppException` via `toFailure()`. The `toFailure()` method is defined
+on `AppException` and handles all subtypes via a switch expression.
+
 ```dart
-Future<Either<Failure, List<User>>> getUsers() async {
+Future<Either<Failure, UserEntity>> getUserById({required int id}) async {
   try {
-    final models = await _datasource.getUsers();
-    return right(models.map((m) => m.toEntity()).toList());
-  } on AppException catch (e) {
-    return left(e.toFailure());
+    final response = await _datasource.getUser(id);
+    return right(response.data.toEntity());
+  } on DioException catch (e) {
+    final appException = e.error;
+    if (appException is AppException) return left(appException.toFailure());
+    return left(Failure.unknown(message: e.message ?? 'Unknown error'));
+  } on Object catch (e) {
+    return left(Failure.unknown(message: e.toString()));
   }
 }
 ```
