@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:{{app_package}}/features/{{name.snakeCase()}}/presentation/providers/{{name.snakeCase()}}_notifier.dart';
 
-class {{name.pascalCase()}}Page extends void void ConsumerWidget {
+class {{name.pascalCase()}}Page extends ConsumerWidget {
   const {{name.pascalCase()}}Page({super.key});
 
   @override

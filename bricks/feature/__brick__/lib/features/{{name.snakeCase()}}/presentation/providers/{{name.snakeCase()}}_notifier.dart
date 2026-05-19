@@ -8,8 +8,8 @@ part '{{name.snakeCase()}}_notifier.g.dart';
 // Wire the use case provider in a {{name.snakeCase()}}_providers.dart file
 // similar to lib/features/users/users_providers.dart, then import it here.
 @riverpod
-class {{name.pascalCase()}}Notifier extends void void _${{name.pascalCase()}}Notifier
-    with void void PaginatedMixin<{{name.pascalCase()}}Entity> {
+class {{name.pascalCase()}}Notifier extends _${{name.pascalCase()}}Notifier
+    with PaginatedMixin<{{name.pascalCase()}}Entity> {
   @override
   Future<List<{{name.pascalCase()}}Entity>> build() => buildPaginated();
 

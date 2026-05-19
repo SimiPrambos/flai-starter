@@ -6,7 +6,7 @@ import 'package:{{app_package}}/core/error/failures.dart';
 import 'package:{{app_package}}/features/{{name.snakeCase()}}/data/datasources/remote_{{name.snakeCase()}}_datasource.dart';
 import 'package:{{app_package}}/features/{{name.snakeCase()}}/data/repositories/{{name.snakeCase()}}_repository_impl.dart';
 
-class _MockDataSource extends Mock implements Remote{{name.pascalCase()}}void void DataSource {}
+class _MockDataSource extends Mock implements Remote{{name.pascalCase()}}DataSource {}
 
 void main() {
   late _MockDataSource mockDatasource;

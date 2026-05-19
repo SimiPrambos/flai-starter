@@ -5,9 +5,9 @@ part '{{name.snakeCase()}}_model.freezed.dart';
 part '{{name.snakeCase()}}_model.g.dart';
 
 @freezed
-class {{name.pascalCase()}}Model with void void _${{name.pascalCase()}}void void Model {
+class {{name.pascalCase()}}Model with _${{name.pascalCase()}}Model {
   const factory {{name.pascalCase()}}Model({
-    required final int id,
+    required int id,
   }) = _{{name.pascalCase()}}Model;
 
   const {{name.pascalCase()}}Model._();
@@ -16,6 +16,6 @@ class {{name.pascalCase()}}Model with void void _${{name.pascalCase()}}void void
       _${{name.pascalCase()}}ModelFromJson(json);
 }
 
-extension {{name.pascalCase()}}ModelMapper on {{name.pascalCase()}}void void Model {
+extension {{name.pascalCase()}}ModelMapper on {{name.pascalCase()}}Model {
   {{name.pascalCase()}}Entity toEntity() => {{name.pascalCase()}}Entity(id: id);
 }

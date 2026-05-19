@@ -7,7 +7,7 @@ import 'package:{{app_package}}/features/{{name.snakeCase()}}/domain/entities/{{
 import 'package:{{app_package}}/features/{{name.snakeCase()}}/domain/repositories/{{name.snakeCase()}}_repository.dart';
 import 'package:{{app_package}}/features/{{name.snakeCase()}}/domain/usecases/get_{{name.snakeCase()}}_use_case.dart';
 
-class _MockRepo extends Mock implements {{name.pascalCase()}}void void Repository {}
+class _MockRepo extends Mock implements {{name.pascalCase()}}Repository {}
 
 void main() {
   late _MockRepo mockRepo;

@@ -7,6 +7,7 @@ analyzer:
     - lib/l10n/gen/**
     - "**/*.g.dart"
     - "**/*.freezed.dart"
+    - "bricks/**"
   errors:
     invalid_annotation_target: ignore
 

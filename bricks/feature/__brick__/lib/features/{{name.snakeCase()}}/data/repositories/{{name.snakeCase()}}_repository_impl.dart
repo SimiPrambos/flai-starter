@@ -12,20 +12,20 @@ import 'package:{{app_package}}/features/{{name.snakeCase()}}/domain/repositorie
 part '{{name.snakeCase()}}_repository_impl.g.dart';
 
 @Riverpod(keepAlive: true)
-{{name.pascalCase()}}void void Repository {{name.camelCase()}}Repository(
+{{name.pascalCase()}}Repository {{name.camelCase()}}Repository(
   {{name.pascalCase()}}RepositoryRef ref,
 ) => {{name.pascalCase()}}RepositoryImpl(ref.watch(remote{{name.pascalCase()}}DataSourceProvider));
 
-class {{name.pascalCase()}}RepositoryImpl implements {{name.pascalCase()}}void void Repository {
+class {{name.pascalCase()}}RepositoryImpl implements {{name.pascalCase()}}Repository {
   const {{name.pascalCase()}}RepositoryImpl(this._datasource);
-  final Remote{{name.pascalCase()}}DataSource datasource;
+  final Remote{{name.pascalCase()}}DataSource _datasource;
 
   @override
   Future<Either<Failure, PaginatedResult<{{name.pascalCase()}}Entity>>> get{{name.pascalCase()}}({
     required int page,
   }) async {
     try {
-      final response = await datasource.get{{name.pascalCase()}}page;
+      final response = await _datasource.get{{name.pascalCase()}}(page);
       return right(
         PaginatedResult(
           items: response.map((m) => m.toEntity()).toList(),
