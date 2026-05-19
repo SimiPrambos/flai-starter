@@ -1,6 +1,8 @@
 include: package:very_good_analysis/analysis_options.yaml
 
 analyzer:
+  plugins:
+    - import_rules
   exclude:
     - lib/l10n/gen/**
     - "**/*.g.dart"
@@ -12,3 +14,15 @@ linter:
   rules:
     public_member_api_docs: false
     one_member_abstracts: false
+
+import_rules:
+  rules:
+    - reason: "Presentation must not depend on data models — use domain entities only"
+      target: "lib/features/*/presentation/**"
+      disallow: "lib/features/*/data/models/**"
+    - reason: "Domain layer must not import the data layer"
+      target: "lib/features/*/domain/**"
+      disallow: "lib/features/*/data/**"
+    - reason: "Domain layer must be pure Dart with no Flutter dependencies"
+      target: "lib/features/*/domain/**"
+      disallow: "package:flutter/**"
