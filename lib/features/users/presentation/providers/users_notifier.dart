@@ -13,11 +13,9 @@ class UsersNotifier extends _$UsersNotifier with PaginatedMixin<UserEntity> {
 
   @override
   Future<PaginatedResult<UserEntity>> fetchPage(int page) async {
-    final result = await ref.read(getUsersUseCaseProvider).call(page: page);
+    final result = await ref.read(userRepositoryProvider).getUsers(page: page);
     return result.fold(
-      // Failure is a sealed class used as the error type in AsyncNotifier;
-      // Riverpod catches it and exposes it via AsyncError regardless of type.
-      // ignore: only_throw_errors
+      // ignore: only_throw_errors // Failure is a sealed class; Riverpod wraps it in AsyncError.
       (failure) => throw failure,
       (paginated) => paginated,
     );

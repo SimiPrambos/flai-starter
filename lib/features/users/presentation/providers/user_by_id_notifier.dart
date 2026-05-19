@@ -8,11 +8,9 @@ part 'user_by_id_notifier.g.dart';
 class UserByIdNotifier extends _$UserByIdNotifier {
   @override
   Future<UserEntity> build(int id) async {
-    final result = await ref.read(getUserByIdUseCaseProvider).call(id: id);
+    final result = await ref.read(userRepositoryProvider).getUserById(id: id);
     return result.fold(
-      // Failure is a sealed class used as the error type in AsyncNotifier;
-      // Riverpod catches it and exposes it via AsyncError regardless of type.
-      // ignore: only_throw_errors
+      // ignore: only_throw_errors // Failure is a sealed class; Riverpod wraps it in AsyncError.
       (failure) => throw failure,
       (user) => user,
     );
