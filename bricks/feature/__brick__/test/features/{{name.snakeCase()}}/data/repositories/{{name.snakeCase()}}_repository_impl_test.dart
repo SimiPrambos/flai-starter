@@ -27,7 +27,9 @@ void main() {
       expect(result.isRight(), true);
     });
 
-    test('returns NetworkFailure when NetworkException in DioException', () async {
+    test(
+        'returns NetworkFailure when NetworkException in DioException',
+        () async {
       when(() => mockDatasource.get{{name.pascalCase()}}(1)).thenThrow(
         DioException(
           requestOptions: RequestOptions(),

@@ -19,8 +19,8 @@ void main() {
   });
 
   test('delegates to repository', () async {
-    final paginated = PaginatedResult<{{name.pascalCase()}}Entity>(
-      items: const [],
+    const paginated = PaginatedResult<{{name.pascalCase()}}Entity>(
+      items: [],
       currentPage: 1,
       totalPages: 1,
     );
