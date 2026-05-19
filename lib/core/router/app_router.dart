@@ -7,7 +7,6 @@ import 'package:template_vgv_app/core/firebase/firebase_providers.dart';
 import 'package:template_vgv_app/core/logging/talker_provider.dart';
 import 'package:template_vgv_app/features/users/presentation/pages/user_detail_page.dart';
 import 'package:template_vgv_app/features/users/presentation/pages/users_page.dart';
-
 part 'app_router.g.dart';
 
 // ---------------------------------------------------------------------------
