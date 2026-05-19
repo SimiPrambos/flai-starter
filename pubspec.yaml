@@ -68,3 +68,12 @@ melos:
     make-feature:
       run: mason make feature
       description: "Scaffold a new feature. Usage: melos make-feature -- --name <feature_name>"
+    make-domain:
+      run: mason make domain
+      description: "Scaffold domain layer. Usage: melos make-domain -- --name <name>"
+    make-data:
+      run: mason make data
+      description: "Scaffold data layer. Usage: melos make-data -- --name <name>"
+    make-presentation:
+      run: mason make presentation
+      description: "Add a page. Usage: melos make-presentation -- --feature <feature> --name <name> --type <list|detail|single|static>"
