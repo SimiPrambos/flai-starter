@@ -60,3 +60,10 @@ melos:
     bootstrap:
       hooks:
         post: sh scripts/bootstrap.sh
+  scripts:
+    check:
+      run: dart run build_runner build --delete-conflicting-outputs && flutter analyze && flutter test
+      description: Full verification loop — build_runner → analyze → test
+    make-feature:
+      run: mason make feature
+      description: "Scaffold a new feature. Usage: melos make-feature -- --name <feature_name>"
