@@ -171,14 +171,15 @@ class __$$UsersResponseImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$UsersResponseImpl implements _UsersResponse {
+class _$UsersResponseImpl extends _UsersResponse {
   const _$UsersResponseImpl({
     required this.page,
     @JsonKey(name: 'per_page') required this.perPage,
     required this.total,
     @JsonKey(name: 'total_pages') required this.totalPages,
     required final List<UserModel> data,
-  }) : _data = data;
+  }) : _data = data,
+       super._();
 
   factory _$UsersResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$UsersResponseImplFromJson(json);
@@ -244,7 +245,7 @@ class _$UsersResponseImpl implements _UsersResponse {
   }
 }
 
-abstract class _UsersResponse implements UsersResponse {
+abstract class _UsersResponse extends UsersResponse {
   const factory _UsersResponse({
     required final int page,
     @JsonKey(name: 'per_page') required final int perPage,
@@ -252,6 +253,7 @@ abstract class _UsersResponse implements UsersResponse {
     @JsonKey(name: 'total_pages') required final int totalPages,
     required final List<UserModel> data,
   }) = _$UsersResponseImpl;
+  const _UsersResponse._() : super._();
 
   factory _UsersResponse.fromJson(Map<String, dynamic> json) =
       _$UsersResponseImpl.fromJson;
