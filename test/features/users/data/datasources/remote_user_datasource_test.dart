@@ -73,7 +73,7 @@ void main() {
       final adapter = FakeHttpClientAdapter(responseJson);
       final dataSource = RemoteUserDataSource(dioWith(adapter));
 
-      final response = await dataSource.getUsers(3);
+      final response = (await dataSource.getUsers(3)) as Map<String, dynamic>;
 
       expect(response['page'], 3);
       final dataList = (response['data'] as List<dynamic>)

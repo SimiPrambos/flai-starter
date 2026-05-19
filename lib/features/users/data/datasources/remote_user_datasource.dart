@@ -15,8 +15,8 @@ abstract class RemoteUserDataSource {
       _RemoteUserDataSource;
 
   @GET('/users')
-  Future<Map<String, dynamic>> getUsers(@Query('page') int page);
+  Future<dynamic> getUsers(@Query('page') int page);
 
   @GET('/users/{id}')
-  Future<Map<String, dynamic>> getUser(@Path('id') int id);
+  Future<dynamic> getUser(@Path('id') int id);
 }

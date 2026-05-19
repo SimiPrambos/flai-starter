@@ -25,7 +25,7 @@ class UserRepositoryImpl with RepositoryGuard implements UserRepository {
     required int page,
   }) => guardRequest(
     () async => PaginatedResponse.fromJson(
-      await _datasource.getUsers(page),
+      (await _datasource.getUsers(page)) as Map<String, dynamic>,
       UserModel.fromJson,
     ).toPaginatedResult((m) => m.toEntity()),
   );
@@ -34,7 +34,7 @@ class UserRepositoryImpl with RepositoryGuard implements UserRepository {
   Future<Either<Failure, UserEntity>> getUserById({required int id}) =>
       guardRequest(
         () async => SingleResponse.fromJson(
-          await _datasource.getUser(id),
+          (await _datasource.getUser(id)) as Map<String, dynamic>,
           UserModel.fromJson,
         ).data.toEntity(),
       );
