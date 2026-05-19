@@ -2,7 +2,7 @@ name: feature
 description: Scaffolds a complete Clean Architecture feature with all layers and tests
 version: 0.1.0+1
 environment:
-  mason: ">=0.1.0-dev.47 <0.1.0"
+  mason: ">=0.1.0-dev.47 <0.2.0"
 
 vars:
   name:
