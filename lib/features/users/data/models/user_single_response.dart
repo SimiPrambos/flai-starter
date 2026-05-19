@@ -6,8 +6,9 @@ part 'user_single_response.g.dart';
 
 @freezed
 class UserSingleResponse with _$UserSingleResponse {
-  const factory UserSingleResponse({required UserModel data}) =
-      _UserSingleResponse;
+  const factory UserSingleResponse({
+    required UserModel data,
+  }) = _UserSingleResponse;
 
   factory UserSingleResponse.fromJson(Map<String, dynamic> json) =>
       _$UserSingleResponseFromJson(json);

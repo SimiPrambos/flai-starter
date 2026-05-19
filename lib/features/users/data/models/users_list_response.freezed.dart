@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'users_response.dart';
+part of 'users_list_response.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,12 +15,12 @@ final _privateConstructorUsedError = UnsupportedError(
   'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
 );
 
-UsersResponse _$UsersResponseFromJson(Map<String, dynamic> json) {
-  return _UsersResponse.fromJson(json);
+UsersListResponse _$UsersListResponseFromJson(Map<String, dynamic> json) {
+  return _UsersListResponse.fromJson(json);
 }
 
 /// @nodoc
-mixin _$UsersResponse {
+mixin _$UsersListResponse {
   int get page => throw _privateConstructorUsedError;
   @JsonKey(name: 'per_page')
   int get perPage => throw _privateConstructorUsedError;
@@ -29,22 +29,22 @@ mixin _$UsersResponse {
   int get totalPages => throw _privateConstructorUsedError;
   List<UserModel> get data => throw _privateConstructorUsedError;
 
-  /// Serializes this UsersResponse to a JSON map.
+  /// Serializes this UsersListResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of UsersResponse
+  /// Create a copy of UsersListResponse
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $UsersResponseCopyWith<UsersResponse> get copyWith =>
+  $UsersListResponseCopyWith<UsersListResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UsersResponseCopyWith<$Res> {
-  factory $UsersResponseCopyWith(
-    UsersResponse value,
-    $Res Function(UsersResponse) then,
-  ) = _$UsersResponseCopyWithImpl<$Res, UsersResponse>;
+abstract class $UsersListResponseCopyWith<$Res> {
+  factory $UsersListResponseCopyWith(
+    UsersListResponse value,
+    $Res Function(UsersListResponse) then,
+  ) = _$UsersListResponseCopyWithImpl<$Res, UsersListResponse>;
   @useResult
   $Res call({
     int page,
@@ -56,16 +56,16 @@ abstract class $UsersResponseCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UsersResponseCopyWithImpl<$Res, $Val extends UsersResponse>
-    implements $UsersResponseCopyWith<$Res> {
-  _$UsersResponseCopyWithImpl(this._value, this._then);
+class _$UsersListResponseCopyWithImpl<$Res, $Val extends UsersListResponse>
+    implements $UsersListResponseCopyWith<$Res> {
+  _$UsersListResponseCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of UsersResponse
+  /// Create a copy of UsersListResponse
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -105,12 +105,12 @@ class _$UsersResponseCopyWithImpl<$Res, $Val extends UsersResponse>
 }
 
 /// @nodoc
-abstract class _$$UsersResponseImplCopyWith<$Res>
-    implements $UsersResponseCopyWith<$Res> {
-  factory _$$UsersResponseImplCopyWith(
-    _$UsersResponseImpl value,
-    $Res Function(_$UsersResponseImpl) then,
-  ) = __$$UsersResponseImplCopyWithImpl<$Res>;
+abstract class _$$UsersListResponseImplCopyWith<$Res>
+    implements $UsersListResponseCopyWith<$Res> {
+  factory _$$UsersListResponseImplCopyWith(
+    _$UsersListResponseImpl value,
+    $Res Function(_$UsersListResponseImpl) then,
+  ) = __$$UsersListResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({
@@ -123,15 +123,15 @@ abstract class _$$UsersResponseImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$UsersResponseImplCopyWithImpl<$Res>
-    extends _$UsersResponseCopyWithImpl<$Res, _$UsersResponseImpl>
-    implements _$$UsersResponseImplCopyWith<$Res> {
-  __$$UsersResponseImplCopyWithImpl(
-    _$UsersResponseImpl _value,
-    $Res Function(_$UsersResponseImpl) _then,
+class __$$UsersListResponseImplCopyWithImpl<$Res>
+    extends _$UsersListResponseCopyWithImpl<$Res, _$UsersListResponseImpl>
+    implements _$$UsersListResponseImplCopyWith<$Res> {
+  __$$UsersListResponseImplCopyWithImpl(
+    _$UsersListResponseImpl _value,
+    $Res Function(_$UsersListResponseImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of UsersResponse
+  /// Create a copy of UsersListResponse
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -143,7 +143,7 @@ class __$$UsersResponseImplCopyWithImpl<$Res>
     Object? data = null,
   }) {
     return _then(
-      _$UsersResponseImpl(
+      _$UsersListResponseImpl(
         page: null == page
             ? _value.page
             : page // ignore: cast_nullable_to_non_nullable
@@ -171,17 +171,18 @@ class __$$UsersResponseImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$UsersResponseImpl implements _UsersResponse {
-  const _$UsersResponseImpl({
+class _$UsersListResponseImpl extends _UsersListResponse {
+  const _$UsersListResponseImpl({
     required this.page,
     @JsonKey(name: 'per_page') required this.perPage,
     required this.total,
     @JsonKey(name: 'total_pages') required this.totalPages,
     required final List<UserModel> data,
-  }) : _data = data;
+  }) : _data = data,
+       super._();
 
-  factory _$UsersResponseImpl.fromJson(Map<String, dynamic> json) =>
-      _$$UsersResponseImplFromJson(json);
+  factory _$UsersListResponseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$UsersListResponseImplFromJson(json);
 
   @override
   final int page;
@@ -203,14 +204,14 @@ class _$UsersResponseImpl implements _UsersResponse {
 
   @override
   String toString() {
-    return 'UsersResponse(page: $page, perPage: $perPage, total: $total, totalPages: $totalPages, data: $data)';
+    return 'UsersListResponse(page: $page, perPage: $perPage, total: $total, totalPages: $totalPages, data: $data)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UsersResponseImpl &&
+            other is _$UsersListResponseImpl &&
             (identical(other.page, page) || other.page == page) &&
             (identical(other.perPage, perPage) || other.perPage == perPage) &&
             (identical(other.total, total) || other.total == total) &&
@@ -230,31 +231,35 @@ class _$UsersResponseImpl implements _UsersResponse {
     const DeepCollectionEquality().hash(_data),
   );
 
-  /// Create a copy of UsersResponse
+  /// Create a copy of UsersListResponse
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$UsersResponseImplCopyWith<_$UsersResponseImpl> get copyWith =>
-      __$$UsersResponseImplCopyWithImpl<_$UsersResponseImpl>(this, _$identity);
+  _$$UsersListResponseImplCopyWith<_$UsersListResponseImpl> get copyWith =>
+      __$$UsersListResponseImplCopyWithImpl<_$UsersListResponseImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UsersResponseImplToJson(this);
+    return _$$UsersListResponseImplToJson(this);
   }
 }
 
-abstract class _UsersResponse implements UsersResponse {
-  const factory _UsersResponse({
+abstract class _UsersListResponse extends UsersListResponse {
+  const factory _UsersListResponse({
     required final int page,
     @JsonKey(name: 'per_page') required final int perPage,
     required final int total,
     @JsonKey(name: 'total_pages') required final int totalPages,
     required final List<UserModel> data,
-  }) = _$UsersResponseImpl;
+  }) = _$UsersListResponseImpl;
+  const _UsersListResponse._() : super._();
 
-  factory _UsersResponse.fromJson(Map<String, dynamic> json) =
-      _$UsersResponseImpl.fromJson;
+  factory _UsersListResponse.fromJson(Map<String, dynamic> json) =
+      _$UsersListResponseImpl.fromJson;
 
   @override
   int get page;
@@ -269,10 +274,10 @@ abstract class _UsersResponse implements UsersResponse {
   @override
   List<UserModel> get data;
 
-  /// Create a copy of UsersResponse
+  /// Create a copy of UsersListResponse
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$UsersResponseImplCopyWith<_$UsersResponseImpl> get copyWith =>
+  _$$UsersListResponseImplCopyWith<_$UsersListResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

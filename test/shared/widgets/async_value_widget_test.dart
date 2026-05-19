@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:template_vgv_app/core/error/failures.dart';
 import 'package:template_vgv_app/shared/widgets/async_value_widget.dart';
 import '../../helpers/pump_app.dart';
 
@@ -65,6 +66,20 @@ void main() {
       );
 
       expect(find.text('Custom Exception: Boom'), findsOneWidget);
+    });
+
+    testWidgets('uses readableMessage when error is a Failure', (tester) async {
+      await pumpAsyncValue<String>(
+        tester,
+        const AsyncValue.error(
+          Failure.network(message: 'No internet'),
+          StackTrace.empty,
+        ),
+      );
+
+      expect(find.text('No internet'), findsOneWidget);
+      // raw toString() would be "NetworkFailure(message: No internet)"
+      expect(find.text('NetworkFailure(message: No internet)'), findsNothing);
     });
   });
 }

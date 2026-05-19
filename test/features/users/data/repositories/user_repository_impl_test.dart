@@ -4,14 +4,16 @@ import 'package:mocktail/mocktail.dart';
 import 'package:template_vgv_app/core/common/paginated_result.dart';
 import 'package:template_vgv_app/core/error/exceptions.dart';
 import 'package:template_vgv_app/core/error/failures.dart';
+import 'package:template_vgv_app/features/users/data/datasources/remote_user_datasource.dart';
 import 'package:template_vgv_app/features/users/data/models/user_model.dart';
 import 'package:template_vgv_app/features/users/data/models/user_single_response.dart';
-import 'package:template_vgv_app/features/users/data/models/users_response.dart';
+import 'package:template_vgv_app/features/users/data/models/users_list_response.dart';
 import 'package:template_vgv_app/features/users/data/repositories/user_repository_impl.dart';
-import '../../../../helpers/fakes.dart';
+
+class _MockDataSource extends Mock implements RemoteUserDataSource {}
 
 void main() {
-  late MockRemoteUserDataSource mockDatasource;
+  late _MockDataSource mockDatasource;
   late UserRepositoryImpl repo;
 
   const testModel = UserModel(
@@ -23,22 +25,21 @@ void main() {
   );
 
   setUp(() {
-    mockDatasource = MockRemoteUserDataSource();
+    mockDatasource = _MockDataSource();
     repo = UserRepositoryImpl(mockDatasource);
   });
 
   group('UserRepositoryImpl.getUsers', () {
     test('returns PaginatedResult with mapped entities on success', () async {
-      const testResponse = UsersResponse(
-        page: 1,
-        perPage: 6,
-        total: 12,
-        totalPages: 2,
-        data: [testModel],
+      when(() => mockDatasource.getUsers(1)).thenAnswer(
+        (_) async => const UsersListResponse(
+          page: 1,
+          perPage: 6,
+          total: 12,
+          totalPages: 2,
+          data: [testModel],
+        ),
       );
-      when(
-        () => mockDatasource.getUsers(1),
-      ).thenAnswer((_) async => testResponse);
 
       final result = await repo.getUsers(page: 1);
 
@@ -143,10 +144,9 @@ void main() {
 
   group('UserRepositoryImpl.getUserById', () {
     test('returns mapped entity on success', () async {
-      const testResponse = UserSingleResponse(data: testModel);
-      when(
-        () => mockDatasource.getUser(7),
-      ).thenAnswer((_) async => testResponse);
+      when(() => mockDatasource.getUser(7)).thenAnswer(
+        (_) async => const UserSingleResponse(data: testModel),
+      );
 
       final result = await repo.getUserById(id: 7);
 

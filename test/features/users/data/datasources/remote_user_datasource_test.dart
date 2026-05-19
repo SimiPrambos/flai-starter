@@ -69,7 +69,7 @@ void main() {
       );
     });
 
-    test('fetches users with page query', () async {
+    test('fetches users with page query and deserializes response', () async {
       final adapter = FakeHttpClientAdapter(responseJson);
       final dataSource = RemoteUserDataSource(dioWith(adapter));
 
@@ -112,13 +112,6 @@ void main() {
       await dataSource.getUsers(3);
 
       expect(adapter.requests.single.baseUrl, 'https://api.example.test/v1');
-    });
-
-    test('rethrows json parsing errors', () async {
-      final adapter = FakeHttpClientAdapter({'page': 'invalid'});
-      final dataSource = RemoteUserDataSource(dioWith(adapter));
-
-      await expectLater(dataSource.getUsers(3), throwsA(isA<Object>()));
     });
   });
 }

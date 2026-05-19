@@ -47,85 +47,13 @@ test/features/payments/
 
 ## Required Steps After Generation
 
-The brick intentionally leaves four things unfinished — complete them in order:
+The brick generates fully wired, compilable code. The only manual steps are feature-specific:
 
-### 1. Add API fields to the model and entity
+1. Add API fields to `<name>_model.dart` and `<name>_entity.dart`
+2. Implement `toEntity()` in the model mapper extension
+3. Run `dart run build_runner build --delete-conflicting-outputs`
 
-`payments_model.dart` and `payments_entity.dart` only have `id`. Add the fields your API returns, regenerate:
-
-```sh
-dart run build_runner build --delete-conflicting-outputs
-```
-
-### 2. Create `lib/features/payments/payments_providers.dart`
-
-Wire the use case to the repository:
-
-```dart
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:template_vgv_app/features/payments/data/repositories/payments_repository_impl.dart';
-import 'package:template_vgv_app/features/payments/domain/usecases/get_payments_use_case.dart';
-
-export 'package:template_vgv_app/features/payments/data/repositories/payments_repository_impl.dart'
-    show paymentsRepositoryProvider;
-
-part 'payments_providers.g.dart';
-
-@riverpod
-GetPaymentsUseCase getPaymentsUseCase(GetPaymentsUseCaseRef ref) =>
-    GetPaymentsUseCase(ref.watch(paymentsRepositoryProvider));
-```
-
-Run build_runner again after creating this file.
-
-### 3. Wire `payments_notifier.dart`
-
-Import the providers file and implement `fetchPage`:
-
-```dart
-import 'package:template_vgv_app/features/payments/users_providers.dart';
-
-// replace the UnimplementedError stub:
-@override
-Future<PaginatedResult<PaymentsEntity>> fetchPage(int page) async {
-  final result = await ref.read(getPaymentsUseCaseProvider).call(page: page);
-  return result.fold(
-    // ignore: only_throw_errors
-    (failure) => throw failure,
-    (paginated) => paginated,
-  );
-}
-```
-
-See `lib/features/users/presentation/providers/users_notifier.dart` for the reference.
-
-### 4. Register the route in `app_router.dart`
-
-Add a `@TypedGoRoute` annotation and a `GoRouteData` subclass with `with _$ClassName`:
-
-```dart
-@TypedGoRoute<PaymentsRoute>(path: '/payments')
-@immutable
-class PaymentsRoute extends GoRouteData with _$PaymentsRoute {
-  const PaymentsRoute();
-  static const path = '/payments';
-  static const routeName = 'payments';
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const PaymentsPage();
-}
-```
-
-Run `build_runner` — `$appRoutes` is updated automatically. No manual route tree edit needed.
-
-### 5. Verify
-
-```sh
-melos check
-```
-
-Expected: build_runner no-op, analyzer clean, all tests pass.
+Everything else — providers, notifier wiring, route registration, by_id notifier, detail page — is handled automatically by the post-gen hook.
 
 ## datasource.getX vs repository.getXs
 

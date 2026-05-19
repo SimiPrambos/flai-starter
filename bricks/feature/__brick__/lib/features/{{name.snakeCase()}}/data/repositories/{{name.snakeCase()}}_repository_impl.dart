@@ -1,8 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:{{app_package}}/core/common/paginated_result.dart';
-import 'package:{{app_package}}/core/error/exceptions.dart';
+import 'package:{{app_package}}/core/common/repository_guard.dart';
 import 'package:{{app_package}}/core/error/failures.dart';
 import 'package:{{app_package}}/features/{{name.snakeCase()}}/data/datasources/remote_{{name.snakeCase()}}_datasource.dart';
 import 'package:{{app_package}}/features/{{name.snakeCase()}}/data/models/{{name.snakeCase()}}_model.dart';
@@ -16,29 +15,26 @@ part '{{name.snakeCase()}}_repository_impl.g.dart';
   {{name.pascalCase()}}RepositoryRef ref,
 ) => {{name.pascalCase()}}RepositoryImpl(ref.watch(remote{{name.pascalCase()}}DataSourceProvider));
 
-class {{name.pascalCase()}}RepositoryImpl implements {{name.pascalCase()}}Repository {
+class {{name.pascalCase()}}RepositoryImpl
+    with RepositoryGuard
+    implements {{name.pascalCase()}}Repository {
   const {{name.pascalCase()}}RepositoryImpl(this._datasource);
   final Remote{{name.pascalCase()}}DataSource _datasource;
 
   @override
-  Future<Either<Failure, PaginatedResult<{{name.pascalCase()}}Entity>>> get{{name.pascalCase()}}({
+  Future<Either<Failure, PaginatedResult<{{name.pascalCase()}}Entity>>> get{{name.pascalCase()}}s({
     required int page,
-  }) async {
-    try {
-      final response = await _datasource.get{{name.pascalCase()}}(page);
-      return right(
-        PaginatedResult(
-          items: response.map((m) => m.toEntity()).toList(),
-          currentPage: page,
-          totalPages: 1,
-        ),
+  }) =>
+      guardRequest(
+        () async => (await _datasource.get{{name.pascalCase()}}s(page))
+            .toPaginatedResult((m) => m.toEntity()),
       );
-    } on DioException catch (e) {
-      final appException = e.error;
-      if (appException is AppException) return left(appException.toFailure());
-      return left(Failure.unknown(message: e.message ?? 'Unknown error'));
-    } on Object catch (e) {
-      return left(Failure.unknown(message: e.toString()));
-    }
-  }
+
+  @override
+  Future<Either<Failure, {{name.pascalCase()}}Entity>> get{{name.pascalCase()}}ById({
+    required int id,
+  }) =>
+      guardRequest(
+        () async => (await _datasource.get{{name.pascalCase()}}(id)).data.toEntity(),
+      );
 }
