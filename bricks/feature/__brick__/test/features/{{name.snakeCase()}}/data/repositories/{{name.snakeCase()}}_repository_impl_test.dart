@@ -4,6 +4,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:{{app_package}}/core/error/exceptions.dart';
 import 'package:{{app_package}}/core/error/failures.dart';
 import 'package:{{app_package}}/features/{{name.snakeCase()}}/data/datasources/remote_{{name.snakeCase()}}_datasource.dart';
+import 'package:{{app_package}}/features/{{name.snakeCase()}}/data/models/{{name.snakeCase()}}_list_response.dart';
+import 'package:{{app_package}}/features/{{name.snakeCase()}}/data/models/{{name.snakeCase()}}_model.dart';
+import 'package:{{app_package}}/features/{{name.snakeCase()}}/data/models/{{name.snakeCase()}}_single_response.dart';
 import 'package:{{app_package}}/features/{{name.snakeCase()}}/data/repositories/{{name.snakeCase()}}_repository_impl.dart';
 
 class _MockDataSource extends Mock implements Remote{{name.pascalCase()}}DataSource {}
@@ -12,21 +15,22 @@ void main() {
   late _MockDataSource mockDatasource;
   late {{name.pascalCase()}}RepositoryImpl repo;
 
+  const testModel = {{name.pascalCase()}}Model(id: 1);
+
   setUp(() {
     mockDatasource = _MockDataSource();
     repo = {{name.pascalCase()}}RepositoryImpl(mockDatasource);
   });
 
   group('{{name.pascalCase()}}RepositoryImpl.get{{name.pascalCase()}}s', () {
-    const listJson = <String, dynamic>{
-      'page': 1,
-      'total_pages': 1,
-      'data': <dynamic>[<String, dynamic>{'id': 1}],
-    };
-
     test('returns right with mapped entities on success', () async {
-      when(() => mockDatasource.get{{name.pascalCase()}}s(1))
-          .thenAnswer((_) async => listJson);
+      when(() => mockDatasource.get{{name.pascalCase()}}s(1)).thenAnswer(
+        (_) async => const {{name.pascalCase()}}ListResponse(
+          page: 1,
+          totalPages: 1,
+          data: [testModel],
+        ),
+      );
 
       final result = await repo.get{{name.pascalCase()}}s(page: 1);
 
@@ -38,8 +42,7 @@ void main() {
     });
 
     test('returns Left(NetworkFailure) on NetworkException', () async {
-      when(() => mockDatasource.get{{name.pascalCase()}}s(1))
-          .thenThrow(
+      when(() => mockDatasource.get{{name.pascalCase()}}s(1)).thenThrow(
         DioException(
           requestOptions: RequestOptions(),
           error: const NetworkException(message: 'No internet'),
@@ -70,13 +73,10 @@ void main() {
   });
 
   group('{{name.pascalCase()}}RepositoryImpl.get{{name.pascalCase()}}ById', () {
-    const singleJson = <String, dynamic>{
-      'data': <String, dynamic>{'id': 1},
-    };
-
     test('returns right with mapped entity on success', () async {
-      when(() => mockDatasource.get{{name.pascalCase()}}(1))
-          .thenAnswer((_) async => singleJson);
+      when(() => mockDatasource.get{{name.pascalCase()}}(1)).thenAnswer(
+        (_) async => const {{name.pascalCase()}}SingleResponse(data: testModel),
+      );
 
       final result = await repo.get{{name.pascalCase()}}ById(id: 1);
 
@@ -88,8 +88,7 @@ void main() {
     });
 
     test('returns Left(ServerFailure) on 404', () async {
-      when(() => mockDatasource.get{{name.pascalCase()}}(999))
-          .thenThrow(
+      when(() => mockDatasource.get{{name.pascalCase()}}(999)).thenThrow(
         DioException(
           requestOptions: RequestOptions(),
           error: const ServerException(message: 'Not found', statusCode: 404),

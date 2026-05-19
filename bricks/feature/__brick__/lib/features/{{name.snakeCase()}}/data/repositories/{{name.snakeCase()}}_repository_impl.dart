@@ -1,9 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:{{app_package}}/core/common/paginated_response.dart';
 import 'package:{{app_package}}/core/common/paginated_result.dart';
 import 'package:{{app_package}}/core/common/repository_guard.dart';
-import 'package:{{app_package}}/core/common/single_response.dart';
 import 'package:{{app_package}}/core/error/failures.dart';
 import 'package:{{app_package}}/features/{{name.snakeCase()}}/data/datasources/remote_{{name.snakeCase()}}_datasource.dart';
 import 'package:{{app_package}}/features/{{name.snakeCase()}}/data/models/{{name.snakeCase()}}_model.dart';
@@ -28,10 +26,8 @@ class {{name.pascalCase()}}RepositoryImpl
     required int page,
   }) =>
       guardRequest(
-        () async => PaginatedResponse.fromJson(
-          (await _datasource.get{{name.pascalCase()}}s(page)) as Map<String, dynamic>,
-          {{name.pascalCase()}}Model.fromJson,
-        ).toPaginatedResult((m) => m.toEntity()),
+        () async => (await _datasource.get{{name.pascalCase()}}s(page))
+            .toPaginatedResult((m) => m.toEntity()),
       );
 
   @override
@@ -39,9 +35,6 @@ class {{name.pascalCase()}}RepositoryImpl
     required int id,
   }) =>
       guardRequest(
-        () async => SingleResponse.fromJson(
-          (await _datasource.get{{name.pascalCase()}}(id)) as Map<String, dynamic>,
-          {{name.pascalCase()}}Model.fromJson,
-        ).data.toEntity(),
+        () async => (await _datasource.get{{name.pascalCase()}}(id)).data.toEntity(),
       );
 }
