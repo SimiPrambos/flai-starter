@@ -36,10 +36,12 @@ Future<void> run(HookContext context) async {
        Get${pascal}UseCase(ref.watch(${camel}RepositoryProvider));
 ''');
   logger.info('3. Import it in ${snake}_notifier.dart and replace the fetchPage stub.');
-  logger.info('4. Wire the route in lib/core/router/app_router.dart:');
+  logger.info('4. Add route to lib/core/router/app_router.dart:');
   logger.info('');
   logger.info('''
-   class ${pascal}Route extends GoRouteData {
+   @TypedGoRoute<${pascal}Route>(path: '/$snake')
+   @immutable
+   class ${pascal}Route extends GoRouteData with _\$${pascal}Route {
      const ${pascal}Route();
      static const path = '/$snake';
      static const routeName = '$snake';
@@ -48,11 +50,7 @@ Future<void> run(HookContext context) async {
      Widget build(BuildContext context, GoRouterState state) =>
          const ${pascal}Page();
    }
-
-   extension ${pascal}RouteExtension on ${pascal}Route {
-     void go(BuildContext context) => context.go(path);
-     void push(BuildContext context) => context.push(path);
-   }
 ''');
+  logger.info('   Then run build_runner — \$appRoutes updates automatically.');
   logger.info('5. Run: melos check');
 }
