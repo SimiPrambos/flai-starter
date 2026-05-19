@@ -75,8 +75,10 @@ void main() {
 
       final response = await dataSource.getUsers(3);
 
-      expect(response.page, 3);
-      expect(response.data.single.email, 'michael.lawson@reqres.in');
+      expect(response['page'], 3);
+      final dataList = (response['data'] as List<dynamic>)
+          .cast<Map<String, dynamic>>();
+      expect(dataList.single['email'], 'michael.lawson@reqres.in');
       expect(adapter.requests.single.method, 'GET');
       expect(adapter.requests.single.path, '/users');
       expect(adapter.requests.single.queryParameters, {'page': 3});
@@ -112,13 +114,6 @@ void main() {
       await dataSource.getUsers(3);
 
       expect(adapter.requests.single.baseUrl, 'https://api.example.test/v1');
-    });
-
-    test('rethrows json parsing errors', () async {
-      final adapter = FakeHttpClientAdapter({'page': 'invalid'});
-      final dataSource = RemoteUserDataSource(dioWith(adapter));
-
-      await expectLater(dataSource.getUsers(3), throwsA(isA<Object>()));
     });
   });
 }

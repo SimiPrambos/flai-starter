@@ -18,12 +18,12 @@ class _RemoteUserDataSource implements RemoteUserDataSource {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<UsersResponse> getUsers(int page) async {
+  Future<Map<String, dynamic>> getUsers(int page) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'page': page};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<UsersResponse>(
+    final _options = _setStreamType<Map<String, dynamic>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -34,9 +34,9 @@ class _RemoteUserDataSource implements RemoteUserDataSource {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late UsersResponse _value;
+    late Map<String, dynamic> _value;
     try {
-      _value = UsersResponse.fromJson(_result.data!);
+      _value = Map<String, dynamic>.from(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -45,12 +45,12 @@ class _RemoteUserDataSource implements RemoteUserDataSource {
   }
 
   @override
-  Future<UserSingleResponse> getUser(int id) async {
+  Future<Map<String, dynamic>> getUser(int id) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<UserSingleResponse>(
+    final _options = _setStreamType<Map<String, dynamic>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -61,9 +61,9 @@ class _RemoteUserDataSource implements RemoteUserDataSource {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late UserSingleResponse _value;
+    late Map<String, dynamic> _value;
     try {
-      _value = UserSingleResponse.fromJson(_result.data!);
+      _value = Map<String, dynamic>.from(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
