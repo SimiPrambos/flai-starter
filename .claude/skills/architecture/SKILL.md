@@ -64,6 +64,40 @@ Provider wiring may expose data implementations through Riverpod providers, but 
 - **notifier**: Riverpod `AsyncNotifier` for presentation state
 - **page**: `ConsumerWidget` rendering loading/error/data
 
+## Core Shared Utilities
+
+### `RepositoryGuard` mixin
+Apply to every repository implementation. Wraps the DioException error pipeline. Never write a manual try/catch in a repository — use `guardRequest`.
+
+```dart
+class XRepositoryImpl with RepositoryGuard implements XRepository {
+  Future<Either<Failure, XEntity>> getX({required int id}) =>
+      guardRequest(() async =>
+          SingleResponse.fromJson(
+            (await _datasource.getX(id)) as Map<String, dynamic>,
+            XModel.fromJson,
+          ).data.toEntity());
+}
+```
+
+### `PagedResponseMapper` mixin (via `PaginatedResponse`)
+Use `PaginatedResponse<T>.fromJson(json, fromJsonT)` and `SingleResponse<T>.fromJson(json, fromJsonT)` from `lib/core/common/` to parse API responses. The datasource returns `Future<dynamic>`, and the repository casts and parses.
+
+```dart
+// datasource (Retrofit)
+@GET('/items')
+Future<dynamic> getItems(@Query('page') int page);
+
+// repository
+PaginatedResponse.fromJson(
+  (await _datasource.getItems(page)) as Map<String, dynamic>,
+  ItemModel.fromJson,
+).toPaginatedResult((m) => m.toEntity())
+```
+
+### Usecase rule
+Eliminate usecases for simple CRUD (get list, get by ID). Notifiers call `ref.read(xRepositoryProvider).getXs()` directly. Only add a usecase class when the operation contains real business logic (input validation, combining multiple data sources, transformation).
+
 ## Reference Implementation
 
 `features/users` is the canonical example — read it before creating new features.
