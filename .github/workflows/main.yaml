@@ -8,11 +8,9 @@ on:
   push:
     branches:
       - main
-      - irwan-playground
   pull_request:
     branches:
       - main
-      - irwan-playground
 
 jobs:
   semantic-pull-request:
