@@ -1,3 +1,9 @@
 bricks:
   feature:
     path: bricks/feature
+  domain:
+    path: bricks/domain
+  data:
+    path: bricks/data
+  presentation:
+    path: bricks/presentation

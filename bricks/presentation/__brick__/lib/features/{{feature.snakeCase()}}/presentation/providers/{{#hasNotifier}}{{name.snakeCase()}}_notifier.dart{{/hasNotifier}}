@@ -1,0 +1,73 @@
+{{#isList}}
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:{{app_package}}/core/common/paginated_mixin.dart';
+import 'package:{{app_package}}/core/common/paginated_result.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/domain/entities/{{feature.snakeCase()}}_entity.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/{{feature.snakeCase()}}_providers.dart';
+
+part '{{name.snakeCase()}}_notifier.g.dart';
+
+@riverpod
+class {{name.pascalCase()}}Notifier extends _${{name.pascalCase()}}Notifier
+    with PaginatedMixin<{{feature.pascalCase()}}Entity> {
+  @override
+  Future<List<{{feature.pascalCase()}}Entity>> build() => buildPaginated();
+
+  @override
+  Future<PaginatedResult<{{feature.pascalCase()}}Entity>> fetchPage(int page) async {
+    final result = await ref
+        .read({{feature.camelCase()}}RepositoryProvider)
+        .get{{feature.pascalCase()}}s(page: page);
+    return result.fold(
+      // ignore: only_throw_errors // Failure is not an Exception but is intentionally thrown
+      (failure) => throw failure,
+      (paginated) => paginated,
+    );
+  }
+}
+{{/isList}}
+{{#isDetail}}
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/domain/entities/{{feature.snakeCase()}}_entity.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/{{feature.snakeCase()}}_providers.dart';
+
+part '{{name.snakeCase()}}_notifier.g.dart';
+
+@riverpod
+class {{name.pascalCase()}}Notifier extends _${{name.pascalCase()}}Notifier {
+  @override
+  Future<{{feature.pascalCase()}}Entity> build(int id) async {
+    final result = await ref
+        .read({{feature.camelCase()}}RepositoryProvider)
+        .get{{feature.pascalCase()}}ById(id: id);
+    return result.fold(
+      // ignore: only_throw_errors // Failure is not an Exception but is intentionally thrown
+      (failure) => throw failure,
+      (entity) => entity,
+    );
+  }
+}
+{{/isDetail}}
+{{#isSingle}}
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/domain/entities/{{feature.snakeCase()}}_entity.dart';
+import 'package:{{app_package}}/features/{{feature.snakeCase()}}/{{feature.snakeCase()}}_providers.dart';
+
+part '{{name.snakeCase()}}_notifier.g.dart';
+
+@riverpod
+class {{name.pascalCase()}}Notifier extends _${{name.pascalCase()}}Notifier {
+  @override
+  Future<{{feature.pascalCase()}}Entity> build() async {
+    // TODO: call the appropriate repository method for this singleton resource
+    final result = await ref
+        .read({{feature.camelCase()}}RepositoryProvider)
+        .get{{feature.pascalCase()}}ById(id: 0);
+    return result.fold(
+      // ignore: only_throw_errors // Failure is not an Exception but is intentionally thrown
+      (failure) => throw failure,
+      (entity) => entity,
+    );
+  }
+}
+{{/isSingle}}

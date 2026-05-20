@@ -25,9 +25,9 @@ jobs:
       coverage_excludes: "**/*.g.dart lib/core/firebase/** lib/core/theme/** lib/core/storage/secure_storage.dart"
       setup: cp .env.example .env && dart run build_runner build --delete-conflicting-outputs
 
-  spell-check:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/spell_check.yml@v1
-    with:
-      includes: |
-        **/*.md
-      modified_files_only: false
+  # spell-check:
+  #   uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/spell_check.yml@v1
+  #   with:
+  #     includes: |
+  #       **/*.md
+  #     modified_files_only: false

@@ -94,21 +94,11 @@ Runs: `build_runner → flutter analyze → flutter test`. Use it before pushing
 
 ---
 
-## Scaffolding a New Feature
+## Scaffolding Features
 
-```sh
-melos make-feature -- --name <feature_name> --app-package template_vgv_app
-```
+Use the mason brick commands to scaffold any Clean Architecture layer — domain, data, or presentation — independently and incrementally.
 
-Generates all Clean Architecture layers for `<feature_name>` (snake_case) — entity, repository interface, use case, data model, datasource, repository implementation, Riverpod notifier, page, and test stubs. A post-gen hook runs `build_runner` automatically and prints the four wiring steps needed to complete the feature.
-
-After generation:
-
-1. Add API fields to `<name>_model.dart` and `<name>_entity.dart`
-2. Create `lib/features/<name>/<name>_providers.dart` to wire the use case
-3. Import it in `<name>_notifier.dart` and implement `fetchPage`
-4. Register the route in `lib/core/router/app_router.dart`
-5. Run `melos check`
+See the `mason` skill (`.claude/skills/mason/SKILL.md`) for the full command reference, type options, typical flows, and common mistakes.
 
 ---
 
@@ -171,9 +161,7 @@ The starter ships with shared abstractions that eliminate repetitive boilerplate
 
 ### Mason
 
-Running `melos make-feature -- --name <name> --app_package <package>` generates a fully wired feature: providers, notifiers, list and detail pages using `PaginatedListPage`/`AsyncDetailScaffold`, and auto-registers both routes in `app_router.dart`.
-
-Manual steps after generation: add API fields, implement `toEntity()`, run build_runner.
+Atomic bricks per Clean Architecture layer, composable and additive. See the `mason` skill for the full reference.
 
 ---
 
