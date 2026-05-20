@@ -45,12 +45,48 @@ Use when: no `docs/features/{name}/SPEC.md` exists yet.
 5. Create empty `docs/features/{name}/CHANGELOG.md`
 6. Set status: `draft`
 7. Announce: "Spec created. Proceeding to scaffold."
-8. Invoke `mason` skill → it determines which bricks to run based on what the spec needs (data layer, page types, iteration plan). Full command reference is in the mason skill.
-9. Fill in generated files from spec:
-   - Entity fields → `{name}_entity.dart` + `{name}_model.dart`
-   - API endpoint → `remote_{name}_datasource.dart` Retrofit annotations
-   - Card widget content → `{name}_card.dart` (list type only)
-10. Update spec status to `in-progress`
+8. Ask: **"Is the API contract confirmed for all endpoints?"**
+
+   **If YES (all endpoints confirmed):**
+   - Invoke `mason` skill → full stack: `make-domain` + `make-data` + `make-presentation`
+   - Fill in generated files from spec:
+     - Entity fields → `{name}_entity.dart` + `{name}_model.dart`
+     - API endpoint → `remote_{name}_datasource.dart` Retrofit annotations
+     - Card widget content → `{name}_card.dart` (list type only)
+   - Mark all API endpoints as `confirmed` in SPEC.md
+
+   **If NO (any endpoint is pending or unknown):**
+   - Run `make-domain` → entity + repository interface only
+   - Run `make-presentation` → page + notifier + route (skip `make-data`)
+   - Create `lib/features/{name}/data/repositories/mock_{name}_repository.dart`:
+     ```dart
+     class Mock{Name}Repository implements {Name}Repository {
+       @override
+       Future<Either<Failure, PaginatedResult<{Name}Entity>>> get{Name}s({
+         required int page,
+       }) async =>
+           right(PaginatedResult(
+             items: _dummy{Name}s,
+             currentPage: page,
+             totalPages: 1,
+           ));
+
+       static const _dummy{Name}s = [
+         {Name}Entity(id: 1 /* fill entity fields from spec */),
+         {Name}Entity(id: 2 /* fill entity fields from spec */),
+       ];
+     }
+     ```
+   - Wire mock in `{name}_providers.dart`:
+     ```dart
+     @Riverpod(keepAlive: true)
+     {Name}Repository {name}Repository({Name}RepositoryRef ref) =>
+         Mock{Name}Repository(); // TODO: swap when API ready
+     ```
+   - Mark affected API endpoints as `mock-only` in SPEC.md
+   - Fill entity fields in `{name}_entity.dart` from spec
+
+9. Update spec status to `in-progress`
 
 ---
 
@@ -94,6 +130,38 @@ Use when: PRD changed, requirements changed, or code diverged from spec.
 7. Append entry to `docs/features/{name}/CHANGELOG.md`
 8. Surface affected files to engineer: "These files need updating: ..."
 9. If the change is a significant architectural decision, add an ADR to `docs/features/{name}/decisions/`
+
+---
+
+## Mode 4 — API Integration
+
+Use when: a feature was built with mock data and the real API contract is now confirmed.
+
+### Steps
+
+1. Update endpoint status in SPEC.md from `pending`/`mock-only` to `confirmed`
+2. Run `make-data` to scaffold real datasource + model + repository impl:
+   ```sh
+   melos make-data -- --name <feature_name> --app-package <app_package>
+   ```
+3. Fill in entity fields, model fields, and datasource Retrofit annotations from spec
+4. Implement `toEntity()` mapper extension on the model
+5. Swap provider in `{name}_providers.dart`:
+   ```dart
+   @Riverpod(keepAlive: true)
+   {Name}Repository {name}Repository({Name}RepositoryRef ref) =>
+       {Name}RepositoryImpl(ref.read(remote{Name}DataSourceProvider));
+   ```
+6. Delete `mock_{name}_repository.dart` (or keep as a test helper — rename to `fake_{name}_repository.dart` in `test/`)
+7. Invoke `superpowers:test-driven-development` for the data layer — seed tests from API scenarios in SPEC.md
+8. Append entry to `docs/features/{name}/CHANGELOG.md`:
+   ```markdown
+   ## {YYYY-MM-DD} — API integrated
+   **Trigger:** Backend API confirmed and deployed
+   **Changed:** Swapped Mock{Name}Repository → {Name}RepositoryImpl. All endpoints now confirmed.
+   **Code affected:** {name}_providers.dart, remote_{name}_datasource.dart, {name}_repository_impl.dart
+   **Status:** applied
+   ```
 
 ---
 
@@ -207,12 +275,18 @@ Filename: `{NNN}-{kebab-description}.md`
 
 | Phase | Skill |
 |---|---|
-| Spec creation complete | invoke `mason` skill — picks atomic bricks based on spec |
+| Start of every conversation | `superpowers:using-superpowers` |
+| New feature or existing feature | `feature-spec` (this skill) |
+| After spec approved | `superpowers:writing-plans` → output to `docs/features/{name}/PLAN.md` |
+| Before any UI work | Scan `lib/shared/widgets/` → decide placement (see CLAUDE.md Workflow rules) |
+| Before implementing each layer | `superpowers:test-driven-development` — seed from Scenarios in SPEC.md |
 | Filling in entity + model | `architecture` skill — layer rules apply |
 | Filling in datasource | `network` skill — Retrofit annotations, interceptors |
 | Filling in notifier | `riverpod` skill — codegen, keepAlive rules |
 | Building card / page UI | `theme`, `responsive-ui`, `shared-widgets` skills |
-| Writing tests | `testing` skill — mock boundaries, pumpApp helper |
+| Before marking complete | `superpowers:verification-before-completion` |
+| Closing out the branch | `superpowers:finishing-a-development-branch` |
+| API contract arrives after mock build | Mode 4 — API Integration (this skill) |
 
 ---
 
