@@ -22,6 +22,7 @@ dependencies:
   flutter_riverpod: ^2.6.1
   flutter_screenutil: ^5.9.3
   flutter_secure_storage: ^9.2.2
+  flutter_svg: ^2.1.0
   fpdart: ^1.1.0
   freezed_annotation: ^2.4.4
   gap: ^3.0.1
@@ -54,6 +55,8 @@ dev_dependencies:
 flutter:
   generate: true
   uses-material-design: true
+  assets:
+    - assets/images/
 
 melos:
   useRootAsPackage: true
