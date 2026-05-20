@@ -71,7 +71,7 @@ GoRouter appRouter(AppRouterRef ref) {
   ];
 
   return GoRouter(
-    initialLocation: UsersRoute.path,
+    initialLocation: LoginRoute.path,
     observers: observers,
     routes: $appRoutes,
   );
