@@ -6,7 +6,7 @@ part of 'app_router.dart';
 // GoRouterGenerator
 // **************************************************************************
 
-List<RouteBase> get $appRoutes => [$usersRoute];
+List<RouteBase> get $appRoutes => [$usersRoute, $loginRoute, $dashboardRoute];
 
 RouteBase get $usersRoute => GoRouteData.$route(
   path: '/users',
@@ -47,6 +47,56 @@ mixin _$UserDetailRoute on GoRouteData {
   String get location => GoRouteData.$location(
     '/users/${Uri.encodeComponent(_self.id.toString())}',
   );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $loginRoute =>
+    GoRouteData.$route(path: '/login', factory: _$LoginRoute._fromState);
+
+mixin _$LoginRoute on GoRouteData {
+  static LoginRoute _fromState(GoRouterState state) => const LoginRoute();
+
+  @override
+  String get location => GoRouteData.$location('/login');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $dashboardRoute => GoRouteData.$route(
+  path: '/dashboard',
+
+  factory: _$DashboardRoute._fromState,
+);
+
+mixin _$DashboardRoute on GoRouteData {
+  static DashboardRoute _fromState(GoRouterState state) =>
+      const DashboardRoute();
+
+  @override
+  String get location => GoRouteData.$location('/dashboard');
 
   @override
   void go(BuildContext context) => context.go(location);

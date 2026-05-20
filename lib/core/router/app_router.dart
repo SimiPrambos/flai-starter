@@ -5,6 +5,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:template_vgv_app/core/firebase/firebase_providers.dart';
 import 'package:template_vgv_app/core/logging/talker_provider.dart';
+import 'package:template_vgv_app/features/auth/presentation/pages/login_page.dart';
+import 'package:template_vgv_app/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:template_vgv_app/features/users/presentation/pages/user_detail_page.dart';
 import 'package:template_vgv_app/features/users/presentation/pages/users_page.dart';
 part 'app_router.g.dart';
@@ -73,4 +75,27 @@ GoRouter appRouter(AppRouterRef ref) {
     observers: observers,
     routes: $appRoutes,
   );
+}
+
+@TypedGoRoute<LoginRoute>(path: '/login')
+@immutable
+class LoginRoute extends GoRouteData with _$LoginRoute {
+  const LoginRoute();
+  static const path = '/login';
+  static const routeName = 'login';
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const LoginPage();
+}
+
+@TypedGoRoute<DashboardRoute>(path: '/dashboard')
+@immutable
+class DashboardRoute extends GoRouteData with _$DashboardRoute {
+  const DashboardRoute();
+  static const path = '/dashboard';
+  static const routeName = 'dashboard';
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const DashboardPage();
 }
