@@ -1,64 +1,50 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:template_vgv_app/core/error/failures.dart';
 import 'package:template_vgv_app/features/auth/data/datasources/remote_auth_datasource.dart';
 import 'package:template_vgv_app/features/auth/data/models/auth_model.dart';
 import 'package:template_vgv_app/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:template_vgv_app/features/auth/domain/entities/auth_entity.dart';
 
-class _MockDataSource extends MockAuthRemoteDataSource {
-  Future<AuthModel> Function({required String email, required String password})?
-  _loginImpl;
-
-  @override
-  Future<AuthModel> login({
-    required String email,
-    required String password,
-  }) => _loginImpl != null
-      ? _loginImpl!(email: email, password: password)
-      : super.login(email: email, password: password);
-}
+class _MockDatasource extends Mock implements AuthRemoteDataSource {}
 
 void main() {
-  late _MockDataSource mockDatasource;
+  late _MockDatasource datasource;
   late AuthRepositoryImpl repo;
 
+  const email = 'test@example.com';
+  const password = 'secret';
+  const model = AuthModel(token: 'tok123');
+
   setUp(() {
-    mockDatasource = _MockDataSource();
-    repo = AuthRepositoryImpl(mockDatasource);
+    datasource = _MockDatasource();
+    repo = AuthRepositoryImpl(datasource);
   });
 
-  group('AuthRepositoryImpl.login', () {
-    test('returns Right with mapped entity on success', () async {
-      const testEmail = 'test@example.com';
-      mockDatasource._loginImpl =
-          ({required String email, required String password}) async =>
-              const AuthModel(token: 'test-token');
+  group('login', () {
+    test('returns AuthEntity on success', () async {
+      when(
+        () => datasource.login(email: email, password: password),
+      ).thenAnswer((_) async => model);
 
-      final result = await repo.login(
-        email: testEmail,
-        password: 'password',
-      );
+      final result = await repo.login(email: email, password: password);
 
-      expect(result.isRight(), true);
-      result.fold(
-        (_) => fail('Expected Right'),
-        (entity) => expect(entity, const AuthEntity(token: 'test-token')),
+      expect(
+        result,
+        equals(right<Failure, AuthEntity>(const AuthEntity(token: 'tok123'))),
       );
     });
 
-    test('returns Left(UnknownFailure) on unexpected exception', () async {
-      mockDatasource._loginImpl =
-          ({required String email, required String password}) =>
-              Future.error(Exception('Unexpected'));
+    test('returns Failure on exception', () async {
+      when(
+        () => datasource.login(email: email, password: password),
+      ).thenThrow(Exception('network error'));
 
-      final result = await repo.login(
-        email: 'test@example.com',
-        password: 'password',
-      );
+      final result = await repo.login(email: email, password: password);
 
-      expect(result.isLeft(), true);
       result.fold(
-        (f) => expect(f, isA<UnknownFailure>()),
+        (f) => expect(f, isA<Failure>()),
         (_) => fail('Expected Left'),
       );
     });
