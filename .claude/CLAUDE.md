@@ -2,6 +2,17 @@
 
 Flutter enterprise starter — Clean Architecture, Riverpod, GoRouter.
 
+## Feature Spec Governance
+
+**Before any work inside `lib/features/{name}/`:**
+
+1. Invoke the `feature-spec` skill
+2. Read `docs/features/{name}/SPEC.md` — this is the source of truth
+3. After changes, update `SPEC.md` if entity fields, endpoints, or UI states changed
+4. Append a `CHANGELOG.md` entry describing what changed and why
+
+Do not invent fields, endpoints, or UI patterns not in the spec without updating the spec first. All other skills apply after the spec is confirmed.
+
 ## Project Purpose
 
 Reusable Flutter starter for future apps. The built-in example feature is `users`, backed by `reqres.in`. Treat it as a reference implementation for new features, not as one-off demo code.
@@ -24,6 +35,7 @@ Load the relevant skill before working in each area:
 
 | Topic | Skill | When to load |
 |---|---|---|
+| Feature spec (PRD → SPEC.md) | @skills/feature-spec/SKILL.md | Before any new or existing feature work |
 | Architecture & layers | @skills/architecture/SKILL.md | Adding features, checking imports |
 | Navigation / routing | @skills/navigation/SKILL.md | Adding routes, screen navigation |
 | Riverpod providers | @skills/riverpod/SKILL.md | Creating providers or notifiers |
@@ -35,5 +47,5 @@ Load the relevant skill before working in each area:
 | Testing | @skills/testing/SKILL.md | Writing any test |
 | Firebase & Talker | @skills/firebase-talker/SKILL.md | Logging, analytics, Crashlytics |
 | Generated files | @skills/generated-files/SKILL.md | Build runner, env, constraints |
-| Feature scaffolding | @skills/mason/SKILL.md | Creating a new feature with mason |
+| Feature scaffolding | @skills/mason/SKILL.md | Scaffolding any layer with make-domain / make-data / make-presentation / make-feature |
 | Shared widgets (AppAvatar, PaginatedListPage, AsyncDetailScaffold, ErrorRetryWidget) | @skills/shared-widgets/SKILL.md | Using or building any shared widget |
