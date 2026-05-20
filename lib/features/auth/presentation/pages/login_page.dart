@@ -75,16 +75,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const _LearnXpertLogo(),
-                      Gap(4.r),
-                      Text(
-                        'POWERED  BY  AJARI',
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          letterSpacing: 3.2,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white.withValues(alpha: 0.35),
-                        ),
-                      ),
                       Gap(40.r),
                       _EmailField(controller: _emailController),
                       Gap(16.r),
