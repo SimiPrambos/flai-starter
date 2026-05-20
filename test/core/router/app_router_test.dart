@@ -67,6 +67,7 @@ void main() {
         ),
       );
 
+      late GoRouter router;
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -74,11 +75,17 @@ void main() {
             userRepositoryProvider.overrideWithValue(mockRepo),
           ],
           child: Consumer(
-            builder: (_, ref, _) =>
-                _appWithRouter(ref.watch(appRouterProvider)),
+            builder: (_, ref, _) {
+              router = ref.watch(appRouterProvider);
+              return _appWithRouter(router);
+            },
           ),
         ),
       );
+      await tester.pumpAndSettle();
+
+      // Navigate to UsersPage since initial location is now LoginRoute
+      router.go(UsersRoute.path);
       await tester.pumpAndSettle();
 
       expect(find.byType(UsersPage), findsOneWidget);
@@ -98,6 +105,7 @@ void main() {
         (_) async => right(_testUser),
       );
 
+      late GoRouter router;
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -105,11 +113,17 @@ void main() {
             userRepositoryProvider.overrideWithValue(mockRepo),
           ],
           child: Consumer(
-            builder: (_, ref, _) =>
-                _appWithRouter(ref.watch(appRouterProvider)),
+            builder: (_, ref, _) {
+              router = ref.watch(appRouterProvider);
+              return _appWithRouter(router);
+            },
           ),
         ),
       );
+      await tester.pumpAndSettle();
+
+      // Navigate to UsersPage since initial location is now LoginRoute
+      router.go(UsersRoute.path);
       await tester.pumpAndSettle();
 
       await tester.tap(find.byType(UserCard).first);
