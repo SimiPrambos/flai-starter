@@ -103,16 +103,40 @@ Use when: PRD changed, requirements changed, or code diverged from spec.
 # Feature: {Name}
 **Status:** draft | in-progress | shipped
 
+## Overview
+**Why:** {one sentence — business reason}
+
+**User Stories:**
+- As a {role}, I want to {action} so that {benefit}
+- As a {role}, I want to {action} so that {benefit}
+
 ## Entity
 | Field  | Type   | Nullable | Notes |
 |--------|--------|----------|-------|
 | id     | int    | no       |       |
 
 ## API
-| Method | Endpoint           | Params      | Response              |
-|--------|--------------------|-------------|-----------------------|
-| GET    | /{name}?page=      | page: int   | {Name}ListResponse    |
-| GET    | /{name}/{id}       | id: int     | {Name}SingleResponse  |
+| Method | Endpoint           | Params      | Response              | Status    |
+|--------|--------------------|-------------|-----------------------|-----------|
+| GET    | /{name}?page=      | page: int   | {Name}ListResponse    | confirmed |
+| GET    | /{name}/{id}       | id: int     | {Name}SingleResponse  | pending   |
+
+Status values: `confirmed` (contract agreed) | `pending` (not yet agreed) | `mock-only` (no backend, mock in use)
+
+## Scenarios
+
+### {Screen or action name}
+
+**Given** {precondition / input state}
+**When** {user action or system event}
+**Then** {expected output / visible result}
+
+**Given** {edge case or error input state}
+**When** {action}
+**Then** {expected handling}
+
+*(Add one block per meaningful behavior — happy path + empty state + error paths + edge cases.
+Each block maps directly to one test case when superpowers:test-driven-development runs.)*
 
 ## UI States
 
@@ -132,8 +156,8 @@ Use when: PRD changed, requirements changed, or code diverged from spec.
 - **List → Detail:** tap card → push {Name}DetailRoute(id: item.id)
 
 ## Acceptance Criteria
-- [ ] {testable condition from PRD}
-- [ ] {testable condition from design}
+- [ ] {testable condition — maps to a scenario above}
+- [ ] {testable condition}
 
 ## Open Questions
 - [ ] {question — who resolves it}
