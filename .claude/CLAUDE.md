@@ -13,6 +13,32 @@ Flutter enterprise starter — Clean Architecture, Riverpod, GoRouter.
 
 Do not invent fields, endpoints, or UI patterns not in the spec without updating the spec first. All other skills apply after the spec is confirmed.
 
+## Workflow — Mandatory
+
+MUST: At the start of every conversation, invoke `superpowers:using-superpowers`
+before any other response, including clarifying questions.
+
+MUST: For any work inside `lib/features/`, invoke `feature-spec` first.
+- New feature (no SPEC.md exists) → Create mode → write `docs/features/{name}/SPEC.md`
+- Existing feature (SPEC.md exists) → Follow mode → read `docs/features/{name}/SPEC.md`
+
+MUST: When brainstorming a Flutter feature → write spec to `docs/features/{name}/SPEC.md`
+using feature-spec format (not `docs/superpowers/specs/`).
+MUST: When writing-plans for a Flutter feature → write plan to `docs/features/{name}/PLAN.md`.
+
+MUST: Before any UI implementation → scan `lib/shared/widgets/` to discover existing
+widgets. Decide placement before writing a single widget:
+- Use existing shared widget if it covers the use case
+- Extend existing widget if a small parameter addition covers it
+- New widget used by 2+ features → `lib/shared/widgets/`
+- New widget specific to one feature → `lib/features/{name}/presentation/widgets/`
+
+MUST: Before implementing any layer → invoke `superpowers:test-driven-development`.
+Seed test cases from BDD scenarios in SPEC.md, not generic stubs.
+
+MUST: Before marking work complete → invoke `superpowers:verification-before-completion`.
+`flutter analyze` + `flutter test` must both pass.
+
 ## Project Purpose
 
 Reusable Flutter starter for future apps. The built-in example feature is `users`, backed by `reqres.in`. Treat it as a reference implementation for new features, not as one-off demo code.
