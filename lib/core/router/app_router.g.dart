@@ -116,7 +116,7 @@ mixin _$DashboardRoute on GoRouteData {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appRouterHash() => r'5f8cd05cc2045c98a85b91b408bbaf4dab0fea49';
+String _$appRouterHash() => r'de7a71ef8f83b936193d3dabdeceed183e6bd022';
 
 /// See also [appRouter].
 @ProviderFor(appRouter)

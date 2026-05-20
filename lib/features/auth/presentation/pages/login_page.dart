@@ -310,6 +310,7 @@ class _ArchPattern extends StatelessWidget {
       child: Image.asset(
         'assets/images/decoration_bottom_login.png',
         fit: BoxFit.fitWidth,
+        errorBuilder: (context, error, stack) => const SizedBox.shrink(),
       ),
     );
   }
