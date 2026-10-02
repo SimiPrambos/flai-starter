@@ -35,5 +35,33 @@
   "userFieldLastName": "Last Name",
   "@userFieldLastName": {
     "description": "User last name field label"
+  },
+  "loginTitle": "Sign in",
+  "@loginTitle": {
+    "description": "Title of the login page"
+  },
+  "loginEmailLabel": "Email",
+  "@loginEmailLabel": {
+    "description": "Label of the email field on the login page"
+  },
+  "loginSubmit": "Sign in",
+  "@loginSubmit": {
+    "description": "Login page submit button"
+  },
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Title of the settings page"
+  },
+  "settingsSignOut": "Sign out",
+  "@settingsSignOut": {
+    "description": "Sign-out button on the settings page"
+  },
+  "tabUsers": "Users",
+  "@tabUsers": {
+    "description": "Bottom tab label for the users branch"
+  },
+  "tabSettings": "Settings",
+  "@tabSettings": {
+    "description": "Bottom tab label for the settings branch"
   }
 }
