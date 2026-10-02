@@ -127,3 +127,17 @@ android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
 macos/Runner/GoogleService-Info.plist
 firebase_app_id_file.json
+
+# Claude Code personal permissions (machine-local)
+.claude/settings.local.json
+
+# Superpowers session working files
+.superpowers/
+
+# Signing secrets (keep outside the repo; never commit)
+*.p8
+ios_distribution_private_key
+**/ios_distribution_private_key*
+
+# Service-account keys (Firebase App Distribution, Play, etc.)
+android/*service-account*.json
