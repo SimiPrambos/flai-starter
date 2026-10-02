@@ -2,7 +2,7 @@
 name: auth
 status: draft
 owner: silmi
-branch: feat/backport-ef-session-shell
+branch: feat/backport-tooling-dx
 last_changed: 2026-10-02
 ---
 
