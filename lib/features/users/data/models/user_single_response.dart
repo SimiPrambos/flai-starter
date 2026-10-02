@@ -5,7 +5,7 @@ part 'user_single_response.freezed.dart';
 part 'user_single_response.g.dart';
 
 @freezed
-class UserSingleResponse with _$UserSingleResponse {
+abstract class UserSingleResponse with _$UserSingleResponse {
   const factory UserSingleResponse({
     required UserModel data,
   }) = _UserSingleResponse;
