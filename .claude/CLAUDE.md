@@ -36,7 +36,7 @@ Emergency bypass (audited): `GOVERNANCE_BYPASS=1`. See `.claude/hooks/` for the 
 - New widget used by 2+ features → `lib/shared/widgets/`
 - New widget specific to one feature → `lib/features/{name}/presentation/widgets/`
 
-**Per-feature artifact contract** is defined in `@skills/feature-spec/SKILL.md`. The folder shape is:
+**Per-feature artifact contract** is defined by the `feature-spec` skill. The folder shape is:
 
 ```
 docs/features/{name}/
