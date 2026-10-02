@@ -20,6 +20,7 @@ Use `Gap(AppSpacing.*)` for simple spacing between widgets:
 ```dart
 Gap(AppSpacing.sm)   // replaces SizedBox(height: 8)
 Gap(AppSpacing.md)   // replaces SizedBox(height: 16)
+Image.asset('assets/images/logo.png')
 ```
 
 ## Shared Widgets
@@ -32,6 +33,23 @@ Check before creating feature-local equivalents:
 | `AppTextField` | Any text input |
 | `AsyncValueWidget` | Render `AsyncValue` loading/error/data |
 
+## Assets
+
+Use the generated `Assets` class (`lib/gen/assets.gen.dart`, flutter_gen). Never write raw `'assets/...'` strings.
+
+```dart
+import 'package:template_vgv_app/gen/assets.gen.dart';
+
+Assets.icons.icHome.svg(width: 24.w, height: 24.w) // assets/icons/ic_home.svg
+Assets.images.logo.image(width: 120.w)             // assets/images/logo.png
+Assets.images.logo.provider()                      // ImageProvider
+Assets.animations.empty                            // String path for other files (e.g. JSON)
+```
+
+- Drop files into `assets/icons/`, `assets/images/` or `assets/animations/`. These folders are already declared in `pubspec.yaml`.
+- Run `dart run build_runner build --delete-conflicting-outputs` to regenerate `Assets`.
+- There is no bundled font; set one in the theme only if a consuming app ships it.
+
 ## Rules
 
 - Use `AppColors` over hardcoded hex values
@@ -39,6 +57,7 @@ Check before creating feature-local equivalents:
 - Use `AppSpacing` constants over magic numbers
 - Prefer shared widgets before creating new ones
 - Do not put `const` on widgets using `AppSpacing` — getters are runtime values
+- Use `Assets.*` (flutter_gen) over raw asset path strings
 
 ## Common Mistakes
 
@@ -52,4 +71,5 @@ SizedBox(height: 16)
 AppColors.primary
 AppTextStyles.headline
 Gap(AppSpacing.md)
+Assets.images.logo.image()
 ```

@@ -7,7 +7,7 @@ description: Use when deciding whether to run build_runner, checking which files
 
 ## Files Committed to Git
 
-`*.g.dart` and `*.freezed.dart` are committed.
+`*.g.dart`, `*.freezed.dart` and `lib/gen/*.gen.dart` (flutter_gen typed assets) are committed.
 
 Exception: `lib/core/env/env.g.dart` is **gitignored** (contains obfuscated secrets).
 
@@ -23,10 +23,13 @@ Run after changing any file that uses:
 | `@RestApi` | `retrofit_generator` |
 | `@Envied` | `envied_generator` |
 | `@TypedGoRoute` | `go_router_builder` |
+| `flutter: assets:` folders in `pubspec.yaml` (adding/removing files) | `flutter_gen_runner` → `lib/gen/assets.gen.dart` |
 
 ```sh
 dart run build_runner build --delete-conflicting-outputs
 ```
+
+Use assets through the generated class: `Assets.icons.foo.svg()`, `Assets.images.bar.image()`. See the `theme` skill.
 
 ## Env Variables
 
