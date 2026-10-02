@@ -1,6 +1,24 @@
 #!/bin/sh
+# Check-only format gate. Never modifies or stages files.
+# Formats the STAGED content of each .dart file (not the working copy), so
+# partially-staged files are checked against exactly what will be committed.
 set -e
-dart fix --apply
-dart format lib test
-git add -u
-flutter analyze lib test
+
+FILES=$(git diff --cached --name-only --diff-filter=ACM -- '*.dart')
+[ -z "$FILES" ] && exit 0
+
+UNFORMATTED=""
+for f in $FILES; do
+  if ! git show ":$f" | dart format --stdin-name="$f" --output=none --set-exit-if-changed > /dev/null 2>&1; then
+    UNFORMATTED="$UNFORMATTED $f"
+  fi
+done
+
+if [ -n "$UNFORMATTED" ]; then
+  echo "✖ Unformatted Dart files staged:"
+  for f in $UNFORMATTED; do echo "   $f"; done
+  echo ""
+  echo "Fix with:"
+  echo "   dart format$UNFORMATTED && git add$UNFORMATTED"
+  exit 1
+fi
