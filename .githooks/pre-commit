@@ -4,7 +4,8 @@
 # partially-staged files are checked against exactly what will be committed.
 set -e
 
-FILES=$(git diff --cached --name-only --diff-filter=ACM -- '*.dart')
+# Mason brick templates contain mustache placeholders and are not valid Dart.
+FILES=$(git diff --cached --name-only --diff-filter=ACM -- '*.dart' | grep -v '^bricks/.*/__brick__/' || true)
 [ -z "$FILES" ] && exit 0
 
 UNFORMATTED=""
