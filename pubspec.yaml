@@ -65,6 +65,12 @@ melos:
     check:
       run: dart run build_runner build --delete-conflicting-outputs && flutter analyze && flutter test
       description: Full verification loop — build_runner → analyze → test
+    test:
+      run: sh scripts/test.sh
+      description: "Run tests with coverage gate (min 85%). CI-safe."
+    coverage:
+      run: sh scripts/coverage.sh
+      description: "Run tests, build HTML coverage report (opens it on macOS outside CI)."
     make-feature:
       run: mason make feature
       description: "Scaffold a new feature. Usage: melos make-feature -- --name <feature_name>"
