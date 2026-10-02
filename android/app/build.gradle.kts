@@ -7,6 +7,29 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// FlutterFire: apply the Firebase Gradle plugins only when at least one
+// google-services.json exists (android/app/google-services.json or
+// android/app/src/<flavor>/google-services.json). Without one the starter
+// still builds and Firebase stays disabled at runtime.
+val hasGoogleServicesJson =
+    file("google-services.json").exists() ||
+        (file("src").listFiles()?.any { it.resolve("google-services.json").exists() } ?: false)
+
+if (hasGoogleServicesJson) {
+    apply(plugin = "com.google.gms.google-services")
+    apply(plugin = "com.google.firebase.crashlytics")
+    // Flavors without their own google-services.json warn instead of failing.
+    extensions.configure<com.google.gms.googleservices.GoogleServicesPlugin.GoogleServicesPluginConfig> {
+        missingGoogleServicesStrategy =
+            com.google.gms.googleservices.GoogleServicesPlugin.MissingGoogleServicesStrategy.WARN
+    }
+} else {
+    logger.warn(
+        "w: No google-services.json found in android/app or android/app/src/<flavor>/. " +
+            "Firebase Gradle plugins (google-services, crashlytics) are not applied.",
+    )
+}
+
 val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
