@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:talker_flutter/talker_flutter.dart';
-import 'package:template_vgv_app/firebase_options.dart';
 
 class FirebaseBootstrapResult {
   const FirebaseBootstrapResult({
@@ -18,12 +17,14 @@ class FirebaseBootstrapResult {
   final Object? error;
 }
 
-Future<FirebaseBootstrapResult> initializeFirebase(Talker talker) async {
+Future<FirebaseBootstrapResult> initializeFirebase(
+  Talker talker, {
+  required FirebaseOptions Function() options,
+}) async {
   try {
+    final firebaseOptions = options();
     if (Firebase.apps.isEmpty) {
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
+      await Firebase.initializeApp(options: firebaseOptions);
     }
 
     final crashlyticsEnabled = _isCrashlyticsSupported;
@@ -43,9 +44,9 @@ Future<FirebaseBootstrapResult> initializeFirebase(Talker talker) async {
   } on Object catch (error, stackTrace) {
     talker
       ..warning(
-        'Firebase is not configured yet. Run `flutterfire configure` in the '
-        'project that consumes this starter to replace '
-        '`lib/firebase_options.dart` and enable Analytics and Crashlytics.',
+        'Firebase initialization failed. Generate the options for this '
+        'flavor with `flutterfire configure` (see README "Firebase") to '
+        'enable Analytics and Crashlytics.',
       )
       ..handle(error, stackTrace, 'Firebase initialization skipped');
 
