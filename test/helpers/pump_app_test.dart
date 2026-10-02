@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:template_vgv_app/core/theme/app_colors.dart';
 
 import 'pump_app.dart';
 
@@ -19,6 +20,21 @@ void main() {
       );
 
       expect(size, const Size(375, 812));
+    });
+
+    testWidgets('renders with AppTheme.light', (tester) async {
+      late ColorScheme scheme;
+
+      await tester.pumpApp(
+        Builder(
+          builder: (context) {
+            scheme = Theme.of(context).colorScheme;
+            return const SizedBox.shrink();
+          },
+        ),
+      );
+
+      expect(scheme.primary, AppColors.primary);
     });
   });
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:template_vgv_app/core/theme/app_theme.dart';
 import 'package:template_vgv_app/l10n/l10n.dart';
 
 /// Suppresses RenderFlex overflow assertions in widget tests.
@@ -45,6 +46,7 @@ extension PumpApp on WidgetTester {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (_, _) => MaterialApp(
+            theme: AppTheme.light,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: widget,
