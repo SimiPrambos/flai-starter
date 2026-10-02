@@ -34,8 +34,16 @@ error handling, logging, and AI context guides — so your team hits the ground 
 ### Prerequisites
 
 - Flutter ≥ 3.29
-- Node.js (for GitNexus and RTK)
+- Node.js (for GitNexus)
 - `melos` (`dart pub global activate melos`)
+- `very_good_cli` (`dart pub global activate very_good_cli`) — used by `melos test`
+- `lcov` (`brew install lcov` on macOS, `apt-get install lcov` on Debian/Ubuntu) — used by `melos coverage`
+
+> **PATH:** Dart global executables live in `~/.pub-cache/bin`. Add it to your shell config if not already:
+>
+> ```sh
+> export PATH="$PATH":"$HOME/.pub-cache/bin"
+> ```
 
 ### 1. Clone and bootstrap
 
@@ -43,15 +51,19 @@ error handling, logging, and AI context guides — so your team hits the ground 
 git clone https://github.com/your-org/flai-starter.git my-app
 cd my-app
 
+flutter pub get
+
 dart pub global activate melos
 melos bootstrap
 ```
 
 `melos bootstrap` runs `scripts/bootstrap.sh` as a post-hook, which:
 
-- Activates git hooks (conventional commits)
+- Activates git hooks: conventional commits, a format check on commit, and analyze + test on push
 - Installs GitNexus (first run only) and indexes the codebase
-- Installs RTK
+- Installs RTK (via the `rtk-ai/rtk` install script)
+
+On CI (`CI=true`) the hook skips all three.
 
 ### 2. Configure environment
 
@@ -77,7 +89,7 @@ Run this after cloning and after modifying any `@riverpod`, `@freezed`, `@JsonSe
 ### 4. Run
 
 ```sh
-flutter run
+flutter run --flavor development --target lib/main_development.dart
 ```
 
 ---
@@ -91,6 +103,11 @@ melos check
 ```
 
 Runs: `build_runner → flutter analyze → flutter test`. Use it before pushing and after scaffolding a new feature.
+
+| Command | What it does |
+|---|---|
+| `melos test` | Tests with coverage gate (≥85%) via `scripts/test.sh`. Same command CI runs. |
+| `melos coverage` | `melos test` + HTML report in `coverage/` (opens automatically on macOS). |
 
 ---
 
