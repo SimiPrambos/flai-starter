@@ -20,7 +20,6 @@ Use `Gap(AppSpacing.*)` for simple spacing between widgets:
 ```dart
 Gap(AppSpacing.sm)   // replaces SizedBox(height: 8)
 Gap(AppSpacing.md)   // replaces SizedBox(height: 16)
-Image.asset('assets/images/logo.png')
 ```
 
 ## Shared Widgets
@@ -66,6 +65,7 @@ Assets.animations.empty                            // String path for other file
 Color(0xFF2196F3)
 TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
 SizedBox(height: 16)
+Image.asset('assets/images/logo.png')
 
 // GOOD
 AppColors.primary
