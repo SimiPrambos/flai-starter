@@ -135,7 +135,7 @@ lib/
 │   ├── network/      # Dio client + interceptors
 │   ├── router/       # GoRouter config
 │   ├── logging/      # Talker provider
-│   ├── firebase/     # Crashlytics + Analytics bootstrap
+│   ├── firebase/     # Crashlytics + Analytics bootstrap, per-flavor options
 │   ├── storage/      # Local persistence
 │   └── theme/        # AppColors, AppTextStyles, AppSpacing
 ├── features/
@@ -143,6 +143,7 @@ lib/
 │       ├── data/         # Retrofit datasource, Freezed models, repo impl
 │       ├── domain/       # Entity, repository interface, use case
 │       └── presentation/ # Notifier, page, widgets
+├── gen/              # flutter_gen typed assets (generated, committed)
 ├── l10n/             # Localisation (English + Bahasa Indonesia)
 └── shared/
     └── widgets/      # AppButton, AppTextField, AsyncValueWidget
@@ -184,20 +185,46 @@ Atomic bricks per Clean Architecture layer, composable and additive. See the `ma
 
 ## Firebase
 
-Crashlytics and Analytics are pre-wired. Without platform config files the app
-runs normally — Firebase is disabled gracefully with a log message.
+Crashlytics and Analytics are pre-wired, with **one Firebase config per flavor**. Without config files the app still builds and runs:
 
-To enable Firebase in a project built from this starter:
+- Dart: the placeholder `firebase_options_<flavor>.dart` throws, `initializeFirebase` catches it, and Talker logs a warning.
+- Android: Gradle skips the google-services / Crashlytics plugins and prints a warning.
+- iOS: the "Copy Firebase Config" build phase prints `warning: GoogleService-Info.plist not found …; skipping`.
+
+| Flavor | Dart options | Android | iOS |
+|---|---|---|---|
+| development | `lib/core/firebase/firebase_options_development.dart` | `android/app/src/development/google-services.json` | `ios/config/development/GoogleService-Info.plist` |
+| staging | `lib/core/firebase/firebase_options_staging.dart` | `android/app/src/staging/google-services.json` | `ios/config/staging/GoogleService-Info.plist` |
+| production | `lib/core/firebase/firebase_options_production.dart` | `android/app/src/production/google-services.json` | `ios/config/production/GoogleService-Info.plist` |
+
+To enable Firebase, first install the FlutterFire CLI:
 
 ```sh
 dart pub global activate flutterfire_cli
-flutterfire configure
 ```
 
-This overwrites the placeholder `lib/firebase_options.dart` and generates
-native config files for all supported platforms. After configuration,
-Crashlytics receives uncaught Flutter and platform errors, and GoRouter
-screen transitions are forwarded to Analytics automatically.
+Then run `flutterfire configure` once per flavor. Use the flavor's application id and bundle id: the base id plus `.dev` for development, `.stg` for staging, and no suffix for production.
+
+```sh
+flutterfire configure \
+  --project=<firebase-project-id> \
+  --platforms=android,ios \
+  --out=lib/core/firebase/firebase_options_development.dart \
+  --android-package-name=<your.application.id>.dev \
+  --android-out=android/app/src/development/google-services.json \
+  --ios-bundle-id=<your.bundle.id>.dev \
+  --ios-out=ios/config/development/GoogleService-Info.plist
+```
+
+Repeat with `staging` / `.stg` and `production` / no suffix.
+
+Notes:
+- `main_<flavor>.dart` already imports its own options file; no Dart change is needed after generation.
+- **iOS prompts.** If the CLI asks how to wire the iOS plist, choose the `Debug-<flavor>` build configuration. The project's "Copy Firebase Config" phase already copies `ios/config/<flavor>/GoogleService-Info.plist` into the app. An extra `flutterfire bundle-service-file` phase added by the CLI is redundant and can be removed.
+- **Crashlytics dSYM upload.** It runs only when the `flutterfire` CLI is on `PATH` and `firebase.json` (written by `flutterfire configure`) exists at the repo root.
+- **Committing configs.** The JSON and plist files are gitignored by default. Consuming apps that want to commit them may delete the `android/app/src/*/google-services.json` and `ios/config/*/GoogleService-Info.plist` lines from `.gitignore`.
+
+After configuration, Crashlytics receives uncaught Flutter and platform errors, and GoRouter screen transitions are forwarded to Analytics automatically.
 
 ---
 

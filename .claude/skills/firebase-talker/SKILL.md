@@ -32,14 +32,23 @@ Route tracking belongs in `app_router.dart` via GoRouter `observers`. Every `GoR
 
 ## Firebase Config
 
-Project-specific config files are **not committed** in this starter:
+One Firebase config per flavor (development, staging, production):
 
-- Run `flutterfire configure` in consuming projects
-- Generates `lib/firebase_options.dart`, `android/app/google-services.json`, Apple `GoogleService-Info.plist`
-- Placeholder `lib/firebase_options.dart` exists for compilation only
+| Layer | File | Committed? |
+|---|---|---|
+| Dart | `lib/core/firebase/firebase_options_<flavor>.dart` | Yes — placeholder that throws until regenerated |
+| Android | `android/app/src/<flavor>/google-services.json` | No (gitignored) |
+| iOS | `ios/config/<flavor>/GoogleService-Info.plist` | No (gitignored) |
+
+- Each `main_<flavor>.dart` passes `firebaseOptions: () => DefaultFirebaseOptions.currentPlatform` from its own options file to `bootstrap`. `initializeFirebase` resolves the closure inside its `try`, so a placeholder logs a Talker warning and the app runs without Firebase.
+- Regenerate per flavor with `flutterfire configure --out=lib/core/firebase/firebase_options_<flavor>.dart --android-out=android/app/src/<flavor>/google-services.json --ios-out=ios/config/<flavor>/GoogleService-Info.plist` (full command in README "Firebase").
+- Android applies the google-services and Crashlytics Gradle plugins only when a `google-services.json` exists; flavors without one warn instead of failing.
+- iOS: the "Copy Firebase Config" Run Script picks the plist via `FLUTTER_APP_FLAVOR` (falling back to the Xcode configuration name) and warns + skips when it is missing. The FlutterFire Crashlytics phase uploads dSYMs only when the `flutterfire` CLI and a repo-root `firebase.json` exist.
 
 ## Common Mistakes
 
 - Creating a second Talker instance → always use `talkerProvider`
 - Adding `TalkerRiverpodObserver` without `!kReleaseMode` guard → noisy logs in production
 - Navigating without a route `name` → Analytics reports raw paths, not screen names
+- Reading `DefaultFirebaseOptions.currentPlatform` eagerly in `main` → the placeholder throws before `bootstrap`; always pass a closure
+- Importing a flavor's options file anywhere except its own `main_<flavor>.dart`
