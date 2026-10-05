@@ -6,16 +6,88 @@ part of 'app_router.dart';
 // GoRouterGenerator
 // **************************************************************************
 
-List<RouteBase> get $appRoutes => [$usersRoute];
+List<RouteBase> get $appRoutes => [$splashRoute, $loginRoute, $appShellRoute];
 
-RouteBase get $usersRoute => GoRouteData.$route(
-  path: '/users',
+RouteBase get $splashRoute =>
+    GoRouteData.$route(path: '/', factory: _$SplashRoute._fromState);
 
-  factory: _$UsersRoute._fromState,
-  routes: [
-    GoRouteData.$route(path: ':id', factory: _$UserDetailRoute._fromState),
+mixin _$SplashRoute on GoRouteData {
+  static SplashRoute _fromState(GoRouterState state) => const SplashRoute();
+
+  @override
+  String get location => GoRouteData.$location('/');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $loginRoute =>
+    GoRouteData.$route(path: '/login', factory: _$LoginRoute._fromState);
+
+mixin _$LoginRoute on GoRouteData {
+  static LoginRoute _fromState(GoRouterState state) => const LoginRoute();
+
+  @override
+  String get location => GoRouteData.$location('/login');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $appShellRoute => StatefulShellRouteData.$route(
+  factory: $AppShellRouteExtension._fromState,
+  branches: [
+    StatefulShellBranchData.$branch(
+      routes: [
+        GoRouteData.$route(
+          path: '/users',
+
+          factory: _$UsersRoute._fromState,
+          routes: [
+            GoRouteData.$route(
+              path: ':id',
+
+              factory: _$UserDetailRoute._fromState,
+            ),
+          ],
+        ),
+      ],
+    ),
+    StatefulShellBranchData.$branch(
+      routes: [
+        GoRouteData.$route(
+          path: '/settings',
+
+          factory: _$SettingsRoute._fromState,
+        ),
+      ],
+    ),
   ],
 );
+
+extension $AppShellRouteExtension on AppShellRoute {
+  static AppShellRoute _fromState(GoRouterState state) => const AppShellRoute();
+}
 
 mixin _$UsersRoute on GoRouteData {
   static UsersRoute _fromState(GoRouterState state) => const UsersRoute();
@@ -62,11 +134,31 @@ mixin _$UserDetailRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
+mixin _$SettingsRoute on GoRouteData {
+  static SettingsRoute _fromState(GoRouterState state) => const SettingsRoute();
+
+  @override
+  String get location => GoRouteData.$location('/settings');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appRouterHash() => r'5f8cd05cc2045c98a85b91b408bbaf4dab0fea49';
+String _$appRouterHash() => r'870bd860675f70f03f665a73257c54a9ab4ad74c';
 
 /// See also [appRouter].
 @ProviderFor(appRouter)
