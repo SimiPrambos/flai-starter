@@ -8,6 +8,13 @@ set -e
 FILES=$(git diff --cached --name-only --diff-filter=ACM -- '*.dart' | grep -v '^bricks/.*/__brick__/' || true)
 [ -z "$FILES" ] && exit 0
 
+if ! command -v dart > /dev/null 2>&1; then
+  echo "✖ 'dart' is not on PATH, so formatting cannot be checked." >&2
+  echo "  Add the Flutter SDK's bin directory to PATH (GUI git clients often" >&2
+  echo "  start with a minimal PATH), then commit again." >&2
+  exit 1
+fi
+
 UNFORMATTED=""
 for f in $FILES; do
   if ! git show ":$f" | dart format --stdin-name="$f" --output=none --set-exit-if-changed > /dev/null 2>&1; then
