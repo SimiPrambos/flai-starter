@@ -1,6 +1,6 @@
 ---
 name: settings
-status: draft
+status: review
 owner: silmi
 branch: feat/backport-tooling-dx
 last_changed: 2026-10-02
@@ -66,10 +66,10 @@ None. Uses the core session flag only.
 
 ## Acceptance Criteria
 
-- [ ] Settings tab shows `SettingsPage` (router test)
-- [ ] Switching tabs keeps the Users branch stack (router + shell tests)
-- [ ] Re-tapping the active tab resets its branch (router + shell tests)
-- [ ] Sign-out clears the session (settings page test) and lands on `LoginPage` (router test)
+- [x] Settings tab shows `SettingsPage` (router test)
+- [x] Switching tabs keeps the Users branch stack (router + shell tests)
+- [x] Re-tapping the active tab resets its branch (router + shell tests)
+- [x] Sign-out clears the session (settings page test) and lands on `LoginPage` (router test)
 - [ ] Strings from l10n (`settingsTitle`, `settingsSignOut`, `tabSettings`), EN + ID
 
 ## Open Questions

@@ -1,6 +1,6 @@
 ---
 name: auth
-status: draft
+status: review
 owner: silmi
 branch: feat/backport-tooling-dx
 last_changed: 2026-10-02
@@ -99,12 +99,12 @@ Sign-in is mocked: the login button only flips the session flag. A real backend 
 
 ## Acceptance Criteria
 
-- [ ] Cold start without a session lands on `LoginPage` (router test)
-- [ ] Cold start with a session lands on `UsersPage` (router test)
-- [ ] `SplashPage` is shown while the session is loading (router test)
-- [ ] A storage failure is treated as signed out (router + notifier tests)
-- [ ] Tapping sign-in persists the session and lands on `UsersPage` (login page test + router test)
-- [ ] `resolveRedirect` truth table covers signed in/out × login/splash/home/deep link/other tab
+- [x] Cold start without a session lands on `LoginPage` (router test)
+- [x] Cold start with a session lands on `UsersPage` (router test)
+- [x] `SplashPage` is shown while the session is loading (router test)
+- [x] A storage failure is treated as signed out (router + notifier tests)
+- [x] Tapping sign-in persists the session and lands on `UsersPage` (login page test + router test)
+- [x] `resolveRedirect` truth table covers signed in/out × login/splash/home/deep link/other tab
 - [ ] All strings come from l10n (`loginTitle`, `loginEmailLabel`, `loginSubmit`), EN + ID
 
 ## Open Questions
