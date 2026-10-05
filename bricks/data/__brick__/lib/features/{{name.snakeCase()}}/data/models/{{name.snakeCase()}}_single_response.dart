@@ -5,7 +5,7 @@ part '{{name.snakeCase()}}_single_response.freezed.dart';
 part '{{name.snakeCase()}}_single_response.g.dart';
 
 @freezed
-class {{name.pascalCase()}}SingleResponse with _${{name.pascalCase()}}SingleResponse {
+abstract class {{name.pascalCase()}}SingleResponse with _${{name.pascalCase()}}SingleResponse {
   const factory {{name.pascalCase()}}SingleResponse({
     required {{name.pascalCase()}}Model data,
   }) = _{{name.pascalCase()}}SingleResponse;

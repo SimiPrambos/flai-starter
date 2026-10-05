@@ -41,6 +41,19 @@ await tester.pumpApp(
 );
 ```
 
+It pumps with `AppTheme.light` and the 375×812 design size. Optional parameters:
+
+| Parameter | Use |
+|---|---|
+| `surfaceSize` | Fix the logical screen size (device pixel ratio is forced to 1.0, so `x.r == x`); reset in teardown |
+| `locale` | Render in another language, e.g. `locale: const Locale('id')` |
+
+`suppressOverflowErrors()` (same file) filters RenderFlex "overflowed" errors for a test and restores the handler in teardown.
+
+Widgets that read ScreenUtil values (`.r`, `.sp`, `AppSpacing.*`) in their constructor must be built **inside** `pumpApp`'s tree (e.g. in a `Builder`), not before it. Otherwise the test only passes when an earlier test happened to initialise ScreenUtil, and fails when run alone.
+
+Pages behind the session gate: override `sessionStorageProvider` with `InMemorySessionStorage(signedIn: true)` and, before tapping, wait for the session to load (`await container.read(sessionNotifierProvider.future)`).
+
 ## Before Finishing Implementation
 
 Always run:

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,13 +10,16 @@ import 'package:template_vgv_app/core/firebase/crashlytics_talker_observer.dart'
 import 'package:template_vgv_app/core/firebase/firebase_bootstrap.dart';
 import 'package:template_vgv_app/core/logging/talker_provider.dart';
 
-Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
+Future<void> bootstrap(
+  FutureOr<Widget> Function() builder, {
+  required FirebaseOptions Function() firebaseOptions,
+}) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final talker = TalkerFlutter.init(
     observer: const CrashlyticsTalkerObserver(),
   );
-  final firebase = await initializeFirebase(talker);
+  final firebase = await initializeFirebase(talker, options: firebaseOptions);
 
   installGlobalErrorHandlers(
     talker: talker,

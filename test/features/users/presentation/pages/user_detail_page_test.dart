@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
@@ -84,6 +86,37 @@ void main() {
       expect(find.text('#7'), findsOneWidget);
       expect(find.text('Michael'), findsOneWidget);
       expect(find.text('Lawson'), findsOneWidget);
+    });
+
+    testWidgets('avatar errorWidget shows fallback icon', (tester) async {
+      when(() => mockRepo.getUserById(id: 7)).thenAnswer(
+        (_) async => right(testUser),
+      );
+
+      await tester.pumpApp(
+        const UserDetailPage(id: 7),
+        overrides: overrides(),
+      );
+      await tester.pumpAndSettle();
+
+      final image = tester.widget<CachedNetworkImage>(
+        find.byType(CachedNetworkImage),
+      );
+
+      await tester.pumpApp(
+        Builder(
+          builder: (context) => Scaffold(
+            body: image.errorWidget!(
+              context,
+              testUser.avatar,
+              Exception('failed'),
+            ),
+          ),
+        ),
+        overrides: overrides(),
+      );
+
+      expect(find.byIcon(Icons.person), findsOneWidget);
     });
   });
 }

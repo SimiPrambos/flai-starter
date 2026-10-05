@@ -6,7 +6,7 @@ part '{{name.snakeCase()}}_list_response.freezed.dart';
 part '{{name.snakeCase()}}_list_response.g.dart';
 
 @freezed
-class {{name.pascalCase()}}ListResponse
+abstract class {{name.pascalCase()}}ListResponse
     with _${{name.pascalCase()}}ListResponse, PagedResponseMapper<{{name.pascalCase()}}Model> {
   const factory {{name.pascalCase()}}ListResponse({
     required int page,

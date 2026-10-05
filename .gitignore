@@ -121,9 +121,32 @@ lib/l10n/gen/
 .env
 lib/core/env/env.g.dart
 
-# Project-specific Firebase config. Generate these in consuming apps with:
-# `flutterfire configure`
+# Project-specific Firebase config, one per flavor. Generate with
+# `flutterfire configure` (see README "Firebase"). Consuming apps that want to
+# commit their configs may delete these lines.
 android/app/google-services.json
+android/app/src/*/google-services.json
 ios/Runner/GoogleService-Info.plist
+ios/config/*/GoogleService-Info.plist
 macos/Runner/GoogleService-Info.plist
 firebase_app_id_file.json
+
+# Claude Code personal permissions (machine-local)
+.claude/settings.local.json
+
+# Superpowers session working files
+.superpowers/
+
+# Signing secrets (keep outside the repo; never commit)
+*.p8
+ios_distribution_private_key
+**/ios_distribution_private_key*
+
+# Service-account keys (Firebase App Distribution, Play, etc.)
+android/*service-account*.json
+
+# Local distribution credentials (template: scripts/.distribute.env.example)
+scripts/.distribute.env
+
+# very_good test --optimization scratch file (removed on a clean exit)
+test/.test_optimizer.dart

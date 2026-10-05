@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:template_vgv_app/core/router/app_router.dart';
-import 'package:template_vgv_app/core/theme/app_colors.dart';
+import 'package:template_vgv_app/core/theme/app_theme.dart';
 import 'package:template_vgv_app/l10n/gen/app_localizations.dart';
 
 class App extends ConsumerWidget {
@@ -17,14 +17,17 @@ class App extends ConsumerWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, _) => MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         routerConfig: router,
         title: 'Flutter Template',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
-          useMaterial3: true,
-        ),
+        theme: AppTheme.light,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        builder: (_, child) => GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: child,
+        ),
       ),
     );
   }

@@ -16,12 +16,15 @@ description: Use when creating new features, adding files, deciding where code b
 ```text
 lib/
 ├── core/
+│   ├── auth/
+│   ├── common/
 │   ├── env/
 │   ├── error/
 │   ├── firebase/
 │   ├── logging/
 │   ├── network/
 │   ├── router/
+│   ├── shell/
 │   ├── storage/
 │   └── theme/
 ├── features/

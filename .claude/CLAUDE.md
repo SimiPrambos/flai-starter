@@ -36,7 +36,7 @@ Emergency bypass (audited): `GOVERNANCE_BYPASS=1`. See `.claude/hooks/` for the 
 - New widget used by 2+ features → `lib/shared/widgets/`
 - New widget specific to one feature → `lib/features/{name}/presentation/widgets/`
 
-**Per-feature artifact contract** is defined in `@skills/feature-spec/SKILL.md`. The folder shape is:
+**Per-feature artifact contract** is defined by the `feature-spec` skill. The folder shape is:
 
 ```
 docs/features/{name}/
@@ -54,7 +54,7 @@ Reusable Flutter starter for future apps. The built-in example feature is `users
 ## Stack
 
 - State + DI: `flutter_riverpod`, `riverpod_annotation`, `riverpod_generator`
-- Routing: `go_router` with manual typed route classes/extensions
+- Routing: `go_router` + `go_router_builder` (typed routes, session redirect, stateful tab shell)
 - Network: `dio`, `retrofit`, `connectivity_plus`
 - Models: `freezed`, `json_serializable`
 - Errors: `fpdart` `Either<Failure, T>`
@@ -69,17 +69,18 @@ Load the relevant skill before working in each area:
 
 | Topic | Skill | When to load |
 |---|---|---|
-| Feature artifact contract (SPEC/CHANGELOG/ADR/Mason) | @skills/feature-spec/SKILL.md | Whenever working under `docs/features/` or `lib/features/` |
-| Architecture & layers | @skills/architecture/SKILL.md | Adding features, checking imports |
-| Navigation / routing | @skills/navigation/SKILL.md | Adding routes, screen navigation |
-| Riverpod providers | @skills/riverpod/SKILL.md | Creating providers or notifiers |
-| Error handling | @skills/error-handling/SKILL.md | Writing repos, handling failures |
-| Network / API | @skills/network/SKILL.md | Adding endpoints, Dio config |
-| Responsive UI | @skills/responsive-ui/SKILL.md | Writing widget dimensions |
-| Loading skeletons | @skills/loading-states/SKILL.md | Adding loading placeholders |
-| Theme & shared UI | @skills/theme/SKILL.md | Colors, text styles, spacing |
-| Testing | @skills/testing/SKILL.md | Writing any test |
-| Firebase & Talker | @skills/firebase-talker/SKILL.md | Logging, analytics, Crashlytics |
-| Generated files | @skills/generated-files/SKILL.md | Build runner, env, constraints |
-| Feature scaffolding | @skills/mason/SKILL.md | `make-domain` / `make-data` / `make-presentation` / `make-feature` |
-| Shared widgets (AppAvatar, PaginatedListPage, AsyncDetailScaffold, ErrorRetryWidget) | @skills/shared-widgets/SKILL.md | Using or building any shared widget |
+| Feature artifact contract (SPEC/CHANGELOG/ADR/Mason) | `feature-spec` | Whenever working under `docs/features/` or `lib/features/` |
+| Architecture & layers | `flai-architecture` | Adding features, checking imports |
+| Navigation / routing | `flai-navigation` | Adding routes, screen navigation |
+| Session gate, redirect & tab shell | `flai-auth-navigation` | Sign-in/out, router redirect, adding a tab or branch, extending to roles |
+| Riverpod providers | `flai-riverpod` | Creating providers or notifiers |
+| Error handling | `flai-error-handling` | Writing repos, handling failures |
+| Network / API | `flai-network` | Adding endpoints, Dio config |
+| Responsive UI | `flai-responsive-ui` | Writing widget dimensions |
+| Loading skeletons | `flai-loading-states` | Adding loading placeholders |
+| Theme & shared UI | `flai-theme` | Colors, text styles, spacing |
+| Testing | `flai-testing` | Writing any test |
+| Firebase & Talker | `flai-firebase-talker` | Logging, analytics, Crashlytics |
+| Generated files | `flai-generated-files` | Build runner, env, constraints |
+| Feature scaffolding | `mason` | `make-domain` / `make-data` / `make-presentation` / `make-feature` |
+| Shared widgets (AppAvatar, PaginatedListPage, AsyncDetailScaffold, ErrorRetryWidget) | `shared-widgets` | Using or building any shared widget |

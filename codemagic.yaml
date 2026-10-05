@@ -1,0 +1,191 @@
+# Codemagic CI/CD — development-flavor distribution template
+#
+# Two manually triggered workflows ship the `development` flavor:
+#   • android-dev → signed release APK → Firebase App Distribution
+#   • ios-dev     → signed IPA         → TestFlight
+#
+# Both run the same coverage-gated suite as `melos test` (scripts/test.sh)
+# before building; a failing test stops the build. Staging/production
+# workflows are not included: copy a workflow and change --flavor, --target
+# and the identifiers.
+#
+# ─── SETUP CHECKLIST ─────────────────────────────────────────────────────────
+#
+# [ ] 1. Replace every <PLACEHOLDER> in this file:
+#          <ASC_INTEGRATION_NAME>        App Store Connect API key name
+#                                        (Codemagic → Teams → Integrations)
+#          <IOS_DEV_BUNDLE_ID>           development bundle id (e.g. com.example.app.dev)
+#          <TESTFLIGHT_BETA_GROUP>       TestFlight beta group (or delete beta_groups)
+#          <ANDROID_KEYSTORE_REFERENCE>  reference name of the uploaded keystore
+#          <FIREBASE_ANDROID_APP_ID_DEV> Firebase Android app id, development flavor
+#                                        (format 1:<number>:android:<hash>)
+#          <FIREBASE_TESTER_GROUP>       App Distribution group ALIAS (not display name)
+# [ ] 2. App Store Connect: register <IOS_DEV_BUNDLE_ID> and connect an API key
+#        with App Manager access under Integrations → App Store Connect.
+# [ ] 3. Code signing identities → Android keystores: upload the release .jks
+#        as <ANDROID_KEYSTORE_REFERENCE>. Codemagic exposes CM_KEYSTORE_PATH /
+#        CM_KEY_ALIAS / CM_KEYSTORE_PASSWORD / CM_KEY_PASSWORD; android-dev maps
+#        them to the ANDROID_KEYSTORE_* vars android/app/build.gradle.kts reads.
+# [ ] 4. Environment variables → group `dev_env` (all Secure):
+#          BASE_URL                  development API base URL   (→ .env)
+#          API_KEY                   development API key        (→ .env)
+#          FIREBASE_SERVICE_ACCOUNT  full JSON of a service account with the
+#                                    "Firebase App Distribution Admin" role
+# [ ] 5. Optional: per-flavor Firebase configs. They are gitignored, so CI
+#        writes them from base64 secrets (README "Firebase" paths). Add to
+#        group `dev_env` (Secure), e.g. `base64 -i <file> | pbcopy`:
+#          FIREBASE_GOOGLE_SERVICES_JSON_B64   -> android/app/src/development/google-services.json
+#          FIREBASE_GOOGLE_SERVICE_INFO_B64    -> ios/config/development/GoogleService-Info.plist
+#        Builds succeed without them; Crashlytics/Analytics stay disabled.
+# [ ] 6. Keep flutter_version below equal to the version in .fvmrc.
+# [ ] 7. Trigger each workflow manually once and check the artifacts.
+
+definitions:
+  flutter_version: &flutter_version 3.41.9 # keep in sync with .fvmrc
+
+  # Shared setup: write .env, install melos, bootstrap, generate code, test.
+  scripts:
+    - &write_env
+      name: Write .env from secure variables
+      script: |
+        set -e
+        echo "BASE_URL=$BASE_URL" > "$CM_BUILD_DIR/.env"
+        echo "API_KEY=$API_KEY"  >> "$CM_BUILD_DIR/.env"
+        echo "Wrote .env (values hidden)"
+
+    - &write_firebase_config
+      name: Write Firebase configs from secure variables (optional)
+      script: |
+        set -e
+        if [ -n "$FIREBASE_GOOGLE_SERVICES_JSON_B64" ]; then
+          mkdir -p "$CM_BUILD_DIR/android/app/src/development"
+          echo "$FIREBASE_GOOGLE_SERVICES_JSON_B64" | base64 --decode \
+            > "$CM_BUILD_DIR/android/app/src/development/google-services.json"
+        fi
+        if [ -n "$FIREBASE_GOOGLE_SERVICE_INFO_B64" ]; then
+          mkdir -p "$CM_BUILD_DIR/ios/config/development"
+          echo "$FIREBASE_GOOGLE_SERVICE_INFO_B64" | base64 --decode \
+            > "$CM_BUILD_DIR/ios/config/development/GoogleService-Info.plist"
+        fi
+
+    - &bootstrap
+      name: Activate melos & bootstrap
+      script: |
+        set -e
+        export PATH="$HOME/.pub-cache/bin:$PATH"
+        echo "PATH=$HOME/.pub-cache/bin:$PATH" >> "$CM_ENV"
+        dart pub global activate melos
+        # scripts/bootstrap.sh skips hooks/GitNexus/RTK when CI=true
+        melos bootstrap
+
+    - &codegen
+      name: Generate code (envied, freezed, riverpod, retrofit, go_router)
+      script: |
+        set -e
+        dart run build_runner build --delete-conflicting-outputs
+
+    - &run_tests
+      name: Run tests (gate — build stops if this fails)
+      script: |
+        set -e
+        export PATH="$HOME/.pub-cache/bin:$PATH"
+        dart pub global activate very_good_cli
+        # Same gate as `melos test`: very_good test with --min-coverage 85.
+        sh scripts/test.sh
+
+workflows:
+  # ───────────────────────────────── Android ────────────────────────────────
+  android-dev:
+    name: Android Development → Firebase App Distribution
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    environment:
+      flutter: *flutter_version
+      java: 17
+      android_signing:
+        - <ANDROID_KEYSTORE_REFERENCE>
+      groups:
+        - dev_env
+    scripts:
+      - *write_env
+      - *write_firebase_config
+      - *bootstrap
+      - *codegen
+      - *run_tests
+      - name: Map Codemagic keystore vars to gradle env vars
+        script: |
+          echo "ANDROID_KEYSTORE_PATH=$CM_KEYSTORE_PATH"                 >> "$CM_ENV"
+          echo "ANDROID_KEYSTORE_ALIAS=$CM_KEY_ALIAS"                    >> "$CM_ENV"
+          echo "ANDROID_KEYSTORE_PASSWORD=$CM_KEYSTORE_PASSWORD"         >> "$CM_ENV"
+          echo "ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD=$CM_KEY_PASSWORD"  >> "$CM_ENV"
+      - name: Build APK (development flavor)
+        script: |
+          set -e
+          flutter build apk --release \
+            --flavor development \
+            --target lib/main_development.dart \
+            --build-number=$BUILD_NUMBER
+    artifacts:
+      - build/**/outputs/**/*.apk
+      - build/**/outputs/**/mapping.txt
+    publishing:
+      firebase:
+        firebase_service_account: $FIREBASE_SERVICE_ACCOUNT
+        android:
+          app_id: <FIREBASE_ANDROID_APP_ID_DEV>
+          groups:
+            - <FIREBASE_TESTER_GROUP>
+
+  # ─────────────────────────────────── iOS ──────────────────────────────────
+  ios-dev:
+    name: iOS Development → TestFlight
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: <ASC_INTEGRATION_NAME>
+    environment:
+      ios_signing:
+        bundle_identifier: <IOS_DEV_BUNDLE_ID>
+        distribution_type: app_store
+      flutter: *flutter_version
+      xcode: latest
+      cocoapods: default
+      groups:
+        - dev_env
+    scripts:
+      - *write_env
+      - *write_firebase_config
+      - *bootstrap
+      - *codegen
+      - *run_tests
+      # ios_signing fetches certificates and profiles through the App Store
+      # Connect integration. use-profiles applies them to the Xcode project and
+      # writes /Users/builder/export_options.plist for `flutter build ipa`.
+      #
+      # If automatic signing stops working, replace the step below with:
+      #   keychain initialize
+      #   app-store-connect fetch-signing-files "<IOS_DEV_BUNDLE_ID>" \
+      #     --type IOS_APP_STORE --certificate-key=@env:CERTIFICATE_PRIVATE_KEY --create
+      #   keychain add-certificates
+      #   xcode-project use-profiles
+      - name: Set up code signing settings on Xcode project
+        script: xcode-project use-profiles
+      - name: Build IPA (development flavor)
+        script: |
+          set -e
+          flutter build ipa --release \
+            --flavor development \
+            --target lib/main_development.dart \
+            --build-number=$BUILD_NUMBER \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        # Group names must match App Store Connect exactly. Remove if unused.
+        beta_groups:
+          - <TESTFLIGHT_BETA_GROUP>
