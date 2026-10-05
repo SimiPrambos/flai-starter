@@ -163,6 +163,8 @@ Moving an existing top-level route into a tab means moving its `@TypedGoRoute` a
 
 See the doc comment on `LoginPage`. In short: `make-domain` + `make-data` for `auth`, a `LoginNotifier` calling `AuthRepository.login`, store the token via `SecureStorageService`, then call `signIn()` on success. The router needs no change.
 
+**Reinstall gotcha (iOS).** Keychain items normally survive uninstalling the app, so a reinstalled app can still be "signed in" from a previous install. Real tokens deserve a first-launch guard: keep a flag in `PreferencesService` (cleared on uninstall), and when it is missing, call `SecureStorageService.deleteAll()` before the session is read.
+
 ---
 
 ## Testing
