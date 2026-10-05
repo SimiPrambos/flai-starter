@@ -16,7 +16,7 @@ error handling, logging, and AI context guides — so your team hits the ground 
 | Area | Technology |
 |---|---|
 | State + DI | `flutter_riverpod`, `riverpod_annotation` (codegen) |
-| Navigation | `go_router` (typed routes, manual extensions) |
+| Navigation | `go_router` + `go_router_builder` (typed routes, session redirect, stateful bottom-tab shell) |
 | Network | `dio`, `retrofit`, `connectivity_plus` |
 | Models | `freezed`, `json_serializable` |
 | Error handling | `fpdart` `Either<Failure, T>` |
@@ -225,6 +225,46 @@ Notes:
 - **Committing configs.** The JSON and plist files are gitignored by default. Consuming apps that want to commit them may delete the `android/app/src/*/google-services.json` and `ios/config/*/GoogleService-Info.plist` lines from `.gitignore`.
 
 After configuration, Crashlytics receives uncaught Flutter and platform errors, and GoRouter screen transitions are forwarded to Analytics automatically.
+
+---
+
+## Release & distribution
+
+The starter ships a session-gated app: a cold start shows a splash loader, then redirects to `/login`. The mock sign-in lands on the Users tab, and Settings → Sign out returns to `/login`. The gate lives in `lib/core/auth/` (`SessionNotifier`) and `lib/core/router/` (`app_router.dart`, `redirect_resolver.dart`); the tab shell is in `lib/core/shell/` (`AppShellPage`, `TabConfig`). Swap in a real backend as described in the `LoginPage` doc comment and the `auth-navigation` skill.
+
+### Codemagic (CI)
+
+`codemagic.yaml` defines two manually triggered workflows for the **development** flavor:
+
+| Workflow | Output | Destination |
+|---|---|---|
+| `android-dev` | Signed release APK | Firebase App Distribution |
+| `ios-dev` | Signed IPA | TestFlight |
+
+Both run the coverage-gated suite (`scripts/test.sh`) before building. Follow the **setup checklist** at the top of `codemagic.yaml`. It covers:
+- every `<PLACEHOLDER>` to replace (`<IOS_DEV_BUNDLE_ID>`, `<ASC_INTEGRATION_NAME>`, `<ANDROID_KEYSTORE_REFERENCE>`, `<FIREBASE_ANDROID_APP_ID_DEV>`, `<FIREBASE_TESTER_GROUP>`, `<TESTFLIGHT_BETA_GROUP>`)
+- the `dev_env` variable group (`BASE_URL`, `API_KEY`, `FIREBASE_SERVICE_ACCOUNT`)
+
+### Local distribution
+
+The same flow runs from a laptop:
+
+```sh
+cp scripts/.distribute.env.example scripts/.distribute.env   # gitignored; fill it in
+sh scripts/distribute_android_dev.sh   # needs FIREBASE_APP_ID, FIREBASE_SERVICE_ACCOUNT_PATH, TESTER_GROUPS
+sh scripts/distribute_ios_dev.sh       # needs BUNDLE_ID, ASC_KEY_ID, ASC_ISSUER_ID, ASC_P8_PATH
+```
+
+The variables can also be exported in the shell (values in `scripts/.distribute.env` win). Each script:
+- lists any missing variable and exits 1 before building
+- checks its tools (Firebase CLI / codemagic-cli-tools)
+- runs `build_runner`
+- builds the `development` flavor
+- uploads the build
+
+Optional iOS variables: `BETA_GROUP` (TestFlight group) and `CERT_KEY_PATH` (defaults to `~/ios_distribution_private_key`). Both scripts need a `.env` at the repo root.
+
+Android release signing reads `ANDROID_KEYSTORE_PATH`, `ANDROID_KEYSTORE_ALIAS`, `ANDROID_KEYSTORE_PASSWORD` and `ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD`.
 
 ---
 
