@@ -105,7 +105,7 @@ Sign-in is mocked: the login button only flips the session flag. A real backend 
 - [x] A storage failure is treated as signed out (router + notifier tests)
 - [x] Tapping sign-in persists the session and lands on `UsersPage` (login page test + router test)
 - [x] `resolveRedirect` truth table covers signed in/out × login/splash/home/deep link/other tab
-- [ ] All strings come from l10n (`loginTitle`, `loginEmailLabel`, `loginSubmit`), EN + ID
+- [x] All strings come from l10n (`loginTitle`, `loginEmailLabel`, `loginSubmit`), EN + ID (login page tests, both locales)
 
 ## Open Questions
 

@@ -2,7 +2,7 @@
 
 _Auto-generated from `docs/features/*/SPEC.md` frontmatter. Do not edit by hand._
 
-_Last regenerated: 2026-10-05T04:28:39Z_
+_Last regenerated: 2026-10-05T04:30:12Z_
 
 | Feature | Status | Owner | Branch | Last changed |
 |---|---|---|---|---|

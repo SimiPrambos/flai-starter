@@ -7,7 +7,7 @@
 **Status:** applied
 
 ## 2026-10-02 — freezed 3 class modifiers
-**Trigger:** Code drift — freezed upgraded to 3.x (back-port B)
+**Trigger:** Code drift — freezed upgraded to 3.x
 **Changed:** `UserEntity`, `UserModel`, `UsersListResponse` and `UserSingleResponse` are now declared `abstract class`; generated files regenerated. No entity, API, UI or behavior change; SPEC.md unchanged.
 **Code affected:** user_entity.dart, user_model.dart, users_list_response.dart, user_single_response.dart (+ generated `.freezed.dart` / `.g.dart`)
 **Status:** applied

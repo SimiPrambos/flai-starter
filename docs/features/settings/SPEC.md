@@ -70,7 +70,7 @@ None. Uses the core session flag only.
 - [x] Switching tabs keeps the Users branch stack (router + shell tests)
 - [x] Re-tapping the active tab resets its branch (router + shell tests)
 - [x] Sign-out clears the session (settings page test) and lands on `LoginPage` (router test)
-- [ ] Strings from l10n (`settingsTitle`, `settingsSignOut`, `tabSettings`), EN + ID
+- [x] Strings from l10n (`settingsTitle`, `settingsSignOut`, `tabSettings`), EN + ID (settings page and shell tests, both locales)
 
 ## Open Questions
 
