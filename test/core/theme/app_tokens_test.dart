@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:template_vgv_app/core/theme/app_colors.dart';
 import 'package:template_vgv_app/core/theme/app_decorators.dart';
-import 'package:template_vgv_app/core/theme/app_spacing.dart';
 
 import '../../helpers/pump_app.dart';
 
@@ -19,14 +18,10 @@ void main() {
         AppColors.danger,
         AppColors.dangerContainer,
         AppColors.surfaceSubtle,
-        AppColors.surfaceCanvas,
         AppColors.infoSurface,
         AppColors.borderSubtle,
         AppColors.textTertiary,
         AppColors.onSurfaceDim,
-        AppColors.gradientStart,
-        AppColors.gradientEnd,
-        AppColors.avatarFallback,
       ];
       for (final color in tokens) {
         expect(color.a, 1);
@@ -47,24 +42,6 @@ void main() {
       expect(AppColors.primary, const Color(0xFF6366F1));
       expect(AppColors.onPrimary, const Color(0xFFFFFFFF));
       expect(AppColors.surface, const Color(0xFFFFFFFF));
-    });
-  });
-
-  group('AppSpacing.sheetMargin', () {
-    testWidgets('is 18 design px', (tester) async {
-      late double margin;
-
-      await tester.pumpApp(
-        Builder(
-          builder: (_) {
-            margin = AppSpacing.sheetMargin;
-            return const SizedBox.shrink();
-          },
-        ),
-        surfaceSize: surface,
-      );
-
-      expect(margin, 18);
     });
   });
 

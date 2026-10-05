@@ -7,7 +7,4 @@ abstract final class AppSpacing {
   static double get lg => 24.r;
   static double get xl => 32.r;
   static double get xxl => 48.r;
-
-  /// Horizontal margin for modal bottom sheets.
-  static double get sheetMargin => 18.r;
 }

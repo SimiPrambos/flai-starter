@@ -44,14 +44,11 @@ Semantic tokens:
 | | `warning` / `warningContainer` | `#D97706` / `#FEF3C7` | Caution |
 | | `danger` / `dangerContainer` | `#DC2626` / `#FEE2E2` | Destructive actions, input errors |
 | Surfaces | `surfaceSubtle` | `#F3F4F6` | Subtle fills (icon boxes, rows) |
-| | `surfaceCanvas` | `#F8FAFC` | Page canvas behind cards, unselected chips |
 | | `infoSurface` | `#EEF2FF` | Informational banners |
 | Borders and text | `borderSubtle` | `#EAECF0` | Hairline borders, outlines |
 | | `textTertiary` | `#7D8590` | Hints, inactive labels |
 | | `onSurfaceDim` | `#4B5563` | Secondary body text (between `onSurface` and `onSurfaceVariant`) |
 | Effects | `shadow` | `#111827` @ 8% | All box shadows |
-| | `gradientStart` / `gradientEnd` | `#4F46E5` / `#7C3AED` | Header gradients |
-| Avatar | `avatarFallback` | `#E0E7FF` | Placeholder background behind avatar initials or icons |
 
 Add a token here before using a new color. Never write `Color(0x…)` in widgets.
 
@@ -68,7 +65,7 @@ Prefer `AppTextStyles.x.copyWith(...)` over a fresh `TextStyle(...)`.
 
 ## `AppSpacing`
 
-`xs` 4, `sm` 8, `md` 16, `lg` 24, `xl` 32, `xxl` 48 (all `.r`), and `sheetMargin` 18 (the bottom-sheet side inset).
+`xs` 4, `sm` 8, `md` 16, `lg` 24, `xl` 32, `xxl` 48 (all `.r`).
 
 Use `Gap(AppSpacing.*)` for spacing between widgets:
 

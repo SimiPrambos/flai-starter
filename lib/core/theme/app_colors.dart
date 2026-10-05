@@ -26,7 +26,6 @@ abstract final class AppColors {
 
   // Surfaces
   static const surfaceSubtle = Color(0xFFF3F4F6);
-  static const surfaceCanvas = Color(0xFFF8FAFC);
   static const infoSurface = Color(0xFFEEF2FF);
 
   // Borders and text
@@ -36,9 +35,4 @@ abstract final class AppColors {
 
   // Effects
   static const shadow = Color(0x14111827);
-  static const gradientStart = Color(0xFF4F46E5);
-  static const gradientEnd = Color(0xFF7C3AED);
-
-  // Avatar
-  static const avatarFallback = Color(0xFFE0E7FF);
 }
