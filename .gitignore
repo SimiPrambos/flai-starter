@@ -144,3 +144,6 @@ ios_distribution_private_key
 
 # Service-account keys (Firebase App Distribution, Play, etc.)
 android/*service-account*.json
+
+# Local distribution credentials (template: scripts/.distribute.env.example)
+scripts/.distribute.env
