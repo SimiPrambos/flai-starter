@@ -83,10 +83,15 @@ GoRouter appRouter(AppRouterRef ref) {
 
 ## Current Routes
 
-| Class | Path | routeName |
-|---|---|---|
-| `UsersRoute` | `/users` | `users` |
-| `UserDetailRoute` | `/users/:id` | `user_detail` |
+| Class | Path | routeName | Where |
+|---|---|---|---|
+| `SplashRoute` | `/` | `splash` | top-level (initial location) |
+| `LoginRoute` | `/login` | `login` | top-level |
+| `UsersRoute` | `/users` | `users` | `AppShellRoute` branch 0 |
+| `UserDetailRoute` | `/users/:id` | `user_detail` | `AppShellRoute` branch 0, nested |
+| `SettingsRoute` | `/settings` | `settings` | `AppShellRoute` branch 1 |
+
+Access is gated by the session redirect, and tabs come from `AppShellRoute` + `kAppTabs`. See the `flai-auth-navigation` skill before touching the redirect, the shell or the tab list.
 
 ## Adding a New Route
 

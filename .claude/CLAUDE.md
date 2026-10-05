@@ -72,6 +72,7 @@ Load the relevant skill before working in each area:
 | Feature artifact contract (SPEC/CHANGELOG/ADR/Mason) | `feature-spec` | Whenever working under `docs/features/` or `lib/features/` |
 | Architecture & layers | `flai-architecture` | Adding features, checking imports |
 | Navigation / routing | `flai-navigation` | Adding routes, screen navigation |
+| Session gate, redirect & tab shell | `flai-auth-navigation` | Sign-in/out, router redirect, adding a tab or branch, extending to roles |
 | Riverpod providers | `flai-riverpod` | Creating providers or notifiers |
 | Error handling | `flai-error-handling` | Writing repos, handling failures |
 | Network / API | `flai-network` | Adding endpoints, Dio config |
