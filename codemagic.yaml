@@ -37,11 +37,11 @@
 #          FIREBASE_GOOGLE_SERVICES_JSON_B64   -> android/app/src/development/google-services.json
 #          FIREBASE_GOOGLE_SERVICE_INFO_B64    -> ios/config/development/GoogleService-Info.plist
 #        Builds succeed without them; Crashlytics/Analytics stay disabled.
-# [ ] 6. Pin flutter_version below to the team's Flutter release.
+# [ ] 6. Keep flutter_version below equal to the version in .fvmrc.
 # [ ] 7. Trigger each workflow manually once and check the artifacts.
 
 definitions:
-  flutter_version: &flutter_version stable
+  flutter_version: &flutter_version 3.41.9 # keep in sync with .fvmrc
 
   # Shared setup: write .env, install melos, bootstrap, generate code, test.
   scripts:
