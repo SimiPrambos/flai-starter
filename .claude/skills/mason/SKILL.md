@@ -21,7 +21,7 @@ make-feature      → chains: make-domain + make-data + make-presentation(list) 
 ## `melos make-domain`
 
 ```sh
-melos make-domain -- --name <feature_name> --app-package template_vgv_app
+melos make-domain -- --name <feature_name> --app_package template_vgv_app
 ```
 
 **Generates:**
@@ -42,7 +42,7 @@ lib/features/{name}/domain/
 ## `melos make-data`
 
 ```sh
-melos make-data -- --name <feature_name> --app-package template_vgv_app
+melos make-data -- --name <feature_name> --app_package template_vgv_app
 ```
 
 **Generates:**
@@ -68,7 +68,7 @@ test/features/{name}/data/repositories/
 ## `melos make-presentation`
 
 ```sh
-melos make-presentation -- --feature <feature_name> --name <page_name> --type <type> --app-package template_vgv_app
+melos make-presentation -- --feature <feature_name> --name <page_name> --type <type> --app_package template_vgv_app
 ```
 
 `--feature` is the feature folder the page belongs to. `--name` is the page name (can differ from feature). `--type` determines what gets generated.
@@ -155,7 +155,7 @@ Route registered: `/{name}`
 ## `melos make-feature` (CRUD shortcut)
 
 ```sh
-melos make-feature -- --name <feature_name> --app-package template_vgv_app
+melos make-feature -- --name <feature_name> --app_package template_vgv_app
 ```
 
 Chains `make-domain` + `make-data` + `make-presentation --type list` + `make-presentation --type detail` in one shot. Use when the spec clearly calls for a paginated list + detail from the start.
@@ -166,33 +166,33 @@ Chains `make-domain` + `make-data` + `make-presentation --type list` + `make-pre
 
 **Full CRUD, known from spec:**
 ```sh
-melos make-feature -- --name orders --app-package my_app
+melos make-feature -- --name orders --app_package my_app
 ```
 
 **Feature growing over sprints:**
 ```sh
 # Sprint 1 — data layer + summary page
-melos make-domain       -- --name products --app-package my_app
-melos make-data         -- --name products --app-package my_app
-melos make-presentation -- --feature products --name product_summary --type static --app-package my_app
+melos make-domain       -- --name products --app_package my_app
+melos make-data         -- --name products --app_package my_app
+melos make-presentation -- --feature products --name product_summary --type static --app_package my_app
 
 # Sprint 2 — add list
-melos make-presentation -- --feature products --name products_list --type list --app-package my_app
+melos make-presentation -- --feature products --name products_list --type list --app_package my_app
 
 # Sprint 3 — add detail
-melos make-presentation -- --feature products --name products_detail --type detail --app-package my_app
+melos make-presentation -- --feature products --name products_detail --type detail --app_package my_app
 ```
 
 **No data layer (dashboard):**
 ```sh
-melos make-presentation -- --feature dashboard --name dashboard --type static --app-package my_app
+melos make-presentation -- --feature dashboard --name dashboard --type static --app_package my_app
 ```
 
 **Singleton resource (profile):**
 ```sh
-melos make-domain       -- --name profile --app-package my_app
-melos make-data         -- --name profile --app-package my_app
-melos make-presentation -- --feature profile --name profile --type single --app-package my_app
+melos make-domain       -- --name profile --app_package my_app
+melos make-data         -- --name profile --app_package my_app
+melos make-presentation -- --feature profile --name profile --type single --app_package my_app
 ```
 
 ---
@@ -237,6 +237,6 @@ Implement only `fetchPage(int page)`.
 - Running `make-data` before `make-domain` — compile errors on missing entity import
 - Using `make-feature` when only one page type is needed — generates pages you'll have to delete
 - Using `--type list` or `--type detail` without having run `make-domain` + `make-data`
-- Forgetting `--app-package` — mason uses the default which may not match the project
+- Forgetting `--app_package` — mason uses the default which may not match the project
 - Not running `build_runner` after adding fields to the model
 - Wiring a route without a stable `routeName` — Analytics reports raw paths instead of screen names
