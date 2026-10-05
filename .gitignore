@@ -147,3 +147,6 @@ android/*service-account*.json
 
 # Local distribution credentials (template: scripts/.distribute.env.example)
 scripts/.distribute.env
+
+# very_good test --optimization scratch file (removed on a clean exit)
+test/.test_optimizer.dart
