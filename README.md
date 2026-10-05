@@ -129,15 +129,17 @@ lib/
 ├── app/
 │   └── view/         # App widget
 ├── core/
+│   ├── auth/         # SessionStorage + SessionNotifier (signed-in flag)
 │   ├── common/       # PaginatedMixin<T>, PaginatedResult<T>
 │   ├── env/          # Envied — BASE_URL, API_KEY
 │   ├── error/        # Failure (sealed) + AppException
 │   ├── network/      # Dio client + interceptors
-│   ├── router/       # GoRouter config
+│   ├── router/       # GoRouter config, session redirect
+│   ├── shell/        # Bottom-tab shell (AppShellPage, TabConfig)
 │   ├── logging/      # Talker provider
 │   ├── firebase/     # Crashlytics + Analytics bootstrap, per-flavor options
 │   ├── storage/      # Local persistence
-│   └── theme/        # AppColors, AppTextStyles, AppSpacing
+│   └── theme/        # AppTheme, AppColors, AppTextStyles, AppSpacing, AppDecorators
 ├── features/
 │   └── <feature>/
 │       ├── data/         # Retrofit datasource, Freezed models, repo impl

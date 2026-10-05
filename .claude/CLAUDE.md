@@ -54,7 +54,7 @@ Reusable Flutter starter for future apps. The built-in example feature is `users
 ## Stack
 
 - State + DI: `flutter_riverpod`, `riverpod_annotation`, `riverpod_generator`
-- Routing: `go_router` with manual typed route classes/extensions
+- Routing: `go_router` + `go_router_builder` (typed routes, session redirect, stateful tab shell)
 - Network: `dio`, `retrofit`, `connectivity_plus`
 - Models: `freezed`, `json_serializable`
 - Errors: `fpdart` `Either<Failure, T>`
