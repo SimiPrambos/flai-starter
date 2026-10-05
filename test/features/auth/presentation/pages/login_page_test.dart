@@ -27,6 +27,21 @@ void main() {
       expect(find.widgetWithText(AppButton, 'Sign in'), findsOneWidget);
     });
 
+    testWidgets('renders Indonesian strings for the id locale', (tester) async {
+      await tester.pumpApp(
+        const LoginPage(),
+        overrides: [
+          sessionStorageProvider.overrideWithValue(InMemorySessionStorage()),
+        ],
+        locale: const Locale('id'),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.widgetWithText(AppBar, 'Masuk'), findsOneWidget);
+      expect(find.widgetWithText(AppTextField, 'Email'), findsOneWidget);
+      expect(find.widgetWithText(AppButton, 'Masuk'), findsOneWidget);
+    });
+
     testWidgets('tapping sign in persists the session', (tester) async {
       final storage = InMemorySessionStorage();
       await tester.pumpApp(

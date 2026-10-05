@@ -26,6 +26,22 @@ void main() {
       expect(find.byIcon(Icons.logout), findsOneWidget);
     });
 
+    testWidgets('renders Indonesian strings for the id locale', (tester) async {
+      await tester.pumpApp(
+        const SettingsPage(),
+        overrides: [
+          sessionStorageProvider.overrideWithValue(
+            InMemorySessionStorage(signedIn: true),
+          ),
+        ],
+        locale: const Locale('id'),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.widgetWithText(AppBar, 'Pengaturan'), findsOneWidget);
+      expect(find.widgetWithText(AppButton, 'Keluar'), findsOneWidget);
+    });
+
     testWidgets('tapping sign out clears the session', (tester) async {
       final storage = InMemorySessionStorage(signedIn: true);
       await tester.pumpApp(
