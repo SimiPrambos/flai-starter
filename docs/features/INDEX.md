@@ -2,9 +2,11 @@
 
 _Auto-generated from `docs/features/*/SPEC.md` frontmatter. Do not edit by hand._
 
-_Last regenerated: 2026-05-20T09:59:42Z_
+_Last regenerated: 2026-10-05T04:30:12Z_
 
 | Feature | Status | Owner | Branch | Last changed |
 |---|---|---|---|---|
 | ai-workflow | in-progress | silmi | feat/ai-improvement | 2026-05-20 |
+| auth | review | silmi | feat/backport-tooling-dx | 2026-10-02 |
+| settings | review | silmi | feat/backport-tooling-dx | 2026-10-02 |
 | users | shipped | silmi | main | 2026-05-20 |

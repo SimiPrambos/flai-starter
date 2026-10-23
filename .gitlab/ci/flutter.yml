@@ -1,6 +1,7 @@
 flutter_test:
   image: ghcr.io/cirruslabs/flutter:3.41.9
   interruptible: true
+  # tags: [<your-runner>]
   variables:
     PUB_CACHE: "$CI_PROJECT_DIR/.pub-cache"
   cache:
@@ -14,17 +15,8 @@ flutter_test:
   script:
     - cp .env.example .env
     - dart pub global activate very_good_cli
-    - very_good packages get --recursive --ignore='!*'
+    - very_good packages get --recursive --ignore='.pub-cache'
     - dart run build_runner build --delete-conflicting-outputs
     - dart format --set-exit-if-changed lib test
     - flutter analyze lib test
-    - |
-      very_good test \
-        -j 4 \
-        --optimization \
-        --coverage \
-        --min-coverage 85 \
-        --exclude-coverage "**/*.g.dart lib/core/firebase/** lib/core/theme/** lib/core/storage/secure_storage.dart" \
-        --report-on "lib" \
-        --show-uncovered \
-        --test-randomize-ordering-seed random
+    - sh scripts/test.sh

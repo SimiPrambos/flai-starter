@@ -6,12 +6,10 @@ part of 'user_single_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$UserSingleResponseImpl _$$UserSingleResponseImplFromJson(
-  Map<String, dynamic> json,
-) => _$UserSingleResponseImpl(
-  data: UserModel.fromJson(json['data'] as Map<String, dynamic>),
-);
+_UserSingleResponse _$UserSingleResponseFromJson(Map<String, dynamic> json) =>
+    _UserSingleResponse(
+      data: UserModel.fromJson(json['data'] as Map<String, dynamic>),
+    );
 
-Map<String, dynamic> _$$UserSingleResponseImplToJson(
-  _$UserSingleResponseImpl instance,
-) => <String, dynamic>{'data': instance.data};
+Map<String, dynamic> _$UserSingleResponseToJson(_UserSingleResponse instance) =>
+    <String, dynamic>{'data': instance.data};

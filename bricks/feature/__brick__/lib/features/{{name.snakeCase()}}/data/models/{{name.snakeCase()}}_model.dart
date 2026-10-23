@@ -5,7 +5,7 @@ part '{{name.snakeCase()}}_model.freezed.dart';
 part '{{name.snakeCase()}}_model.g.dart';
 
 @freezed
-class {{name.pascalCase()}}Model with _${{name.pascalCase()}}Model {
+abstract class {{name.pascalCase()}}Model with _${{name.pascalCase()}}Model {
   const factory {{name.pascalCase()}}Model({
     required int id,
   }) = _{{name.pascalCase()}}Model;

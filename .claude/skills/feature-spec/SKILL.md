@@ -175,19 +175,19 @@ Three atomic bricks map 1:1 to Clean Architecture layers. Run them independently
 
 ```sh
 # Domain layer only (entity + repository interface)
-melos make-domain -- --name {feature} --app-package template_vgv_app
+melos make-domain -- --name {feature} --app_package template_vgv_app
 
 # Data layer (model + datasource + repo impl + providers + repo test)
-melos make-data -- --name {feature} --app-package template_vgv_app
+melos make-data -- --name {feature} --app_package template_vgv_app
 
 # Presentation layer (page + notifier + route + notifier test)
-melos make-presentation -- --feature {feature} --name {page} --type list|detail|single|static --app-package template_vgv_app
+melos make-presentation -- --feature {feature} --name {page} --type list|detail|single|static --app_package template_vgv_app
 ```
 
 Full CRUD shortcut (chains domain + data + list + detail in one shot):
 
 ```sh
-melos make-feature -- --name {feature} --app-package template_vgv_app
+melos make-feature -- --name {feature} --app_package template_vgv_app
 ```
 
 See `.claude/skills/mason/SKILL.md` for the full brick reference, type semantics, and file ownership table.

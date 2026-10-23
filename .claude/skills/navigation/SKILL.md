@@ -83,10 +83,15 @@ GoRouter appRouter(AppRouterRef ref) {
 
 ## Current Routes
 
-| Class | Path | routeName |
-|---|---|---|
-| `UsersRoute` | `/users` | `users` |
-| `UserDetailRoute` | `/users/:id` | `user_detail` |
+| Class | Path | routeName | Where |
+|---|---|---|---|
+| `SplashRoute` | `/` | `splash` | top-level (initial location) |
+| `LoginRoute` | `/login` | `login` | top-level |
+| `UsersRoute` | `/users` | `users` | `AppShellRoute` branch 0 |
+| `UserDetailRoute` | `/users/:id` | `user_detail` | `AppShellRoute` branch 0, nested |
+| `SettingsRoute` | `/settings` | `settings` | `AppShellRoute` branch 1 |
+
+Access is gated by the session redirect, and tabs come from `AppShellRoute` + `kAppTabs`. See the `flai-auth-navigation` skill before touching the redirect, the shell or the tab list.
 
 ## Adding a New Route
 
@@ -134,9 +139,9 @@ class ChildRoute extends GoRouteData with _$ChildRoute {
 | Package | Constraint | Notes |
 |---|---|---|
 | `go_router` | `^16.0.0` | 16+ required for go_router_builder 3.x mixin pattern |
-| `go_router_builder` | `">=3.0.0 <3.2.0"` | 3.2+ requires `build ^3.x` which conflicts with `freezed 2.x` |
+| `go_router_builder` | `">=3.0.0 <3.2.0"` | 3.2+ requires `build ^3.x`; the current generator set (freezed 3.1, riverpod_generator 2.x, envied_generator 1.1) is on `build ^2` |
 
-Upgrade `go_router_builder` to `^4.x` only when upgrading `freezed` to `^3.x`.
+Upgrade `go_router_builder` past 3.1 only together with the rest of the generator set, once all of them support `build ^3`.
 
 ## Common Mistakes
 

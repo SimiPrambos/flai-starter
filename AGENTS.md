@@ -17,7 +17,7 @@ Then check and install CLI tools:
 npx gitnexus --version || npm install -g gitnexus && npx gitnexus analyze --index-only
 
 # RTK
-rtk --version || npm install -g @rtk/cli
+rtk --version || curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
 ```
 
 **NEVER proceed with coding if any tool is missing.**

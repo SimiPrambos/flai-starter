@@ -6,7 +6,7 @@ part 'users_list_response.freezed.dart';
 part 'users_list_response.g.dart';
 
 @freezed
-class UsersListResponse
+abstract class UsersListResponse
     with _$UsersListResponse, PagedResponseMapper<UserModel> {
   const factory UsersListResponse({
     required int page,

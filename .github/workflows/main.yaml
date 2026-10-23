@@ -22,7 +22,7 @@ jobs:
       flutter_version: "3.41.x"
       run_bloc_lint: false
       min_coverage: 85
-      coverage_excludes: "**/*.g.dart lib/core/firebase/** lib/core/theme/** lib/core/storage/secure_storage.dart"
+      coverage_excludes: "**/*.g.dart **/*.freezed.dart lib/core/firebase/** lib/core/theme/** lib/core/storage/secure_storage.dart"
       setup: cp .env.example .env && dart run build_runner build --delete-conflicting-outputs
 
   # spell-check:

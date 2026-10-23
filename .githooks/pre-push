@@ -1,0 +1,9 @@
+#!/bin/sh
+# Heavy checks run at push time so commits stay fast.
+set -e
+
+echo "🔍 flutter analyze..."
+flutter analyze lib test
+
+echo "🧪 flutter test..."
+flutter test

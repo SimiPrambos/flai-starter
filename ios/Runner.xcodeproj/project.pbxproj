@@ -219,6 +219,7 @@
 			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
 			buildPhases = (
 				35B03FA6A885FE6615DF7830 /* [CP] Check Pods Manifest.lock */,
+				8CDA0DB0A0045B064F0C3BC3 /* Copy Firebase Config */,
 				9740EEB61CF901F6004384FC /* Run Script */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
@@ -226,6 +227,7 @@
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				1619E63CD0C67F7C6CC22736 /* [CP] Embed Pods Frameworks */,
+				06E2BD28043254CE81268BDC /* FlutterFire: "flutterfire upload-crashlytics-symbols" */,
 			);
 			buildRules = (
 			);
@@ -297,6 +299,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		06E2BD28043254CE81268BDC /* FlutterFire: "flutterfire upload-crashlytics-symbols" */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "FlutterFire: \"flutterfire upload-crashlytics-symbols\"";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Uploads dSYMs to Crashlytics. No-op unless the flutterfire CLI, a repo-root\n# firebase.json and the FirebaseCrashlytics pod are all present.\nPATH=\"${PATH}:${FLUTTER_ROOT}/bin:${PUB_CACHE}/bin:${HOME}/.pub-cache/bin\"\nif ! command -v flutterfire >/dev/null 2>&1; then\n  echo \"flutterfire CLI not found; skipping Crashlytics symbol upload\"\n  exit 0\nfi\nif [ ! -f \"${PROJECT_DIR}/../firebase.json\" ]; then\n  echo \"firebase.json not found at repo root; skipping Crashlytics symbol upload\"\n  exit 0\nfi\nif [ -z \"$PODS_ROOT\" ] || [ ! -d \"${PODS_ROOT}/FirebaseCrashlytics\" ]; then\n  echo \"FirebaseCrashlytics pod not found; skipping Crashlytics symbol upload\"\n  exit 0\nfi\nflutterfire upload-crashlytics-symbols --upload-symbols-script-path=\"${PODS_ROOT}/FirebaseCrashlytics/run\" --platform=ios --apple-project-path=\"${SRCROOT}\" --env-platform-name=\"${PLATFORM_NAME}\" --env-configuration=\"${CONFIGURATION}\" --env-project-dir=\"${PROJECT_DIR}\" --env-built-products-dir=\"${BUILT_PRODUCTS_DIR}\" --env-dwarf-dsym-folder-path=\"${DWARF_DSYM_FOLDER_PATH}\" --env-dwarf-dsym-file-name=\"${DWARF_DSYM_FILE_NAME}\" --env-infoplist-path=\"${INFOPLIST_PATH}\" --default-config=default || echo \"warning: Crashlytics symbol upload failed; continuing\"\n";
+			showEnvVarsInLog = 0;
+		};
 		1619E63CD0C67F7C6CC22736 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -372,6 +394,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8CDA0DB0A0045B064F0C3BC3 /* Copy Firebase Config */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Firebase Config";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Copies ios/config/<flavor>/GoogleService-Info.plist into the app bundle.\n# Missing plist -> warning + skip, so the starter builds without Firebase.\nFLAVOR=\"\"\nfor define in $(echo \"$DART_DEFINES\" | tr ',' '\\n'); do\n  decoded=$(echo \"$define\" | base64 --decode 2>/dev/null || true)\n  case \"$decoded\" in\n    FLUTTER_APP_FLAVOR=*) FLAVOR=\"${decoded#FLUTTER_APP_FLAVOR=}\" ;;\n  esac\ndone\nif [ -z \"$FLAVOR\" ]; then\n  case \"$CONFIGURATION\" in\n    *production*) FLAVOR=\"production\" ;;\n    *staging*) FLAVOR=\"staging\" ;;\n    *) FLAVOR=\"development\" ;;\n  esac\nfi\nPLIST_SOURCE=\"${PROJECT_DIR}/config/${FLAVOR}/GoogleService-Info.plist\"\nAPP_DIR=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\"\nrm -f \"${APP_DIR}/GoogleService-Info.plist\"\nif [ ! -f \"$PLIST_SOURCE\" ]; then\n  echo \"warning: GoogleService-Info.plist not found for flavor '${FLAVOR}' at ${PLIST_SOURCE}; skipping (Firebase stays disabled)\"\n  exit 0\nfi\nmkdir -p \"$APP_DIR\"\ncp \"$PLIST_SOURCE\" \"${APP_DIR}/GoogleService-Info.plist\"\necho \"Copied GoogleService-Info.plist for flavor: ${FLAVOR}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9740EEB61CF901F6004384FC /* Run Script */ = {
